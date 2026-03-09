@@ -317,7 +317,155 @@ body::before {
   color: var(--text);
 }
 
-/* ─── SETTINGS SCREEN ──────────────────────────── */
+/* ─── HISTORY OVERLAY ──────────────────────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.overlay.active { display: flex; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: scaleIn 0.2s ease;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ─── LEADERBOARD ───────────────────────────────── */
+.lb-filters {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.lb-filter {
+  padding: 0.3rem 0.8rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lb-filter:hover { border-color: var(--accent); color: var(--accent); }
+.lb-filter.active {
+  background: rgba(0,212,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.lb-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.lb-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-bottom: 0.5rem;
+}
+
+.lb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.lb-table thead tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.lb-table th {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.lb-table td {
+  padding: 0.6rem 0.6rem;
+  border-bottom: 1px solid rgba(36,51,71,0.5);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.lb-table tbody tr:hover td { background: var(--surface2); }
+
+.lb-rank { font-family: var(--mono); color: var(--text-dim); font-size: 0.75rem; }
+.lb-rank.top1 { color: #fbbf24; font-weight: 700; }
+.lb-rank.top2 { color: #94a3b8; font-weight: 600; }
+.lb-rank.top3 { color: #b45309; font-weight: 600; }
+
+.lb-name { color: var(--text); font-weight: 500; }
+.lb-score { font-family: var(--mono); font-weight: 700; }
+.lb-mode-tag {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  border: 1px solid;
+  font-family: var(--mono);
+}
+
+.lb-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
 .settings-screen {
   display: none;
   position: fixed;
@@ -1584,6 +1732,7 @@ body::before {
 
   <div class="home-bottom">
     <button class="btn-outline" onclick="openHistory()">📊 History</button>
+    <button class="btn-outline" onclick="openLeaderboard()">🏆 Leaderboard</button>
     <button class="btn-outline" onclick="openSettings()">⚙️ Settings</button>
   </div>
 </div>
@@ -1633,19 +1782,6 @@ body::before {
             <span class="cost-pill-val" style="color:var(--green)">~5,000 runs</span>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- LEADERBOARD -->
-    <div class="settings-section">
-      <div class="settings-section-header">📊 Leaderboard</div>
-      <div class="settings-card">
-        <div class="field-label">Google Apps Script URL</div>
-        <input type="text" class="field-input" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/...">
-        <div class="field-hint">Paste your Apps Script Web App URL here. Scores are submitted automatically on quiz completion.</div>
-        <button class="btn-test-sheet" onclick="testSheetConnection()">
-          <span id="sheetTestText">Test Connection</span>
-        </button>
       </div>
     </div>
 
@@ -1725,8 +1861,62 @@ body::before {
 </div>
 
 <!-- ══════════════════════════════════════════════════ -->
-<!--  QUIZ SCREEN                                       -->
+<!--  LEADERBOARD OVERLAY                               -->
 <!-- ══════════════════════════════════════════════════ -->
+<div id="leaderboardOverlay" class="overlay">
+  <div class="panel" style="max-width:560px">
+    <div class="panel-title">
+      🏆 Leaderboard
+      <button class="panel-close" onclick="closeLeaderboard()">✕</button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="lb-filters">
+      <button class="lb-filter active" onclick="filterLeaderboard('all', this)">All</button>
+      <button class="lb-filter" onclick="filterLeaderboard('MCQ', this)">MCQ</button>
+      <button class="lb-filter" onclick="filterLeaderboard('Code Write', this)">Code Write</button>
+      <button class="lb-filter" onclick="filterLeaderboard('Mixed', this)">Mixed</button>
+      <button class="lb-filter" onclick="filterLeaderboard('Python Basics', this)">Basics</button>
+    </div>
+
+    <!-- State: loading / error / empty / table -->
+    <div id="lbLoading" class="lb-state">
+      <div class="lb-spinner"></div>
+      <div>Loading scores...</div>
+    </div>
+    <div id="lbError" class="lb-state" style="display:none">
+      <div style="font-size:1.5rem;margin-bottom:0.5rem">⚠️</div>
+      <div id="lbErrorMsg">Could not load leaderboard.</div>
+      <button class="btn-test-sheet" style="margin-top:1rem;max-width:180px" onclick="loadLeaderboard()">Retry</button>
+    </div>
+    <div id="lbEmpty" class="lb-state" style="display:none">
+      <div style="font-size:1.5rem;margin-bottom:0.5rem">🎯</div>
+      <div>No runs yet — complete a quiz to appear here!</div>
+    </div>
+
+    <div id="lbTable" style="display:none">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Mode</th>
+            <th>Score</th>
+            <th>Result</th>
+            <th>Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="lbBody"></tbody>
+      </table>
+    </div>
+
+    <div class="lb-footer">
+      <span id="lbCount" style="color:var(--text-dim);font-size:0.75rem"></span>
+      <button class="btn-test-sheet" style="max-width:120px;padding:0.4rem 0.75rem;font-size:0.78rem" onclick="loadLeaderboard()">↻ Refresh</button>
+    </div>
+  </div>
+</div>
 <div id="quizScreen" class="screen">
   <div class="quiz-header">
     <button class="quiz-back" onclick="confirmBack()">← Exit</button>
@@ -3291,7 +3481,7 @@ function loadSettings() {
   document.getElementById('displayNameInput').value = name;
 
   const sheetUrl = localStorage.getItem('ict162_sheeturl') || '';
-  document.getElementById('sheetUrlInput').value = sheetUrl;
+  // sheet URL is hardcoded — no UI field needed
 
   const em = localStorage.getItem('ict162_exammode') === 'true';
   state.examMode = em;
@@ -3309,8 +3499,7 @@ function saveSettings() {
   const name = document.getElementById('displayNameInput').value.trim();
   if(name) localStorage.setItem('ict162_name', name);
 
-  const sheetUrl = document.getElementById('sheetUrlInput').value.trim();
-  localStorage.setItem('ict162_sheeturl', sheetUrl);
+  // sheet URL hardcoded — no save needed
 
   localStorage.setItem('ict162_exammode', state.examMode);
   closeSettings();
@@ -3337,6 +3526,112 @@ function closeSettings() {
 
 function openHistory() { renderHistory(); document.getElementById('historyOverlay').classList.add('active'); }
 function closeHistory() { document.getElementById('historyOverlay').classList.remove('active'); }
+
+// ── Leaderboard ───────────────────────────────────────────────
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwbursxZcRzT8E2raBC5L7zFWCUrZ-y0ncK5TAvChHcM5wgsKPU8bnaWjIhdlVjqfPpvg/exec';
+let lbData = [];
+let lbFilter = 'all';
+
+function openLeaderboard() {
+  document.getElementById('leaderboardOverlay').classList.add('active');
+  loadLeaderboard();
+}
+
+function closeLeaderboard() {
+  document.getElementById('leaderboardOverlay').classList.remove('active');
+}
+
+async function loadLeaderboard() {
+  // Show loading state
+  document.getElementById('lbLoading').style.display = 'flex';
+  document.getElementById('lbError').style.display = 'none';
+  document.getElementById('lbEmpty').style.display = 'none';
+  document.getElementById('lbTable').style.display = 'none';
+
+  try {
+    const resp = await fetch(SHEET_URL);
+    const json = await resp.json();
+
+    if(json.status !== 'ok') throw new Error(json.message || 'Script error');
+
+    lbData = json.data || [];
+    document.getElementById('lbLoading').style.display = 'none';
+
+    if(!lbData.length) {
+      document.getElementById('lbEmpty').style.display = 'flex';
+      return;
+    }
+
+    renderLeaderboard();
+
+  } catch(e) {
+    document.getElementById('lbLoading').style.display = 'none';
+    document.getElementById('lbError').style.display = 'flex';
+    document.getElementById('lbErrorMsg').textContent = 'Could not load leaderboard. Check your connection.';
+  }
+}
+
+function filterLeaderboard(mode, btn) {
+  lbFilter = mode;
+  document.querySelectorAll('.lb-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeaderboard();
+}
+
+function renderLeaderboard() {
+  const filtered = lbFilter === 'all'
+    ? lbData
+    : lbData.filter(r => r['Mode'] === lbFilter);
+
+  // Sort by score % descending
+  const sorted = [...filtered].sort((a, b) => {
+    const aScore = parseInt(a['Score %']) || 0;
+    const bScore = parseInt(b['Score %']) || 0;
+    return bScore - aScore;
+  });
+
+  document.getElementById('lbCount').textContent = `${sorted.length} run${sorted.length !== 1 ? 's' : ''}`;
+
+  if(!sorted.length) {
+    document.getElementById('lbTable').style.display = 'none';
+    document.getElementById('lbEmpty').style.display = 'flex';
+    return;
+  }
+
+  document.getElementById('lbEmpty').style.display = 'none';
+  document.getElementById('lbTable').style.display = 'block';
+
+  const modeColours = {
+    'MCQ':            { color:'#00d4ff', border:'rgba(0,212,255,0.3)' },
+    'Code Write':     { color:'#fb923c', border:'rgba(251,146,60,0.3)' },
+    'Mixed':          { color:'#a78bfa', border:'rgba(167,139,250,0.3)' },
+    'Python Basics':  { color:'#10b981', border:'rgba(16,185,129,0.3)' }
+  };
+
+  const tbody = document.getElementById('lbBody');
+  tbody.innerHTML = sorted.map((row, i) => {
+    const rank = i + 1;
+    const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+    const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+    const score = parseInt(row['Score %']) || 0;
+    const scoreColor = score >= 70 ? 'var(--green)' : score >= 50 ? 'var(--amber)' : 'var(--red)';
+    const mc = modeColours[row['Mode']] || { color:'var(--text-muted)', border:'var(--border)' };
+    const result = `${row['Correct'] || '?'}/${row['Total'] || '?'}`;
+
+    // Format date — strip time portion
+    const dateRaw = (row['Timestamp'] || '').split(',')[0];
+
+    return `<tr>
+      <td><span class="lb-rank ${rankClass}">${rankEmoji}</span></td>
+      <td><span class="lb-name">${escHtml(row['Name'] || 'Anonymous')}</span></td>
+      <td><span class="lb-mode-tag" style="color:${mc.color};border-color:${mc.border}">${escHtml(row['Mode'] || '')}</span></td>
+      <td><span class="lb-score" style="color:${scoreColor}">${row['Score %'] || '—'}</span></td>
+      <td style="color:var(--text-dim);font-family:var(--mono);font-size:0.78rem">${result}</td>
+      <td style="color:var(--text-dim);font-family:var(--mono);font-size:0.78rem">${escHtml(row['Time'] || '—')}</td>
+      <td style="color:var(--text-dim);font-size:0.75rem">${escHtml(dateRaw)}</td>
+    </tr>`;
+  }).join('');
+}
 
 // ── Install UI ────────────────────────────────────────────────
 function updateInstallUI() {
@@ -3367,26 +3662,13 @@ function updateInstallUI() {
   }
 }
 
-// ── Sheet connection test ─────────────────────────────────────
+// ── Sheet connection test (used by leaderboard retry) ────────
 async function testSheetConnection() {
-  const url = document.getElementById('sheetUrlInput').value.trim();
-  const btn = document.getElementById('sheetTestText');
-  const btnEl = btn.parentElement;
-  if(!url) { btnEl.classList.add('fail'); btn.textContent = '✕ No URL entered'; setTimeout(() => { btnEl.classList.remove('fail'); btn.textContent = 'Test Connection'; }, 2000); return; }
-  btn.textContent = 'Testing...';
   try {
-    const resp = await fetch(url);
+    const resp = await fetch(SHEET_URL);
     const data = await resp.json();
-    if(data.status === 'alive') {
-      btnEl.classList.add('success');
-      btn.textContent = '✓ Connected';
-      setTimeout(() => { btnEl.classList.remove('success'); btn.textContent = 'Test Connection'; }, 3000);
-    } else { throw new Error('unexpected'); }
-  } catch(e) {
-    btnEl.classList.add('fail');
-    btn.textContent = '✕ Connection failed';
-    setTimeout(() => { btnEl.classList.remove('fail'); btn.textContent = 'Test Connection'; }, 3000);
-  }
+    return data.status === 'ok' || data.status === 'alive';
+  } catch(e) { return false; }
 }
 
 // ── Clear data ────────────────────────────────────────────────
@@ -3449,8 +3731,7 @@ function maybeShowIOSBanner() {
 
 // ── Submit score to Google Sheet ──────────────────────────────
 async function submitToSheet(result) {
-  const url = localStorage.getItem('ict162_sheeturl');
-  if(!url) return;
+  const url = 'https://script.google.com/macros/s/AKfycbwbursxZcRzT8E2raBC5L7zFWCUrZ-y0ncK5TAvChHcM5wgsKPU8bnaWjIhdlVjqfPpvg/exec';
   const name = localStorage.getItem('ict162_name') || 'Anonymous';
   const modeLabel = { mcq:'MCQ', code:'Code Write', mixed:'Mixed', basics:'Python Basics' }[result.mode] || result.mode;
   try {
@@ -4129,6 +4410,9 @@ function escHtml(str) {
 document.getElementById('historyOverlay').addEventListener('click', function(e) {
   if(e.target === this) closeHistory();
 });
+document.getElementById('leaderboardOverlay').addEventListener('click', function(e) {
+  if(e.target === this) closeLeaderboard();
+});
 
 // ── Init ─────────────────────────────────────────────────────
 window.addEventListener('load', () => {
@@ -4136,12 +4420,7 @@ window.addEventListener('load', () => {
   loadLastRun();
   initPWA();
   maybeShowIOSBanner();
-  // Pre-fill sheet URL from storage
-  const stored = localStorage.getItem('ict162_sheeturl');
-  if(!stored) {
-    localStorage.setItem('ict162_sheeturl',
-      'https://script.google.com/macros/s/AKfycbzU6AjrtdpxPgWQXZtd5YBK-JdslXbAgywMf1smDFes7oEwrkWc-OnvtPCBS-VY_oTRcw/exec');
-  }
+  // Sheet URL is hardcoded — no user config needed
 });
 
 // ── PWA Setup ────────────────────────────────────────────────
@@ -4191,44 +4470,18 @@ function initPWA() {
   const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
   document.getElementById('pwaManifest').href = URL.createObjectURL(manifestBlob);
 
-  // Register service worker (inline via blob)
-  if('serviceWorker' in navigator) {
-    const swCode = `
-const CACHE = 'oop-prep-v2';
-const OFFLINE_URL = self.location.href;
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll([OFFLINE_URL]))
-      .then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', e => {
-  if(e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      return cached || fetch(e.request).then(resp => {
-        const clone = resp.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return resp;
-      }).catch(() => caches.match(OFFLINE_URL));
-    })
-  );
-});`;
-    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-    const swURL = URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swURL, { scope: './' })
-      .then(() => console.log('SW registered'))
-      .catch(e => console.log('SW skipped (file://):', e.message));
+  // Service Worker — single-file PWAs cannot use blob: SW URLs cross-browser.
+  // Installability (Add to Home Screen) works via the manifest alone.
+  // Offline works because the entire app is one self-contained HTML file cached by the browser.
+  if('serviceWorker' in navigator && location.protocol === 'https:') {
+    // Attempt registration — will silently fail on blob restriction, that's fine
+    try {
+      const swCode = `self.addEventListener('fetch', ()=>{});`;
+      const swBlob = new Blob([swCode], {type:'application/javascript'});
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob))
+        .then(() => console.log('✅ SW registered'))
+        .catch(() => console.log('ℹ️ SW skipped — install prompt still works via manifest'));
+    } catch(e) { /* silent */ }
   }
 }
 
@@ -4237,34 +4490,8 @@ let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   deferredPrompt = e;
-  showInstallBanner();
+  updateInstallUI(); // update the Settings install section
 });
-
-function showInstallBanner() {
-  if(document.getElementById('installBanner')) return;
-  const banner = document.createElement('div');
-  banner.id = 'installBanner';
-  banner.style.cssText = `
-    position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
-    background:#1a2332;border:1px solid #243347;border-radius:12px;
-    padding:0.85rem 1.25rem;display:flex;align-items:center;gap:0.75rem;
-    font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#e2eaf5;
-    z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:320px;width:90%;
-  `;
-  banner.innerHTML = `
-    <span style="font-size:1.3rem">📲</span>
-    <span style="flex:1">Install as app for offline use</span>
-    <button onclick="installPWA()" style="
-      background:linear-gradient(135deg,#7c3aed,#6d28d9);border:none;
-      border-radius:8px;color:white;font-family:'DM Sans',sans-serif;
-      font-weight:600;font-size:0.8rem;padding:0.5rem 0.9rem;cursor:pointer;">
-      Install
-    </button>
-    <button onclick="this.parentElement.remove()" style="
-      background:none;border:none;color:#6b82a0;cursor:pointer;font-size:1rem;padding:0.25rem;">✕</button>
-  `;
-  document.body.appendChild(banner);
-}
 
 function installPWA() {
   if(!deferredPrompt) return;
