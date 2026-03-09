@@ -317,48 +317,216 @@ body::before {
   color: var(--text);
 }
 
-/* ─── SETTINGS PANEL ───────────────────────────── */
-.overlay {
+/* ─── SETTINGS SCREEN ──────────────────────────── */
+.settings-screen {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
+  background: var(--bg);
   z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.overlay.active { display: flex; }
+.settings-screen.active { display: block; }
 
-.panel {
+.settings-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.settings-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.settings-back {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.4rem 0;
+}
+
+.settings-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.btn-settings-save {
+  background: var(--accent2);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-settings-save:hover { opacity: 0.85; }
+
+.settings-section {
+  margin-bottom: 1.75rem;
+}
+
+.settings-section-header {
+  font-size: 0.7rem;
+  font-family: var(--mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.6rem;
+  padding-left: 0.25rem;
+}
+
+.settings-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 2rem;
-  width: 100%;
-  max-width: 440px;
-  animation: scaleIn 0.2s ease;
+  padding: 1.25rem;
 }
 
-.panel-title {
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
+.cost-pill-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
 }
 
-.panel-close {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 1.2rem;
-  line-height: 1;
+.cost-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 0.3rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
 }
+
+.cost-pill-label {
+  color: var(--text-dim);
+}
+
+.cost-pill-val {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.btn-test-sheet {
+  margin-top: 0.75rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.btn-test-sheet:hover { border-color: var(--accent); color: var(--accent); }
+.btn-test-sheet.success { border-color: var(--green); color: var(--green); }
+.btn-test-sheet.fail { border-color: var(--red); color: var(--red); }
+
+.install-platform-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.install-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.25rem 0;
+}
+
+.btn-install-pwa {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-install-pwa:hover { opacity: 0.9; }
+
+.install-status {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  padding: 0.5rem 0;
+}
+
+.install-status.installed { color: var(--green); }
+
+.ios-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ios-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ios-step-num {
+  width: 22px;
+  height: 22px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-family: var(--mono);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.btn-danger-outline {
+  width: 100%;
+  padding: 0.7rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger-outline:hover { border-color: var(--red); color: var(--red); }
 
 .field-label {
   font-size: 0.78rem;
@@ -1421,35 +1589,125 @@ body::before {
 </div>
 
 <!-- ══════════════════════════════════════════════════ -->
-<!--  SETTINGS OVERLAY                                  -->
+<!--  SETTINGS SCREEN (full page)                       -->
 <!-- ══════════════════════════════════════════════════ -->
-<div id="settingsOverlay" class="overlay">
-  <div class="panel">
-    <div class="panel-title">
-      Settings
-      <button class="panel-close" onclick="closeSettings()">✕</button>
+<div id="settingsOverlay" class="settings-screen">
+  <div class="settings-inner">
+
+    <div class="settings-topbar">
+      <button class="settings-back" onclick="closeSettings()">← Back</button>
+      <span class="settings-title">Settings</span>
+      <button class="btn-settings-save" onclick="saveSettings()">Save</button>
     </div>
 
-    <div class="field-label">🔑 Anthropic API Key</div>
-    <input type="password" class="field-input" id="apiKeyInput" placeholder="sk-ant-api03-...">
-    <div class="field-hint">
-      Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.<br>
-      Stored in sessionStorage only — clears when you close the tab.<br><br>
-      <span style="color:var(--text-muted)">💰 Cost per Code Write marking</span><br>
-      Uses <strong style="color:var(--accent)">Claude Haiku 4.5</strong> — cheapest active model.<br>
-      ~$0.0027 per submission &nbsp;·&nbsp; ~$0.027 per 10-question run<br>
-      <strong style="color:var(--green)">$5 credit ≈ 1,850+ markings</strong>
-    </div>
-
-    <div class="toggle-row">
-      <div class="toggle-info">
-        <div class="toggle-title">Exam Mode</div>
-        <div class="toggle-desc">Strict marking, no hints, model answer hidden until scored</div>
+    <!-- PROFILE -->
+    <div class="settings-section">
+      <div class="settings-section-header">👤 Profile</div>
+      <div class="settings-card">
+        <div class="field-label">Display Name</div>
+        <input type="text" class="field-input" id="displayNameInput" placeholder="Enter your name" maxlength="32">
+        <div class="field-hint">Shown on the leaderboard when you submit a score. Saved locally — never asked again.</div>
       </div>
-      <div class="toggle" id="examModeToggle" onclick="toggleExamMode()"></div>
     </div>
 
-    <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+    <!-- AI MARKING -->
+    <div class="settings-section">
+      <div class="settings-section-header">🤖 AI Marking</div>
+      <div class="settings-card">
+        <div class="field-label">Anthropic API Key</div>
+        <input type="password" class="field-input" id="apiKeyInput" placeholder="sk-ant-api03-...">
+        <div class="field-hint">
+          Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Stored in sessionStorage — clears when you close the tab.
+        </div>
+        <div class="cost-pill-row">
+          <div class="cost-pill">
+            <span class="cost-pill-label">Model</span>
+            <span class="cost-pill-val" style="color:var(--accent)">Haiku 4.5</span>
+          </div>
+          <div class="cost-pill">
+            <span class="cost-pill-label">Per marking</span>
+            <span class="cost-pill-val">~$0.001</span>
+          </div>
+          <div class="cost-pill">
+            <span class="cost-pill-label">$5 credit</span>
+            <span class="cost-pill-val" style="color:var(--green)">~5,000 runs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="settings-section">
+      <div class="settings-section-header">📊 Leaderboard</div>
+      <div class="settings-card">
+        <div class="field-label">Google Apps Script URL</div>
+        <input type="text" class="field-input" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/...">
+        <div class="field-hint">Paste your Apps Script Web App URL here. Scores are submitted automatically on quiz completion.</div>
+        <button class="btn-test-sheet" onclick="testSheetConnection()">
+          <span id="sheetTestText">Test Connection</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- QUIZ BEHAVIOUR -->
+    <div class="settings-section">
+      <div class="settings-section-header">🎯 Quiz Behaviour</div>
+      <div class="settings-card">
+        <div class="toggle-row" style="border:none;margin:0;padding:0">
+          <div class="toggle-info">
+            <div class="toggle-title">Exam Mode</div>
+            <div class="toggle-desc">Strict marking · no hints · model answer hidden until scored</div>
+          </div>
+          <div class="toggle" id="examModeToggle" onclick="toggleExamMode()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTALL APP -->
+    <div class="settings-section">
+      <div class="settings-section-header">📲 Install App</div>
+      <div class="settings-card" id="installSection">
+
+        <!-- Android -->
+        <div id="androidInstall">
+          <div class="install-platform-label">Android · Chrome</div>
+          <button class="btn-install-pwa" id="androidInstallBtn" onclick="installPWA()" style="display:none">
+            ⬇ Add to Home Screen
+          </button>
+          <div id="androidInstalled" style="display:none" class="install-status installed">
+            ✅ App already installed
+          </div>
+          <div id="androidUnavailable" class="install-status">
+            Open this page in Chrome on Android to install.
+          </div>
+        </div>
+
+        <div class="install-divider"></div>
+
+        <!-- iOS -->
+        <div id="iosInstall">
+          <div class="install-platform-label">iOS · Safari</div>
+          <div class="ios-steps">
+            <div class="ios-step"><span class="ios-step-num">1</span>Tap the <strong>Share</strong> button <span style="font-size:1.1rem">⎋</span> in Safari</div>
+            <div class="ios-step"><span class="ios-step-num">2</span>Scroll down and tap <strong>Add to Home Screen</strong></div>
+            <div class="ios-step"><span class="ios-step-num">3</span>Tap <strong>Add</strong> — done!</div>
+          </div>
+          <div class="field-hint" style="margin-top:0.5rem">Must use Safari. Chrome on iOS does not support PWA install.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DATA -->
+    <div class="settings-section">
+      <div class="settings-section-header">🗑 Data</div>
+      <div class="settings-card">
+        <button class="btn-danger-outline" onclick="confirmClearHistory()">Clear Run History</button>
+        <button class="btn-danger-outline" style="margin-top:0.5rem;border-color:rgba(244,63,94,0.5);color:var(--red)" onclick="confirmClearAll()">Clear All Data</button>
+      </div>
+    </div>
+
+    <div style="height:2rem"></div>
   </div>
 </div>
 
@@ -3028,17 +3286,37 @@ let state = {
 function loadSettings() {
   const key = sessionStorage.getItem('ict162_apikey') || '';
   document.getElementById('apiKeyInput').value = key;
+
+  const name = localStorage.getItem('ict162_name') || '';
+  document.getElementById('displayNameInput').value = name;
+
+  const sheetUrl = localStorage.getItem('ict162_sheeturl') || '';
+  document.getElementById('sheetUrlInput').value = sheetUrl;
+
   const em = localStorage.getItem('ict162_exammode') === 'true';
   state.examMode = em;
   const tog = document.getElementById('examModeToggle');
   if(em) tog.classList.add('on'); else tog.classList.remove('on');
+
+  // Android install button state
+  updateInstallUI();
 }
 
 function saveSettings() {
   const key = document.getElementById('apiKeyInput').value.trim();
   if(key) sessionStorage.setItem('ict162_apikey', key);
+
+  const name = document.getElementById('displayNameInput').value.trim();
+  if(name) localStorage.setItem('ict162_name', name);
+
+  const sheetUrl = document.getElementById('sheetUrlInput').value.trim();
+  localStorage.setItem('ict162_sheeturl', sheetUrl);
+
   localStorage.setItem('ict162_exammode', state.examMode);
   closeSettings();
+
+  // Show brief toast
+  showToast('Settings saved');
 }
 
 function toggleExamMode() {
@@ -3047,10 +3325,203 @@ function toggleExamMode() {
   if(state.examMode) tog.classList.add('on'); else tog.classList.remove('on');
 }
 
-function openSettings() { loadSettings(); document.getElementById('settingsOverlay').classList.add('active'); }
-function closeSettings() { document.getElementById('settingsOverlay').classList.remove('active'); }
+function openSettings() {
+  loadSettings();
+  document.getElementById('settingsOverlay').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('active');
+}
+
 function openHistory() { renderHistory(); document.getElementById('historyOverlay').classList.add('active'); }
 function closeHistory() { document.getElementById('historyOverlay').classList.remove('active'); }
+
+// ── Install UI ────────────────────────────────────────────────
+function updateInstallUI() {
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+
+  const btn = document.getElementById('androidInstallBtn');
+  const installed = document.getElementById('androidInstalled');
+  const unavailable = document.getElementById('androidUnavailable');
+
+  if(isStandalone) {
+    btn.style.display = 'none';
+    installed.style.display = 'block';
+    unavailable.style.display = 'none';
+  } else if(deferredPrompt) {
+    btn.style.display = 'block';
+    installed.style.display = 'none';
+    unavailable.style.display = 'none';
+  } else if(isAndroid) {
+    btn.style.display = 'none';
+    installed.style.display = 'none';
+    unavailable.style.display = 'block';
+    unavailable.textContent = 'Use Chrome on Android and reload to see the install prompt.';
+  } else if(!isIOS) {
+    unavailable.style.display = 'block';
+    unavailable.textContent = 'Open on Android or iOS to install as an app.';
+  }
+}
+
+// ── Sheet connection test ─────────────────────────────────────
+async function testSheetConnection() {
+  const url = document.getElementById('sheetUrlInput').value.trim();
+  const btn = document.getElementById('sheetTestText');
+  const btnEl = btn.parentElement;
+  if(!url) { btnEl.classList.add('fail'); btn.textContent = '✕ No URL entered'; setTimeout(() => { btnEl.classList.remove('fail'); btn.textContent = 'Test Connection'; }, 2000); return; }
+  btn.textContent = 'Testing...';
+  try {
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if(data.status === 'alive') {
+      btnEl.classList.add('success');
+      btn.textContent = '✓ Connected';
+      setTimeout(() => { btnEl.classList.remove('success'); btn.textContent = 'Test Connection'; }, 3000);
+    } else { throw new Error('unexpected'); }
+  } catch(e) {
+    btnEl.classList.add('fail');
+    btn.textContent = '✕ Connection failed';
+    setTimeout(() => { btnEl.classList.remove('fail'); btn.textContent = 'Test Connection'; }, 3000);
+  }
+}
+
+// ── Clear data ────────────────────────────────────────────────
+function confirmClearHistory() {
+  if(confirm('Clear all run history? This cannot be undone.')) {
+    localStorage.removeItem('ict162_history');
+    showToast('History cleared');
+    loadLastRun();
+  }
+}
+
+function confirmClearAll() {
+  if(confirm('Clear ALL data including name, API key settings, and history? This cannot be undone.')) {
+    localStorage.clear();
+    sessionStorage.clear();
+    showToast('All data cleared');
+    loadLastRun();
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+    background:var(--surface);border:1px solid var(--border);border-radius:100px;
+    padding:0.6rem 1.25rem;font-size:0.82rem;color:var(--text);z-index:9999;
+    box-shadow:0 4px 20px rgba(0,0,0,0.4);white-space:nowrap;
+    animation:fadeUp 0.2s ease;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
+// ── iOS install banner (shows once) ──────────────────────────
+function maybeShowIOSBanner() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  const dismissed = localStorage.getItem('ict162_ios_banner');
+  if(!isIOS || isStandalone || dismissed) return;
+
+  const banner = document.createElement('div');
+  banner.style.cssText = `position:fixed;bottom:0;left:0;right:0;
+    background:var(--surface);border-top:1px solid var(--border);
+    padding:1rem 1.25rem 1.5rem;z-index:9999;
+    display:flex;align-items:flex-start;gap:0.75rem;
+    box-shadow:0 -8px 32px rgba(0,0,0,0.4);`;
+  banner.innerHTML = `
+    <span style="font-size:1.6rem;flex-shrink:0">📲</span>
+    <div style="flex:1">
+      <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.3rem">Install OOP Prep</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.5">
+        Tap <strong>Share ⎋</strong> then <strong>Add to Home Screen</strong> to install this app.
+      </div>
+    </div>
+    <button onclick="this.parentElement.remove();localStorage.setItem('ict162_ios_banner','1')"
+      style="background:none;border:none;color:var(--text-dim);font-size:1.2rem;cursor:pointer;padding:0;flex-shrink:0">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+// ── Submit score to Google Sheet ──────────────────────────────
+async function submitToSheet(result) {
+  const url = localStorage.getItem('ict162_sheeturl');
+  if(!url) return;
+  const name = localStorage.getItem('ict162_name') || 'Anonymous';
+  const modeLabel = { mcq:'MCQ', code:'Code Write', mixed:'Mixed', basics:'Python Basics' }[result.mode] || result.mode;
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        name,
+        mode: modeLabel,
+        pct: result.pct,
+        correct: result.correct,
+        total: result.total,
+        time: fmtSec(result.totalTime)
+      })
+    });
+  } catch(e) {
+    console.log('Sheet submit failed (non-critical):', e.message);
+  }
+}
+
+// ── Name prompt on first completion ──────────────────────────
+function promptNameIfNeeded(callback) {
+  const name = localStorage.getItem('ict162_name');
+  if(name) { callback(); return; }
+
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.75);
+    backdrop-filter:blur(4px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:1.5rem;`;
+  overlay.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+      padding:2rem;width:100%;max-width:380px;animation:scaleIn 0.2s ease;">
+      <div style="font-weight:600;font-size:1.05rem;margin-bottom:0.5rem">What's your name?</div>
+      <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.25rem">
+        Used on the leaderboard. Saved to this device — won't be asked again.
+      </div>
+      <input id="namePromptInput" type="text" maxlength="32"
+        style="width:100%;background:var(--surface2);border:1px solid var(--border);
+          border-radius:var(--radius-sm);color:var(--text);font-family:var(--sans);
+          font-size:0.9rem;padding:0.75rem 1rem;outline:none;margin-bottom:1rem;"
+        placeholder="Your name" />
+      <button onclick="
+        const v = document.getElementById('namePromptInput').value.trim();
+        if(!v) return;
+        localStorage.setItem('ict162_name', v);
+        this.closest('div[style]').parentElement.remove();
+        arguments[0].stopPropagation();
+      "
+        style="width:100%;padding:0.8rem;background:linear-gradient(135deg,var(--accent2),#6d28d9);
+          border:none;border-radius:var(--radius-sm);color:white;font-family:var(--sans);
+          font-weight:600;font-size:0.9rem;cursor:pointer;">
+        Save &amp; Continue
+      </button>
+      <button onclick="this.closest('div[style]').parentElement.remove();"
+        style="width:100%;margin-top:0.5rem;padding:0.7rem;background:none;border:none;
+          color:var(--text-dim);font-family:var(--sans);font-size:0.82rem;cursor:pointer;">
+        Skip for now
+      </button>
+    </div>
+  `;
+  // Fix: use proper event listener for save button
+  document.body.appendChild(overlay);
+  const saveBtn = overlay.querySelector('button');
+  saveBtn.onclick = () => {
+    const v = document.getElementById('namePromptInput').value.trim();
+    if(!v) return;
+    localStorage.setItem('ict162_name', v);
+    overlay.remove();
+    callback();
+  };
+  overlay.querySelector('button:last-child').onclick = () => { overlay.remove(); callback(); };
+}
 
 // ── Progress persistence ─────────────────────────────────────
 function saveRun(result) {
@@ -3058,6 +3529,8 @@ function saveRun(result) {
   history.unshift(result);
   if(history.length > 10) history.splice(10);
   localStorage.setItem('ict162_history', JSON.stringify(history));
+  // Submit to leaderboard sheet
+  submitToSheet(result);
 }
 
 function loadLastRun() {
@@ -3540,15 +4013,16 @@ function showResults() {
     return q.type === 'mcq' ? a.score === 1 : a.score >= q.marks * 0.5;
   }).length;
 
-  // Save to history
-  saveRun({
+  // Save to history (with name prompt on first run)
+  const runData = {
     date: new Date().toISOString(),
     mode: state.mode,
     pct,
     totalTime: totalSec,
     correct,
     total: state.quiz.length
-  });
+  };
+  promptNameIfNeeded(() => saveRun(runData));
 
   // Render score ring
   const ringFill = document.getElementById('scoreRingFill');
@@ -3652,9 +4126,6 @@ function escHtml(str) {
 }
 
 // ── Close overlays on backdrop click ─────────────────────────
-document.getElementById('settingsOverlay').addEventListener('click', function(e) {
-  if(e.target === this) closeSettings();
-});
 document.getElementById('historyOverlay').addEventListener('click', function(e) {
   if(e.target === this) closeHistory();
 });
@@ -3664,6 +4135,13 @@ window.addEventListener('load', () => {
   loadSettings();
   loadLastRun();
   initPWA();
+  maybeShowIOSBanner();
+  // Pre-fill sheet URL from storage
+  const stored = localStorage.getItem('ict162_sheeturl');
+  if(!stored) {
+    localStorage.setItem('ict162_sheeturl',
+      'https://script.google.com/macros/s/AKfycbzU6AjrtdpxPgWQXZtd5YBK-JdslXbAgywMf1smDFes7oEwrkWc-OnvtPCBS-VY_oTRcw/exec');
+  }
 });
 
 // ── PWA Setup ────────────────────────────────────────────────
