@@ -1,0 +1,3802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ICT162 · OOP Prep v2</title>
+
+<!-- SEO: block all crawlers -->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+
+<!-- PWA manifest injected inline via JS below -->
+<link id="pwaManifest" rel="manifest">
+
+<!-- iOS PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OOP Prep">
+<link rel="apple-touch-icon" id="appleTouchIcon">
+
+<!-- Android / Chrome PWA -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e14">
+<meta name="application-name" content="OOP Prep">
+<meta name="description" content="ICT162 OOP Python exam prep quiz">
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e14;
+  --surface: #111720;
+  --surface2: #1a2332;
+  --surface3: #1f2d3d;
+  --border: #243347;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --green: #10b981;
+  --red: #f43f5e;
+  --amber: #f59e0b;
+  --text: #e2eaf5;
+  --text-muted: #6b82a0;
+  --text-dim: #3d5270;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(0,212,255,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(124,58,237,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.screen { display: none !important; position: relative; z-index: 1; }
+.screen.active { display: block !important; }
+#homeScreen.active { display: flex !important; }
+#quizScreen.active { display: flex !important; }
+
+/* ─── HOME SCREEN ─────────────────────────────── */
+#homeScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.6s ease both;
+}
+
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.home-title {
+  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.home-title span {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+/* Last run card */
+#lastRunCard {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+  display: none;
+}
+
+#lastRunCard.visible { display: block; }
+
+.last-run-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+}
+
+.last-run-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.last-run-stat .stat-val {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.last-run-stat .stat-lbl {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Mode cards */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s 0.15s ease both;
+}
+
+.mode-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.mode-card:hover::before { opacity: 1; }
+
+.mode-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.mode-card.full-width::before {
+  background: linear-gradient(135deg, rgba(124,58,237,0.06), transparent);
+}
+
+.mode-card.full-width:hover { border-color: var(--accent2); }
+
+.mode-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.mode-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.mode-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.mode-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  margin-top: 0.5rem;
+  background: rgba(0,212,255,0.1);
+  color: var(--accent);
+  border: 1px solid rgba(0,212,255,0.2);
+}
+
+.mode-badge.purple {
+  background: rgba(124,58,237,0.1);
+  color: #a78bfa;
+  border-color: rgba(124,58,237,0.2);
+}
+
+.mode-badge.basics-badge {
+  background: rgba(16,185,129,0.1);
+  color: var(--green);
+  border: 1px solid rgba(16,185,129,0.2);
+}
+
+.basics-card::before {
+  background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent) !important;
+}
+
+.basics-card:hover { border-color: var(--green) !important; }
+
+.warmup-divider {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.warmup-divider::before,
+.warmup-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.warmup-divider span {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+/* Bottom bar */
+.home-bottom {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 480px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.btn-outline {
+  flex: 1;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* ─── SETTINGS PANEL ───────────────────────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.overlay.active { display: flex; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 440px;
+  animation: scaleIn 0.2s ease;
+}
+
+.panel-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.field-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.field-input:focus { border-color: var(--accent); }
+
+.field-hint {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.field-hint a { color: var(--accent); text-decoration: none; }
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.toggle-info .toggle-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.toggle-info .toggle-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.toggle {
+  width: 44px;
+  height: 24px;
+  background: var(--surface3);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle.on { background: var(--accent2); border-color: var(--accent2); }
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.toggle.on::after {
+  left: 22px;
+  background: white;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, var(--accent2), #6d28d9);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 1rem;
+}
+
+.btn-primary:hover { opacity: 0.9; }
+
+/* ─── HISTORY PANEL ────────────────────────────── */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.history-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.history-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.history-mode {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 0.2rem 0;
+}
+
+.history-time {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.history-score {
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.score-green { color: var(--green); }
+.score-amber { color: var(--amber); }
+.score-red { color: var(--red); }
+
+.empty-history {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 2rem;
+  font-size: 0.85rem;
+}
+
+/* ─── QUIZ SCREEN ──────────────────────────────── */
+#quizScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10,14,20,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quiz-back {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  transition: color 0.2s;
+  padding: 0.25rem 0;
+}
+
+.quiz-back:hover { color: var(--text); }
+
+.quiz-progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.quiz-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--surface3);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+.quiz-counter {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.quiz-timer {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  min-width: 52px;
+  text-align: center;
+}
+
+.quiz-timer.warn { color: var(--red); border-color: rgba(244,63,94,0.4); }
+
+.mode-indicator {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mode-indicator.tutor {
+  background: rgba(124,58,237,0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(124,58,237,0.3);
+}
+
+.mode-indicator.exam {
+  background: rgba(244,63,94,0.12);
+  color: var(--red);
+  border: 1px solid rgba(244,63,94,0.3);
+}
+
+/* Question area */
+.quiz-body {
+  flex: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.q-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid;
+}
+
+.q-tag.mcq { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.08); }
+.q-tag.code { color: #fb923c; border-color: rgba(251,146,60,0.3); background: rgba(251,146,60,0.08); }
+
+.q-topic {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.q-marks {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.q-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  white-space: pre-wrap;
+}
+
+/* Code block in question */
+.q-code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #b8d4f5;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* MCQ Options */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.option-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.15s ease;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(0,212,255,0.04);
+}
+
+.option-btn:disabled { cursor: default; }
+
+.option-letter {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+
+.option-btn.correct {
+  border-color: var(--green);
+  background: rgba(16,185,129,0.08);
+}
+
+.option-btn.correct .option-letter {
+  background: var(--green);
+  color: white;
+}
+
+.option-btn.wrong {
+  border-color: var(--red);
+  background: rgba(244,63,94,0.08);
+}
+
+.option-btn.wrong .option-letter {
+  background: var(--red);
+  color: white;
+}
+
+/* Feedback box */
+.feedback-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: none;
+  animation: fadeUp 0.3s ease;
+}
+
+.feedback-box.visible { display: block; }
+
+.feedback-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-title.correct-title { color: var(--green); }
+.feedback-title.wrong-title { color: var(--red); }
+
+.feedback-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* Hints */
+.hints-area {
+  margin-bottom: 1.25rem;
+}
+
+.hint-btn {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  padding: 0.6rem 1rem;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hint-btn:hover { border-color: var(--amber); color: var(--amber); }
+.hint-btn:disabled { opacity: 0.4; cursor: default; }
+
+.hint-card {
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.1rem;
+  margin-top: 0.5rem;
+  display: none;
+  animation: fadeUp 0.2s ease;
+}
+
+.hint-card.visible { display: block; }
+
+.hint-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.35rem;
+}
+
+.hint-text {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Code Write textarea */
+.starter-code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #b8d4f5;
+  margin-bottom: 0.75rem;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.textarea-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 240px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  padding: 1rem 1.25rem;
+  resize: vertical;
+  outline: none;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+  transition: border-color 0.2s;
+}
+
+.code-textarea:focus { border-color: var(--accent2); }
+
+.textarea-hint {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-top: 0.35rem;
+}
+
+/* Submit / AI marking */
+.submit-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--accent2), #6d28d9);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-submit:hover { opacity: 0.88; }
+.btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+
+/* AI Marking result */
+.marking-result {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  display: none;
+  animation: fadeUp 0.3s ease;
+}
+
+.marking-result.visible { display: block; }
+
+.marking-header {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.marking-score-big {
+  font-family: var(--mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.marking-overall {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex: 1;
+  margin-left: 1.25rem;
+  line-height: 1.5;
+}
+
+.rubric-list {
+  padding: 0;
+}
+
+.rubric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+
+.rubric-item:last-child { border-bottom: none; }
+
+.rubric-criterion {
+  font-size: 0.83rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.rubric-comment {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.5;
+}
+
+.rubric-marks {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rubric-marks.full { color: var(--green); }
+.rubric-marks.partial { color: var(--amber); }
+.rubric-marks.zero { color: var(--red); }
+
+.model-answer-section {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+}
+
+.model-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.model-code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #b8d4f5;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* API error fallback */
+.api-error {
+  background: rgba(244,63,94,0.06);
+  border: 1px solid rgba(244,63,94,0.2);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.api-error.visible { display: block; }
+
+/* Nav buttons */
+.nav-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+.btn-nav {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-nav.primary-nav {
+  background: linear-gradient(135deg, var(--accent2), #6d28d9);
+  border-color: transparent;
+  color: white;
+}
+
+.btn-nav.primary-nav:hover { opacity: 0.88; }
+
+/* ─── RESULTS SCREEN ───────────────────────────── */
+#resultsScreen {
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.4s ease;
+}
+
+.score-ring-wrap {
+  display: inline-block;
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.score-ring {
+  width: 120px;
+  height: 120px;
+  transform: rotate(-90deg);
+}
+
+.score-ring-bg {
+  fill: none;
+  stroke: var(--surface3);
+  stroke-width: 8;
+}
+
+.score-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.score-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-pct {
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.25rem;
+}
+
+.results-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.results-subtitle {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* Stats strip */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.4s 0.1s ease both;
+}
+
+.stat-cell {
+  background: var(--surface);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.stat-cell .val {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-cell .lbl {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+}
+
+/* Topic breakdown */
+.section-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.75rem;
+}
+
+.topic-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  animation: fadeUp 0.4s 0.15s ease both;
+}
+
+.topic-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topic-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+.topic-bar-wrap {
+  width: 100px;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.topic-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.8s ease;
+}
+
+.topic-pct {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* Review list */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.4s 0.2s ease both;
+}
+
+.review-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.review-item-header {
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.review-item-header:hover { background: var(--surface2); }
+
+.review-icon { font-size: 1rem; flex-shrink: 0; }
+
+.review-q-text {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.review-time {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.review-item-body {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: none;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.review-item-body.open { display: block; }
+
+.review-detail-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.35rem;
+}
+
+.review-code {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  white-space: pre;
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+  color: #b8d4f5;
+}
+
+/* Results buttons */
+.results-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  padding-bottom: 3rem;
+  animation: fadeUp 0.4s 0.25s ease both;
+  flex-wrap: wrap;
+}
+
+/* ─── ANIMATIONS ───────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── RESPONSIVE ───────────────────────────────── */
+@media (max-width: 480px) {
+  .mode-grid { grid-template-columns: 1fr; }
+  .mode-card.full-width { grid-column: 1; }
+  .quiz-header { padding: 0.6rem 1rem; gap: 0.5rem; }
+  .quiz-body { padding: 1.25rem 1rem; }
+  .stats-strip { grid-template-columns: 1fr; }
+  .stats-strip { border-radius: var(--radius-sm); }
+  .last-run-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 100px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  HOME SCREEN                                       -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="homeScreen" class="screen active">
+  <div class="home-header">
+    <div class="home-badge">🐍 ICT162 · SUSS · v2</div>
+    <h1 class="home-title">OOP<br><span>Practice Quiz</span></h1>
+    <p class="home-subtitle">Object Oriented Programming · Exam Prep</p>
+  </div>
+
+  <div id="lastRunCard">
+    <div class="last-run-label">⏱ Last Run</div>
+    <div class="last-run-grid">
+      <div class="last-run-stat">
+        <div class="stat-val" id="lrScore">—</div>
+        <div class="stat-lbl">Score</div>
+      </div>
+      <div class="last-run-stat">
+        <div class="stat-val" id="lrTime">—</div>
+        <div class="stat-lbl">Duration</div>
+      </div>
+      <div class="last-run-stat">
+        <div class="stat-val" id="lrDate">—</div>
+        <div class="stat-lbl">Date</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-grid">
+    <div class="mode-card" onclick="startQuiz('mcq')">
+      <div class="mode-icon">🔍</div>
+      <div class="mode-title">MCQ Practice</div>
+      <div class="mode-desc">Output tracing, error spotting, concept identification</div>
+      <span class="mode-badge">70 questions · shuffled</span>
+    </div>
+    <div class="mode-card" onclick="startQuiz('code')">
+      <div class="mode-icon">✍️</div>
+      <div class="mode-title">Code Write</div>
+      <div class="mode-desc">Write Python OOP code from memory with AI marking</div>
+      <span class="mode-badge">25 questions · shuffled</span>
+    </div>
+    <div class="mode-card full-width" onclick="startQuiz('mixed')">
+      <div class="mode-icon">🎯</div>
+      <div class="mode-title">Mixed Run — Full Exam Simulation</div>
+      <div class="mode-desc">MCQ + Code Write across all topics. Closest to the real exam experience.</div>
+      <span class="mode-badge purple">20 questions · randomly drawn</span>
+    </div>
+  </div>
+
+  <div class="warmup-divider">
+    <span>— warmup —</span>
+  </div>
+
+  <div class="mode-grid" style="max-width:480px;width:100%">
+    <div class="mode-card full-width basics-card" onclick="startQuiz('basics')">
+      <div class="mode-icon">🐍</div>
+      <div class="mode-title">Python Basics</div>
+      <div class="mode-desc">Loops, strings, lists, dicts, tuples, file I/O, operators, functions. Great warmup or quick refresher — not part of the OOP bank.</div>
+      <span class="mode-badge basics-badge">50 questions · 20 per run</span>
+    </div>
+  </div>
+
+  <div class="home-bottom">
+    <button class="btn-outline" onclick="openHistory()">📊 History</button>
+    <button class="btn-outline" onclick="openSettings()">⚙️ Settings</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  SETTINGS OVERLAY                                  -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="settingsOverlay" class="overlay">
+  <div class="panel">
+    <div class="panel-title">
+      Settings
+      <button class="panel-close" onclick="closeSettings()">✕</button>
+    </div>
+
+    <div class="field-label">🔑 Anthropic API Key</div>
+    <input type="password" class="field-input" id="apiKeyInput" placeholder="sk-ant-api03-...">
+    <div class="field-hint">
+      Get your key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.<br>
+      Stored in sessionStorage only — clears when you close the tab.<br><br>
+      <span style="color:var(--text-muted)">💰 Cost per Code Write marking</span><br>
+      Uses <strong style="color:var(--accent)">Claude Haiku 4.5</strong> — cheapest active model.<br>
+      ~$0.0027 per submission &nbsp;·&nbsp; ~$0.027 per 10-question run<br>
+      <strong style="color:var(--green)">$5 credit ≈ 1,850+ markings</strong>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-title">Exam Mode</div>
+        <div class="toggle-desc">Strict marking, no hints, model answer hidden until scored</div>
+      </div>
+      <div class="toggle" id="examModeToggle" onclick="toggleExamMode()"></div>
+    </div>
+
+    <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  HISTORY OVERLAY                                   -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="historyOverlay" class="overlay">
+  <div class="panel" style="max-width:520px">
+    <div class="panel-title">
+      Run History
+      <button class="panel-close" onclick="closeHistory()">✕</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  QUIZ SCREEN                                       -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="quizScreen" class="screen">
+  <div class="quiz-header">
+    <button class="quiz-back" onclick="confirmBack()">← Exit</button>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="progressFill"></div>
+      </div>
+      <div class="quiz-counter" id="quizCounter">1 / 1</div>
+    </div>
+    <div class="quiz-timer" id="quizTimer">0:00</div>
+    <div class="mode-indicator" id="modeIndicator">Tutor</div>
+  </div>
+
+  <div class="quiz-body" id="quizBody"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  RESULTS SCREEN                                    -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="resultsScreen" class="screen">
+  <div class="results-header">
+    <div class="score-ring-wrap">
+      <svg class="score-ring" viewBox="0 0 120 120">
+        <circle class="score-ring-bg" cx="60" cy="60" r="50"/>
+        <circle class="score-ring-fill" id="scoreRingFill" cx="60" cy="60" r="50"
+                stroke-dasharray="314" stroke-dashoffset="314"/>
+      </svg>
+      <div class="score-ring-text">
+        <div class="score-pct" id="scorePct">0%</div>
+        <div class="score-label">Score</div>
+      </div>
+    </div>
+    <div class="results-title" id="resultsTitle">—</div>
+    <div class="results-subtitle" id="resultsSubtitle">—</div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-cell"><div class="val" id="rTotalTime">—</div><div class="lbl">Total Time</div></div>
+    <div class="stat-cell"><div class="val" id="rAvgTime">—</div><div class="lbl">Avg / Question</div></div>
+    <div class="stat-cell"><div class="val" id="rCorrect">—</div><div class="lbl">Correct</div></div>
+  </div>
+
+  <div class="section-title">Topic Breakdown</div>
+  <div class="topic-grid" id="topicGrid"></div>
+
+  <div class="section-title">Question Review</div>
+  <div class="review-list" id="reviewList"></div>
+
+  <div class="results-actions">
+    <button class="btn-nav" onclick="goHome()">← Home</button>
+    <button class="btn-nav primary-nav" onclick="rerun()">Run Again ↺</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  QUESTION BANK
+// ══════════════════════════════════════════════════════════════
+// NEW FULL QUESTION BANK — 70 MCQ + 25 Code Write = 95 questions
+const Q = [
+
+// ════════════════════════════════════════════════
+// MCQ — OUTPUT TRACING (20 questions)
+// ════════════════════════════════════════════════
+{
+  id:1, type:'mcq', topic:'Inheritance',
+  q:'What is the output?\n\nclass Parent:\n    value = 5\n    def __init__(self):\n        self.value = 10\n\nclass Child(Parent):\n    pass\n\np = Parent()\nc = Child()\nprint("Parent value:", p.value)\nprint("Child value:", c.value)',
+  o:['Parent value: 5  Child value: 5','Parent value: 10  Child value: 10','Parent value: 5  Child value: 10','Parent value: 10  Child value: 5'],
+  a:1,
+  e:'Both p and c call __init__ which sets self.value = 10 as an instance variable. Instance variables shadow class variables. Child inherits __init__ from Parent, so c.value is also 10.'
+},
+{
+  id:2, type:'mcq', topic:'Class Variables',
+  q:'What is printed?\n\nclass Counter:\n    count = 0\n    def __init__(self):\n        Counter.count += 1\n\na = Counter()\nb = Counter()\nprint(Counter.count)',
+  o:['0','1','2','Error'],
+  a:2,
+  e:'count is a CLASS variable shared across all instances. Each __init__ call increments Counter.count. Two objects are created so the result is 2.'
+},
+{
+  id:3, type:'mcq', topic:'Inheritance',
+  q:'What does this print?\n\nclass Animal:\n    def speak(self):\n        return "..."\n\nclass Dog(Animal):\n    def speak(self):\n        return "Woof"\n\nclass Cat(Animal):\n    pass\n\nanimals = [Dog(), Cat()]\nfor a in animals:\n    print(a.speak())',
+  o:['Woof\nWoof','Woof\n...','...\nWoof','Error — Cat has no speak'],
+  a:1,
+  e:'Dog overrides speak() returning "Woof". Cat does not override it so it inherits Animal.speak() returning "...". Output is Woof then ...'
+},
+{
+  id:4, type:'mcq', topic:'Inheritance',
+  q:'What is the output?\n\nclass Vehicle:\n    def __init__(self, speed):\n        self._speed = speed\n    def describe(self):\n        return f"Speed: {self._speed}"\n\nclass Car(Vehicle):\n    def __init__(self, speed, brand):\n        super().__init__(speed)\n        self.__brand = brand\n    def describe(self):\n        return super().describe() + f" Brand: {self.__brand}"\n\nc = Car(120, "Toyota")\nprint(c.describe())',
+  o:['Speed: 120','Brand: Toyota','Speed: 120 Brand: Toyota','Error'],
+  a:2,
+  e:'Car.describe() calls super().describe() which returns "Speed: 120", then appends " Brand: Toyota". This is method overriding by refinement.'
+},
+{
+  id:5, type:'mcq', topic:'Class Variables',
+  q:'What is printed?\n\nclass BankAccount:\n    _interestRate = 0.03\n    def __init__(self, balance):\n        self.__balance = balance\n    def addInterest(self):\n        self.__balance += self.__balance * type(self)._interestRate\n        return self.__balance\n\nclass SavingsAccount(BankAccount):\n    _interestRate = 0.05\n\ns = SavingsAccount(1000)\nprint(s.addInterest())',
+  o:['1030.0','1050.0','1000','AttributeError'],
+  a:1,
+  e:'type(self)._interestRate resolves to SavingsAccount._interestRate = 0.05 because self is a SavingsAccount. So 1000 + 1000*0.05 = 1050.0.'
+},
+{
+  id:6, type:'mcq', topic:'Composition',
+  q:'What is printed?\n\nclass Engine:\n    def __init__(self, hp):\n        self.__hp = hp\n    @property\n    def hp(self):\n        return self.__hp\n\nclass Car:\n    def __init__(self, model, engine):\n        self.__model = model\n        self.__engine = engine\n    def power(self):\n        return self.__engine.hp * 0.75\n\ne = Engine(200)\nc = Car("Sedan", e)\nprint(c.power())',
+  o:['200','150.0','0.75','Error'],
+  a:1,
+  e:'c.power() calls self.__engine.hp which returns 200, then 200 * 0.75 = 150.0.'
+},
+{
+  id:7, type:'mcq', topic:'Inheritance',
+  q:'What is the output?\n\nclass Shape:\n    def area(self):\n        return 0\n\nclass Rectangle(Shape):\n    def __init__(self, w, h):\n        self.__w = w\n        self.__h = h\n    def area(self):\n        return self.__w * self.__h\n\nshapes = [Shape(), Rectangle(4, 5)]\ntotal = sum(s.area() for s in shapes)\nprint(total)',
+  o:['0','20','20','Error'],
+  a:2,
+  e:'Shape().area() returns 0. Rectangle(4,5).area() returns 20. sum = 0 + 20 = 20. This demonstrates polymorphism — the correct area() method is called for each object type.'
+},
+{
+  id:8, type:'mcq', topic:'Exception Handling',
+  q:'What is printed when index = 1 is entered?\n\nx = [10, 20, 30]\ntry:\n    print("start")\n    val = x[int(input())]\n    print("got", val)\nexcept IndexError:\n    print("index error")\nelse:\n    print("no error")\nfinally:\n    print("done")',
+  o:['start\ngot 20\ndone','start\ngot 20\nno error\ndone','start\nindex error\ndone','start\ndone'],
+  a:1,
+  e:'index=1 is valid, x[1]=20. No exception is raised so the else block runs. finally ALWAYS runs. Output: start → got 20 → no error → done.'
+},
+{
+  id:9, type:'mcq', topic:'Inheritance',
+  q:'What is printed?\n\nclass A:\n    def hello(self):\n        return "A"\n\nclass B(A):\n    def hello(self):\n        return super().hello() + "B"\n\nclass C(B):\n    def hello(self):\n        return super().hello() + "C"\n\nobj = C()\nprint(obj.hello())',
+  o:['C','BC','ABC','CBA'],
+  a:2,
+  e:'C.hello() calls super().hello() which is B.hello(). B.hello() calls super().hello() which is A.hello() returning "A". B appends "B" → "AB". C appends "C" → "ABC".'
+},
+{
+  id:10, type:'mcq', topic:'Properties',
+  q:'What is the output?\n\nclass Temperature:\n    def __init__(self, celsius):\n        self.__celsius = celsius\n    @property\n    def celsius(self):\n        return self.__celsius\n    @property\n    def fahrenheit(self):\n        return self.__celsius * 9/5 + 32\n\nt = Temperature(100)\nprint(t.fahrenheit)',
+  o:['100','212.0','32','AttributeError'],
+  a:1,
+  e:'fahrenheit is a computed property. 100 * 9/5 + 32 = 180 + 32 = 212.0.'
+},
+{
+  id:11, type:'mcq', topic:'Collections',
+  q:'What is the output?\n\nclass Student:\n    def __init__(self, name, gpa):\n        self.name = name\n        self.gpa = gpa\n\nstudents = [\n    Student("Alice", 3.8),\n    Student("Bob", 3.2),\n    Student("Carol", 3.9)\n]\nbest = max(students, key=lambda s: s.gpa)\nprint(best.name)',
+  o:['Alice','Bob','Carol','Error'],
+  a:2,
+  e:'max() with key=lambda s: s.gpa compares gpa values. Carol has 3.9 which is highest. best.name is "Carol".'
+},
+{
+  id:12, type:'mcq', topic:'Inheritance',
+  q:'What is the output?\n\nclass PartTimeStaff:\n    _FEES = 32\n    def __init__(self, name):\n        self._name = name\n    def computePay(self, rounds):\n        if rounds <= 30:\n            return rounds * self._FEES\n        return 30 * self._FEES + (rounds - 30) * (self._FEES * 1.85)\n\np = PartTimeStaff("Alex")\nprint(p.computePay(30))\nprint(p.computePay(31))',
+  o:['960\n991.2','960\n1024.4','960\n992.0','960\n960'],
+  a:1,
+  e:'For 30 rounds: 30*32 = 960. For 31 rounds: 30*32 + 1*(32*1.85) = 960 + 59.2 = 1019.2. Wait — 960 + 59.2 = 1019.2. Let me recheck: 30*32=960, (31-30)*(32*1.85)=1*59.2=59.2, total=1019.2. Answer B: 960 then 1019.2.',
+  o:['960\n991.2','960\n1019.2','960\n992.0','960\n960'],
+  a:1,
+  e:'For 30 rounds: 30*32 = 960. For 31 rounds: 30*32 + (31-30)*(32*1.85) = 960 + 59.2 = 1019.2.'
+},
+{
+  id:13, type:'mcq', topic:'Exception Handling',
+  q:'What is printed?\n\nclass NegativeAmountError(Exception):\n    pass\n\ndef deposit(amount):\n    if amount <= 0:\n        raise NegativeAmountError("Amount must be positive")\n    return amount\n\ntry:\n    result = deposit(-50)\n    print("Deposited:", result)\nexcept NegativeAmountError as e:\n    print("Error:", e)\nprint("Done")',
+  o:['Deposited: -50\nDone','Error: Amount must be positive\nDone','Error: Amount must be positive','Done'],
+  a:1,
+  e:'deposit(-50) raises NegativeAmountError. The except block catches it and prints "Error: Amount must be positive". print("Done") is outside the try/except so it always runs.'
+},
+{
+  id:14, type:'mcq', topic:'Class Variables',
+  q:'What is printed?\n\nclass Booking:\n    _bkNum = 1\n    def __init__(self, name):\n        self.__id = Booking._bkNum\n        Booking._bkNum += 1\n        self.__name = name\n    def __str__(self):\n        return f"Booking {self.__id}: {self.__name}"\n\nb1 = Booking("Alice")\nb2 = Booking("Bob")\nprint(b1)\nprint(b2)',
+  o:['Booking 1: Alice\nBooking 2: Bob','Booking 0: Alice\nBooking 1: Bob','Booking 2: Alice\nBooking 2: Bob','Error'],
+  a:0,
+  e:'_bkNum starts at 1. b1 gets id=1, then _bkNum becomes 2. b2 gets id=2. Both __str__ calls return the correct booking string.'
+},
+{
+  id:15, type:'mcq', topic:'Composition',
+  q:'What is printed?\n\nclass Contact:\n    def __init__(self, name, phone):\n        self.__name = name\n        self.__phone = phone\n    @property\n    def name(self): return self.__name\n    @property\n    def phone(self): return self.__phone\n\nclass PhoneBook:\n    def __init__(self):\n        self.__contacts = []\n    def add(self, c):\n        self.__contacts.append(c)\n    def count(self):\n        return len(self.__contacts)\n\npb = PhoneBook()\npb.add(Contact("Alice", "91234567"))\npb.add(Contact("Bob", "98765432"))\nprint(pb.count())',
+  o:['0','1','2','Error'],
+  a:2,
+  e:'Two Contact objects are added to the PhoneBook list. len(self.__contacts) is 2.'
+},
+{
+  id:16, type:'mcq', topic:'Properties',
+  q:'What is the output?\n\nclass CashCard:\n    def __init__(self, id, amount):\n        self.__id = id\n        self.__balance = amount\n    @property\n    def balance(self):\n        return self.__balance\n    @balance.setter\n    def balance(self, val):\n        if val >= 0:\n            self.__balance = val\n\nc = CashCard("X1", 100)\nc.balance = -50\nprint(c.balance)',
+  o:['-50','100','0','AttributeError'],
+  a:1,
+  e:'The setter checks if val >= 0. -50 fails the check so self.__balance is NOT updated. c.balance remains 100.'
+},
+{
+  id:17, type:'mcq', topic:'Inheritance',
+  q:'What is printed?\n\nclass Person:\n    def __init__(self, name, age):\n        self._name = name\n        self._age = age\n    def __str__(self):\n        return f"{self._name} ({self._age})"\n\nclass Student(Person):\n    def __init__(self, name, age, sid):\n        super().__init__(name, age)\n        self.__sid = sid\n    def __str__(self):\n        return super().__str__() + f" ID:{self.__sid}"\n\ns = Student("Lee", 20, "S001")\nprint(s)',
+  o:['Lee (20)','S001','Lee (20) ID:S001','Student Lee (20)'],
+  a:2,
+  e:'Student.__str__ calls super().__str__() which returns "Lee (20)", then appends " ID:S001". Result: "Lee (20) ID:S001".'
+},
+{
+  id:18, type:'mcq', topic:'Abstract Classes',
+  q:'What is printed?\n\nfrom abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self): pass\n    def describe(self):\n        return f"Area is {self.area()}"\n\nclass Circle(Shape):\n    def __init__(self, r):\n        self.__r = r\n    def area(self):\n        return 3.14 * self.__r ** 2\n\nc = Circle(5)\nprint(c.describe())',
+  o:['Area is 0','Area is 78.5','Area is 3.14','TypeError'],
+  a:1,
+  e:'Circle implements area() returning 3.14*25=78.5. describe() is a concrete method in Shape that calls self.area() — polymorphism via template method pattern. Output: "Area is 78.5".'
+},
+{
+  id:19, type:'mcq', topic:'Collections',
+  q:'What is printed?\n\nclass Item:\n    def __init__(self, name, price):\n        self.name = name\n        self.price = price\n\nitems = {}\nitems["book"] = Item("Python Book", 45.0)\nitems["pen"] = Item("Pen", 2.5)\n\nif "book" in items:\n    print(items["book"].name)\nprint(items.get("pencil", "not found"))',
+  o:['Python Book\nnot found','Python Book\nNone','book\nnot found','Error'],
+  a:0,
+  e:'"book" is a key in the dictionary so items["book"].name prints "Python Book". items.get("pencil", "not found") returns the default "not found" since "pencil" is not a key.'
+},
+{
+  id:20, type:'mcq', topic:'Inheritance',
+  q:'What is printed?\n\nclass FullTimeStaff:\n    _FEES = 32\n    def __init__(self, name, salary):\n        self._name = name\n        self.__salary = salary\n    def computePay(self, rounds):\n        return self.__salary + rounds * self._FEES\n\nf = FullTimeStaff("Sam", 1500)\nprint(f.computePay(20))\nprint(f.computePay(40))',
+  o:['2140\n2780','1500\n1500','2140\n2140','Error'],
+  a:0,
+  e:'computePay = salary + rounds * FEES. For 20: 1500 + 20*32 = 1500+640 = 2140. For 40: 1500 + 40*32 = 1500+1280 = 2780.'
+},
+
+// ════════════════════════════════════════════════
+// MCQ — ERROR SPOTTING (15 questions)
+// ════════════════════════════════════════════════
+{
+  id:21, type:'mcq', topic:'Error Spotting',
+  q:'Which line causes an error?\n\nclass Dog:\n    def __init__(name, breed):    # line 2\n        self.name = name           # line 3\n        self.breed = breed         # line 4\n\nd = Dog("Rex", "Labrador")         # line 6',
+  o:['Line 2','Line 3','Line 6','No error'],
+  a:0,
+  e:'__init__ is missing self as its first parameter. Python passes the instance automatically as the first argument. Without self, "name" receives the instance and self on line 3 is undefined.'
+},
+{
+  id:22, type:'mcq', topic:'Error Spotting',
+  q:'What is wrong with this code?\n\nclass BankAccount:\n    def __init__(self, id, balance):\n        self.__id = id\n        self.__balance = balance\n\nb = BankAccount("A1", 100)\nprint(b.__balance)',
+  o:['No error — prints 100','AttributeError — __balance is name-mangled and not directly accessible','TypeError — wrong number of arguments','SyntaxError'],
+  a:1,
+  e:'Double underscore triggers name mangling. self.__balance becomes _BankAccount__balance internally. Accessing b.__balance from outside the class raises AttributeError. Use a @property getter instead.'
+},
+{
+  id:23, type:'mcq', topic:'Error Spotting',
+  q:'Which line causes a TypeError?\n\nfrom abc import ABC, abstractmethod\n\nclass Animal(ABC):           # line 3\n    @abstractmethod          # line 4\n    def speak(self): pass    # line 5\n\nclass Dog(Animal):           # line 7\n    def bark(self):          # line 8\n        return "Woof"        # line 9\n\nd = Dog()                    # line 11',
+  o:['Line 3','Line 4','Line 7','Line 11'],
+  a:3,
+  e:'Dog inherits from Animal but does NOT implement the abstract method speak(). Attempting to instantiate Dog on line 11 raises TypeError: Cannot instantiate abstract class Dog with abstract method speak.'
+},
+{
+  id:24, type:'mcq', topic:'Error Spotting',
+  q:'What error does this raise?\n\nclass Rectangle:\n    def __init__(self, length, width):\n        self.__length = length\n        self.__width = width\n\nclass Square(Rectangle):\n    def __init__(self, side):\n        super().__init__(side)\n\ns = Square(5)',
+  o:['No error','TypeError: __init__ missing required argument: width','AttributeError: no attribute side','NameError: side not defined'],
+  a:1,
+  e:'Rectangle.__init__ requires two arguments: length and width. Square calls super().__init__(side) passing only one argument. This raises TypeError because width is missing.'
+},
+{
+  id:25, type:'mcq', topic:'Error Spotting',
+  q:'What error occurs?\n\nclass Stack:\n    def __init__(self):\n        self.__items = []\n    def push(self, item):\n        self.__items.append(item)\n    def pop(self):\n        return self.__items.pop()\n\ns = Stack()\ns.push(1)\ns.pop()\ns.pop()',
+  o:['No error','IndexError: pop from empty list','AttributeError','TypeError'],
+  a:1,
+  e:'After push(1) and pop(), the list is empty. The second pop() calls pop() on an empty list which raises IndexError: pop from empty list.'
+},
+{
+  id:26, type:'mcq', topic:'Error Spotting',
+  q:'What is wrong here?\n\nclass Person:\n    def __init__(self, name):\n        self.__name = name\n\nclass Employee(Person):\n    def __init__(self, name, empId):\n        self.__name = name\n        self.__empId = empId\n\ne = Employee("Alice", "E001")\nprint(e._Person__name)',
+  o:['Prints Alice','AttributeError — _Person__name does not exist','Employee.__init__ should call super().__init__','Both B and C are correct'],
+  a:3,
+  e:'Employee.__init__ does NOT call super().__init__(name). This means Person.__init__ is never called so _Person__name is never set. Accessing e._Person__name raises AttributeError. Also, best practice requires calling super().__init__.'
+},
+{
+  id:27, type:'mcq', topic:'Error Spotting',
+  q:'Which statement causes an AttributeError?\n\nclass CashCard:\n    def __init__(self, id, balance):\n        self.__id = id\n        self.__balance = balance\n    @property\n    def balance(self):\n        return self.__balance\n\nc = CashCard("C1", 50)\nprint(c.balance)       # line A\nc.balance = 100        # line B\nprint(c.__balance)     # line C',
+  o:['Line A','Line B','Line C','Lines B and C'],
+  a:3,
+  e:'Line B raises AttributeError because balance has no setter defined — you cannot assign to a read-only property. Line C raises AttributeError because __balance is name-mangled. Both B and C fail.'
+},
+{
+  id:28, type:'mcq', topic:'Error Spotting',
+  q:'What is wrong?\n\nclass Counter:\n    count = 0\n    def increment(self):\n        count += 1\n\nc = Counter()\nc.increment()',
+  o:['No error — count is incremented','UnboundLocalError: count referenced before assignment','AttributeError: no attribute count','TypeError'],
+  a:1,
+  e:'Inside increment(), count += 1 refers to a LOCAL variable count, not the class variable. Python sees the assignment and treats count as local, but it has no local value yet. This raises UnboundLocalError. Fix: use Counter.count += 1 or self.__class__.count += 1.'
+},
+{
+  id:29, type:'mcq', topic:'Error Spotting',
+  q:'What error does this raise?\n\nclass Inventory:\n    def __init__(self):\n        self.__items = {}\n    def getItem(self, code):\n        return self.__items[code]\n\ninv = Inventory()\nprint(inv.getItem("P001"))',
+  o:['None','KeyError: P001','AttributeError','IndexError'],
+  a:1,
+  e:'self.__items is an empty dictionary. Accessing self.__items["P001"] when the key does not exist raises KeyError. Use self.__items.get("P001") or check with "P001" in self.__items first.'
+},
+{
+  id:30, type:'mcq', topic:'Error Spotting',
+  q:'What is wrong with this inheritance?\n\nclass Vehicle:\n    def __init__(self, speed):\n        self.__speed = speed\n\nclass Car(Vehicle):\n    def getSpeed(self):\n        return self.__speed\n\nc = Car(100)\nprint(c.getSpeed())',
+  o:['Prints 100','AttributeError — __speed is private to Vehicle','TypeError','No error'],
+  a:1,
+  e:'self.__speed in Car.getSpeed() refers to _Car__speed, not _Vehicle__speed. They are different attributes due to name mangling. Car never sets _Car__speed so AttributeError is raised. Use self._speed (single underscore, protected) or provide a getter property in Vehicle.'
+},
+{
+  id:31, type:'mcq', topic:'Error Spotting',
+  q:'Which line raises an IndentationError?\n\nclass Box:\n    def __init__(self, size):\n        self.__size = size\n    def getSize(self):      # line 4\n    return self.__size      # line 5\n\nb = Box(10)',
+  o:['Line 4','Line 5','Line 7','No error'],
+  a:1,
+  e:'Line 5 is not indented inside getSize(). Python expects the method body to be indented one level under the def. This causes IndentationError (or SyntaxError depending on Python version).'
+},
+{
+  id:32, type:'mcq', topic:'Error Spotting',
+  q:'What does this raise?\n\nclass Movie:\n    def __init__(self, title, rating):\n        self.__title = title\n        self.__rating = rating\n\nm = Movie("Inception")',
+  o:['No error','TypeError: __init__ missing required argument: rating','AttributeError','ValueError'],
+  a:1,
+  e:'Movie.__init__ requires two arguments (plus self): title and rating. Calling Movie("Inception") provides only title. Python raises TypeError because rating is missing and has no default value.'
+},
+{
+  id:33, type:'mcq', topic:'Error Spotting',
+  q:'What is wrong?\n\nclass Account:\n    def __init__(self, owner, balance=0):\n        self.__owner = owner\n        self.__balance = balance\n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n            return True\n\na = Account("Alice")\nif a.deposit(100) == True:\n    print("Success")\nif a.deposit(-50) == True:\n    print("Also success")',
+  o:['Success\nAlso success','Success','Success\nError','Success only — deposit(-50) returns None not True'],
+  a:3,
+  e:'deposit(-50) does not satisfy amount > 0 so the if block does not run and the function implicitly returns None. None == True is False so "Also success" is NOT printed. Only "Success" prints.'
+},
+{
+  id:34, type:'mcq', topic:'Error Spotting',
+  q:'What error occurs on instantiation?\n\nfrom abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    @abstractmethod\n    def process(self): pass\n    @abstractmethod\n    def refund(self): pass\n\nclass CashPayment(Payment):\n    def process(self):\n        return "Cash processed"\n\np = CashPayment()',
+  o:['No error','TypeError: Cannot instantiate abstract class CashPayment with abstract method refund','AttributeError','NameError'],
+  a:1,
+  e:'CashPayment implements process() but NOT refund(). A class with any unimplemented abstract methods cannot be instantiated. Python raises TypeError listing the unimplemented abstract method.'
+},
+{
+  id:35, type:'mcq', topic:'Error Spotting',
+  q:'What is the issue?\n\nclass Employee:\n    def __init__(self, name, dept):\n        self._name = name\n        self._dept = dept\n\nclass Manager(Employee):\n    def __init__(self, name, dept, reports):\n        self._name = name\n        self._dept = dept\n        self._reports = reports\n    def addReport(self, emp):\n        self._reports.append(emp)',
+  o:['No error — Manager works correctly',
+     'Manager should call super().__init__(name, dept) instead of duplicating code',
+     'TypeError in addReport',
+     'AttributeError: _reports not defined'],
+  a:1,
+  e:'Manager duplicates the attribute initialisation from Employee instead of calling super().__init__(name, dept). This violates DRY and means any future changes to Employee.__init__ will not be reflected in Manager. Always call super().__init__.'
+},
+
+// ════════════════════════════════════════════════
+// MCQ — CONCEPT IDENTIFICATION (15 questions)
+// ════════════════════════════════════════════════
+{
+  id:36, type:'mcq', topic:'Composition',
+  q:'Which line BEST demonstrates object composition?\n\nclass Engine:               # line 1\n    def start(self): pass   # line 2\n\nclass Car:                  # line 4\n    def __init__(self, model, engine):  # line 5\n        self.__model = model            # line 6\n        self.__engine = engine          # line 7\n    def start(self):                    # line 8\n        self.__engine.start()           # line 9',
+  o:['self.__model = model','self.__engine = engine','def start(self):','class Car:'],
+  a:1,
+  e:'Composition means HAS-A. self.__engine = engine stores an Engine OBJECT as an instance variable inside Car. self.__model is a string, not an object relationship. This is the composition line.'
+},
+{
+  id:37, type:'mcq', topic:'Method Overriding',
+  q:'Which term describes deduct() in MemberCashCard?\n\nclass CashCard:\n    def deduct(self, amount):\n        if self.__balance >= amount:\n            self.__balance -= amount\n            return True\n        return False\n\nclass MemberCashCard(CashCard):\n    def deduct(self, amt):\n        if super().deduct(amt):\n            self.__points += int(amt)\n            return True\n        return False',
+  o:['Method overloading','Method overriding by replacement','Method overriding by refinement','Polymorphism'],
+  a:2,
+  e:'The signature matches the parent method AND it calls super().deduct(amt). Calling the parent method is the defining feature of overriding by REFINEMENT. Replacement would not call super().'
+},
+{
+  id:38, type:'mcq', topic:'Abstract Classes',
+  q:'Which part enforces that subclasses MUST implement start()?\n\nfrom abc import ABC, abstractmethod\n\nclass AbstractVehicle(ABC):    # A\n    @abstractmethod             # B\n    def start(self): pass\n\nclass Bike(AbstractVehicle):   # C\n    def start(self):            # D\n        return "Pedalling"',
+  o:['class AbstractVehicle(ABC):','@abstractmethod','class Bike(AbstractVehicle):','def start(self):'],
+  a:1,
+  e:'The @abstractmethod decorator marks start() as abstract and forces all concrete subclasses to implement it. Inheriting from ABC alone is not sufficient — @abstractmethod is what creates the enforcement.'
+},
+{
+  id:39, type:'mcq', topic:'SOLID Principles',
+  q:'Which SOLID principle states that a class should have only one reason to change?',
+  o:['Open-Closed Principle','Single Responsibility Principle','Liskov Substitution Principle','Dependency Inversion Principle'],
+  a:1,
+  e:'Single Responsibility Principle (SRP): a class should model one thing and have only one reason to change. If a class handles both data storage and display formatting, it has two responsibilities and should be split.'
+},
+{
+  id:40, type:'mcq', topic:'SOLID Principles',
+  q:'Which SOLID principle is violated if adding a new shape type requires modifying an existing drawShapes() function?',
+  o:['Single Responsibility Principle','Open-Closed Principle','Liskov Substitution Principle','Interface Segregation Principle'],
+  a:1,
+  e:'Open-Closed Principle: software entities should be OPEN for extension but CLOSED for modification. New shapes should be added by creating new subclasses, not by editing existing working code.'
+},
+{
+  id:41, type:'mcq', topic:'Inheritance',
+  q:'Which relationship does inheritance represent?',
+  o:['HAS-A','USES-A','IS-A','PART-OF'],
+  a:2,
+  e:'Inheritance models an IS-A relationship. A Dog IS-A Animal. A JuniorAccount IS-A BankAccount. Composition models HAS-A (a Car HAS-A Engine).'
+},
+{
+  id:42, type:'mcq', topic:'Composition',
+  q:'Which relationship does object composition represent?',
+  o:['IS-A','HAS-A','EXTENDS','IMPLEMENTS'],
+  a:1,
+  e:'Composition models a HAS-A relationship. A PhoneBook HAS-A collection of Contacts. A Car HAS-A Engine. The composed object is stored as an instance variable.'
+},
+{
+  id:43, type:'mcq', topic:'Properties',
+  q:'What is the correct way to define a read-only property for __balance?',
+  o:['def getBalance(self): return self.__balance',
+     '@property\ndef balance(self): return self.__balance',
+     '@getter\ndef balance(self): return self.__balance',
+     'balance = property(self.__balance)'],
+  a:1,
+  e:'The @property decorator creates a getter. Accessing obj.balance calls the method. Without a @balance.setter, it is read-only. @getter does not exist in Python. The old-style property() factory requires a function reference, not a value.'
+},
+{
+  id:44, type:'mcq', topic:'Encapsulation',
+  q:'What is the purpose of using double underscore (self.__balance) for an attribute?',
+  o:['It makes the attribute read-only',
+     'It hides the attribute and triggers name mangling to prevent direct external access',
+     'It makes the attribute a class variable',
+     'It marks the attribute as deprecated'],
+  a:1,
+  e:'Double underscore triggers Python\'s name mangling: self.__balance in class Foo becomes _Foo__balance. This makes it harder to accidentally access or override from outside or in subclasses. It is the Python convention for private attributes.'
+},
+{
+  id:45, type:'mcq', topic:'Method Overriding',
+  q:'Which describes method overriding by REPLACEMENT?\n\nclass CashCard:\n    def __str__(self):\n        return f"Id: {self.__id}"\n\nclass MemberCashCard(CashCard):\n    def __str__(self):\n        return f"Org: {self.__organisation}"',
+  o:['MemberCashCard.__str__ calls super().__str__() first',
+     'MemberCashCard.__str__ completely replaces CashCard.__str__ without calling super()',
+     'Both methods have the same body',
+     'This is not method overriding'],
+  a:1,
+  e:'Overriding by REPLACEMENT means the subclass method completely replaces the parent method — it does NOT call super(). If super().__str__() was called inside MemberCashCard.__str__, it would be overriding by refinement.'
+},
+{
+  id:46, type:'mcq', topic:'Polymorphism',
+  q:'Which OOP concept allows this code to work correctly with different object types?\n\nanimals = [Dog(), Cat(), Bird()]\nfor a in animals:\n    a.speak()',
+  o:['Encapsulation','Inheritance','Polymorphism','Abstraction'],
+  a:2,
+  e:'Polymorphism allows objects of different types to be treated through a common interface. Each animal has its own speak() implementation but the loop calls speak() on each without knowing or caring about the specific type.'
+},
+{
+  id:47, type:'mcq', topic:'Abstract Classes',
+  q:'What is the purpose of an abstract class in Python?',
+  o:['To prevent a class from being modified',
+     'To define a common interface and force subclasses to implement specific methods',
+     'To make all methods private',
+     'To create objects that cannot hold state'],
+  a:1,
+  e:'An abstract class defines a blueprint — it specifies WHAT methods subclasses must have without providing the implementation. It cannot be instantiated directly. This ensures all concrete subclasses follow the same interface.'
+},
+{
+  id:48, type:'mcq', topic:'Exception Handling',
+  q:'Why should you catch specific exceptions before general ones?',
+  o:['Python requires it by syntax',
+     'General exceptions are slower to process',
+     'Python checks except blocks in order — a general exception would catch everything first, making specific handlers unreachable',
+     'Specific exceptions must always be re-raised'],
+  a:2,
+  e:'Python evaluates except blocks top to bottom and executes the FIRST match. Since ValueError is a subclass of Exception, "except Exception" catches it first if placed before "except ValueError". Always order from most specific to most general.'
+},
+{
+  id:49, type:'mcq', topic:'Encapsulation',
+  q:'What is the difference between single underscore (_name) and double underscore (__name)?',
+  o:['No difference — both are private',
+     '_name is a convention for protected (accessible in subclasses), __name triggers name mangling (harder to access outside the class)',
+     '__name is public, _name is private',
+     '_name triggers name mangling, __name is just a convention'],
+  a:1,
+  e:'Single underscore is a CONVENTION meaning "protected" — it signals to other developers not to access it directly but Python does not enforce this. Double underscore triggers actual name mangling: __attr becomes _ClassName__attr, making it genuinely harder to access outside the class.'
+},
+{
+  id:50, type:'mcq', topic:'SOLID Principles',
+  q:'What does the Liskov Substitution Principle state?',
+  o:['All methods in a class must have a single purpose',
+     'Subclasses should be substitutable for their parent class without breaking the program',
+     'Classes should depend on abstractions not concrete implementations',
+     'A class should be open for extension but closed for modification'],
+  a:1,
+  e:'LSP: objects of a subclass should be usable wherever the parent class is expected, without breaking correctness. If a JuniorAccount cannot be used wherever BankAccount is expected (e.g. withdraw behaves completely differently), LSP may be violated.'
+},
+
+// ════════════════════════════════════════════════
+// MCQ — EXCEPTION FLOW (10 questions)
+// ════════════════════════════════════════════════
+{
+  id:51, type:'mcq', topic:'Exception Handling',
+  q:'What is printed when user enters 3?\n\nx = [1, 2, 3]\ntry:\n    print("begin try")\n    index = int(input())\n    x[index] = 4\n    print("end try")\nexcept Exception as e:\n    print("except block")\n    return\nelse:\n    print("else block")\nfinally:\n    print("finally block")',
+  o:['begin try\nexcept block\nfinally block',
+     'begin try\nexcept block\nelse block\nfinally block',
+     'begin try\nend try\nelse block\nfinally block',
+     'begin try\nfinally block'],
+  a:0,
+  e:'Index 3 is out of range (valid: 0-2). IndexError is caught by except Exception. The else block only runs if NO exception occurred. finally ALWAYS runs. Output: begin try → except block → finally block.'
+},
+{
+  id:52, type:'mcq', topic:'Exception Handling',
+  q:'What is printed when user enters 1?\n\nx = [1, 2, 3]\ntry:\n    print("begin try")\n    x[int(input())] = 4\n    print("end try")\n    return\nexcept Exception as e:\n    print("except block")\nelse:\n    print("else block")\nfinally:\n    print("finally block")\nprint("end main")',
+  o:['begin try\nend try\nfinally block',
+     'begin try\nend try\nelse block\nfinally block',
+     'begin try\nend try\nfinally block\nend main',
+     'begin try\nend try\nelse block\nfinally block\nend main'],
+  a:0,
+  e:'Index 1 is valid so no exception. The return statement exits the function AFTER finally runs. else block is skipped (return was hit before else). Finally ALWAYS runs even with return. end main is never reached.'
+},
+{
+  id:53, type:'mcq', topic:'Exception Handling',
+  q:'What is the output?\n\ntry:\n    x = int("hello")\nexcept ValueError:\n    print("ValueError")\nexcept Exception:\n    print("Exception")\nfinally:\n    print("Finally")',
+  o:['ValueError\nFinally','Exception\nFinally','ValueError','Finally'],
+  a:0,
+  e:'int("hello") raises ValueError. The first except block matches (ValueError is checked before Exception). "ValueError" is printed. finally always runs printing "Finally".'
+},
+{
+  id:54, type:'mcq', topic:'Exception Handling',
+  q:'Which is the correct order for catching exceptions?\n\nOption A:\nexcept ValueError:\nexcept Exception:\n\nOption B:\nexcept Exception:\nexcept ValueError:',
+  o:['Option A — specific before general','Option B — general before specific','Either order works','Neither is valid Python'],
+  a:0,
+  e:'Always catch specific exceptions before general ones. In Option B, "except Exception" would catch ValueError first making the ValueError handler unreachable dead code. Python does not raise an error for this but it is logically incorrect.'
+},
+{
+  id:55, type:'mcq', topic:'Exception Handling',
+  q:'What is printed?\n\nclass AppError(Exception):\n    pass\n\ndef risky(x):\n    if x < 0:\n        raise AppError("negative")\n    return x * 2\n\ntry:\n    print(risky(5))\n    print(risky(-1))\n    print(risky(3))\nexcept AppError as e:\n    print(f"Caught: {e}")',
+  o:['10\n6','10\nCaught: negative','Caught: negative','10\nCaught: negative\n6'],
+  a:1,
+  e:'risky(5) succeeds → prints 10. risky(-1) raises AppError → caught → prints "Caught: negative". risky(3) is never reached because the exception broke the try block.'
+},
+{
+  id:56, type:'mcq', topic:'Exception Handling',
+  q:'What happens when you raise an exception inside a finally block?\n\ntry:\n    raise ValueError("first")\nexcept ValueError:\n    print("caught first")\nfinally:\n    raise RuntimeError("second")',
+  o:['Both exceptions are printed',
+     'Only ValueError is raised',
+     'RuntimeError replaces ValueError — only RuntimeError propagates',
+     'SyntaxError'],
+  a:2,
+  e:'A new exception raised inside a finally block replaces any previously handled exception. The RuntimeError propagates out of the function. The ValueError was already caught so only RuntimeError is seen by the caller.'
+},
+{
+  id:57, type:'mcq', topic:'Exception Handling',
+  q:'What is the purpose of a user-defined exception class?\n\nclass InsufficientFundsError(Exception):\n    pass',
+  o:['To replace the built-in Exception class',
+     'To create domain-specific exceptions that communicate meaningful business rule violations',
+     'To make exceptions that cannot be caught',
+     'To add extra attributes to all exceptions'],
+  a:1,
+  e:'User-defined exceptions give meaningful names to business rule violations. InsufficientFundsError is far more informative than a generic ValueError or Exception. Callers can catch specifically InsufficientFundsError without catching unrelated errors.'
+},
+{
+  id:58, type:'mcq', topic:'Exception Handling',
+  q:'What is printed?\n\ndef divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nresult = divide(10, 0)\nif result is None:\n    print("Cannot divide")\nelse:\n    print(result)',
+  o:['0','None','Cannot divide','ZeroDivisionError'],
+  a:2,
+  e:'divide(10, 0) catches ZeroDivisionError and returns None. The caller checks "if result is None" which is True, so "Cannot divide" is printed. This is a common pattern for returning a sentinel value instead of letting exceptions propagate.'
+},
+{
+  id:59, type:'mcq', topic:'Exception Handling',
+  q:'How should you handle an exception and still let it propagate to the caller?\n\ntry:\n    risky_operation()\nexcept Exception as e:\n    print("Logging:", e)\n    # What goes here?',
+  o:['return e','ignore it — it is already handled','raise','raise Exception("new error")'],
+  a:2,
+  e:'"raise" with no arguments re-raises the current exception. This allows you to log or perform cleanup while still propagating the original exception to the caller.'
+},
+{
+  id:60, type:'mcq', topic:'Exception Handling',
+  q:'What is the output?\n\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    print("zero")\nexcept ArithmeticError:\n    print("arithmetic")\nexcept Exception:\n    print("exception")',
+  o:['zero','arithmetic','exception','zero\narithmetic\nexception'],
+  a:0,
+  e:'ZeroDivisionError is a subclass of ArithmeticError which is a subclass of Exception. Python checks except blocks in order and executes the FIRST match. ZeroDivisionError matches first, printing "zero". The other handlers are skipped.'
+},
+
+// ════════════════════════════════════════════════
+// MCQ — COLLECTIONS (10 questions)
+// ════════════════════════════════════════════════
+{
+  id:61, type:'mcq', topic:'Collections',
+  q:'Which code correctly adds and retrieves an object from a list collection?',
+  o:['cards = {}\ncards.append(CashCard("C1", 10))',
+     'cards = []\ncards.append(CashCard("C1", 10))\nprint(cards[0].balance)',
+     'cards = []\ncards.add(CashCard("C1", 10))',
+     'cards = ()\ncards.append(CashCard("C1", 10))'],
+  a:1,
+  e:'Lists use [] and append(). cards[0] retrieves the first element. Dictionaries use {}, lists have no .add() method, and tuples are immutable so append() would fail.'
+},
+{
+  id:62, type:'mcq', topic:'Collections',
+  q:'Which code searches a list of Student objects by student ID?',
+  o:['if sid in students: print(students[sid])',
+     'for s in students:\n    if s.id == sid:\n        print(s)\n        break\nelse:\n    print("Not found")',
+     'print(students.get(sid, "Not found"))',
+     'print(students.find(sid))'],
+  a:1,
+  e:'A list does not support key-based lookup. You must iterate and compare. The for/else pattern is the correct ICT162 idiom: if the loop completes without breaking, the else block runs. .get() is for dicts. .find() does not exist for lists.'
+},
+{
+  id:63, type:'mcq', topic:'Collections',
+  q:'Which correctly removes an object from a dictionary collection by key?',
+  o:['del cards[card_id]',
+     'cards.remove(card_id)',
+     'cards.pop(cards[card_id])',
+     'cards.delete(card_id)'],
+  a:0,
+  e:'"del cards[key]" removes the key-value pair from a dictionary. .remove() is a list method. .pop(key) also works for dicts but the syntax shown is wrong. .delete() does not exist.'
+},
+{
+  id:64, type:'mcq', topic:'Collections',
+  q:'What is printed?\n\nbookings = {}\nbookings[1] = "Alice"\nbookings[2] = "Bob"\nbookings[3] = "Carol"\n\nfor k, v in bookings.items():\n    if v == "Bob":\n        del bookings[2]\n\nprint(len(bookings))',
+  o:['3','2','1','RuntimeError: dictionary changed during iteration'],
+  a:3,
+  e:'You cannot modify a dictionary while iterating over it with .items(). Python raises RuntimeError: dictionary changed size during iteration. Build a list of keys to delete first, then delete after the loop.'
+},
+{
+  id:65, type:'mcq', topic:'Collections',
+  q:'Which correctly checks if an object exists in a list collection, then removes it?',
+  o:['cards.delete(c)',
+     'if c in cards:\n    cards.remove(c)',
+     'del cards[c]',
+     'cards.pop(c)'],
+  a:1,
+  e:'"c in cards" checks membership (uses __eq__). cards.remove(c) removes the first matching element. Always check first to avoid ValueError if the element is not present. del cards[index] requires an index, not an object.'
+},
+{
+  id:66, type:'mcq', topic:'Collections',
+  q:'What does cards.pop(1) do to a list?\n\ncards = [A, B, C, D]',
+  o:['Removes and returns the element at index 1 (B); remaining list is [A, C, D]',
+     'Removes the last element (D)',
+     'Removes element B but does not return it',
+     'Raises KeyError'],
+  a:0,
+  e:'list.pop(index) removes AND returns the element at the given index. After pop(1), the list becomes [A, C, D] and the method returns B. Elements to the right shift left.'
+},
+{
+  id:67, type:'mcq', topic:'Collections',
+  q:'Which code correctly iterates all values in a dictionary of objects?',
+  o:['for k in bookings:\n    print(bookings[k])',
+     'for b in bookings.values():\n    print(b)',
+     'for k, v in bookings:\n    print(v)',
+     'Both A and B are correct'],
+  a:3,
+  e:'Option A iterates keys and accesses values by key — correct. Option B uses .values() to iterate values directly — also correct. Option C is wrong: for k,v in bookings iterates keys only (no unpacking). Both A and B work.'
+},
+{
+  id:68, type:'mcq', topic:'Collections',
+  q:'What is the difference between a list and a dictionary collection in ICT162?',
+  o:['Lists are faster than dictionaries',
+     'Lists use integer indices for access; dictionaries use keys (like booking id or card id) for direct O(1) lookup',
+     'Dictionaries can only store strings',
+     'Lists are mutable, dictionaries are immutable'],
+  a:1,
+  e:'The key practical difference: dictionary lookup by key is O(1) regardless of size. List search by value requires iterating O(n). Use a dictionary when you need to retrieve objects by a unique identifier like booking ID or card ID.'
+},
+{
+  id:69, type:'mcq', topic:'Collections',
+  q:'What is printed?\n\ncontacts = []\ncontacts.append("Alice")\ncontacts.append("Bob")\ncontacts.insert(0, "Zara")\nprint(contacts[0])\nprint(len(contacts))',
+  o:['Alice\n2','Zara\n3','Alice\n3','Zara\n2'],
+  a:1,
+  e:'insert(0, "Zara") inserts "Zara" at index 0, shifting everything right. The list becomes ["Zara", "Alice", "Bob"]. contacts[0] is "Zara" and len() is 3.'
+},
+{
+  id:70, type:'mcq', topic:'Collections',
+  q:'Which is the correct way to use a class variable as the dictionary key in ICT162?\n\nclass Booking:\n    _bkNum = 1\n    def __init__(self, passenger):\n        self.__id = Booking._bkNum\n        Booking._bkNum += 1\n        self.__passenger = passenger',
+  o:['bookings[booking] = booking',
+     'bookings[booking.__id] = booking',
+     'bookings[booking.id] = booking',
+     'bookings.append(booking)'],
+  a:2,
+  e:'bookings[booking.id] uses the property getter to retrieve the booking ID as the dictionary key, with the Booking object as the value. bookings[booking.__id] would fail due to name mangling from outside the class. .append() is for lists.'
+},
+
+// ════════════════════════════════════════════════
+// CODE WRITE (25 questions)
+// ════════════════════════════════════════════════
+{
+  id:101, type:'code_write', topic:'Classes & Objects',
+  marks:10,
+  q:'Define a class BankAccount with:\n• __init__(self, accountId: str, pin: str, balance: float = 100.0)\n• Getter properties for accountId, pin, and balance\n• deposit(amount) — adds amount to balance\n• withdraw(amount) — deducts only if balance sufficient; returns True if successful, False otherwise\n• __str__ returns: "Account: A001  Balance: $150.00"',
+  starter:'class BankAccount:\n    pass',
+  hints:[
+    'Private attributes in Python use double underscore (self.__balance). Methods then access them via self.__balance only, not self.balance.',
+    'Keywords: def __init__, @property, def deposit, def withdraw, def __str__, f-string with :.2f for currency formatting'
+  ],
+  rubric:[
+    {criterion:'__init__ with correct parameters using self.__ for all attributes', marks:2},
+    {criterion:'Getter @property for accountId, pin, balance', marks:2},
+    {criterion:'deposit(amount) correctly adds to balance', marks:1},
+    {criterion:'withdraw checks balance before deducting, returns True/False', marks:3},
+    {criterion:'__str__ returns correctly formatted string', marks:2}
+  ],
+  model:'class BankAccount:\n    def __init__(self, accountId, pin, balance=100.0):\n        self.__accountId = accountId\n        self.__pin = pin\n        self.__balance = balance\n\n    @property\n    def accountId(self):\n        return self.__accountId\n\n    @property\n    def pin(self):\n        return self.__pin\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount <= self.__balance:\n            self.__balance -= amount\n            return True\n        return False\n\n    def __str__(self):\n        return f\'Account: {self.__accountId}  Balance: ${self.__balance:.2f}\'',
+  e:'Key points: double-underscore for private attributes, @property for getters, withdraw checks before deducting and returns bool, __str__ uses :.2f for 2 decimal places.'
+},
+{
+  id:102, type:'code_write', topic:'Inheritance',
+  marks:12,
+  q:'JuniorAccount is a subclass of BankAccount.\n\nWrite JuniorAccount with:\n• __init__(self, id, guardian: str, balance: float = 0.0) — calls super().__init__\n• Getter property for guardian\n• withdraw(amount) — limits withdrawal to max $50; returns True/False\n• accumulateInterest() — uses class variable _interestRate = 0.04\n• __str__ — includes all BankAccount info plus guardian name',
+  starter:'class JuniorAccount(BankAccount):\n    _interestRate = 0.04\n    pass',
+  hints:[
+    'Call super().__init__(id, \'\', balance) to initialise the parent. Guardian is a NEW attribute specific to JuniorAccount — don\'t pass it to BankAccount.',
+    'Keywords: super().__init__, @property, def withdraw, def accumulateInterest, super().__str__()'
+  ],
+  rubric:[
+    {criterion:'class JuniorAccount(BankAccount) with _interestRate = 0.04', marks:1},
+    {criterion:'__init__ calls super().__init__ with correct args and sets self.__guardian', marks:3},
+    {criterion:'Getter property for guardian', marks:1},
+    {criterion:'withdraw limits to $50 max and returns True/False', marks:3},
+    {criterion:'accumulateInterest uses type(self)._interestRate', marks:2},
+    {criterion:'__str__ calls super().__str__() and appends guardian', marks:2}
+  ],
+  model:'class JuniorAccount(BankAccount):\n    _interestRate = 0.04\n\n    def __init__(self, id, guardian, balance=0.0):\n        super().__init__(id, \'\', balance)\n        self.__guardian = guardian\n\n    @property\n    def guardian(self):\n        return self.__guardian\n\n    def withdraw(self, amount):\n        if amount > 50:\n            return False\n        return super().withdraw(amount)\n\n    def accumulateInterest(self):\n        interest = self.balance * type(self)._interestRate\n        self.deposit(interest)\n\n    def __str__(self):\n        return super().__str__() + f\'  Guardian: {self.__guardian}\'',
+  e:'super().__init__ must be called first. withdraw checks the $50 limit before delegating to super().withdraw(). type(self)._interestRate picks up the subclass rate. __str__ extends the parent string using super().__str__().'
+},
+{
+  id:103, type:'code_write', topic:'Abstract Classes',
+  marks:9,
+  q:'Implement the abstract class DeliveryPartner (JUL 2023 exam):\n\n• Class variable _FEES_PER_ROUND = 32\n• Instance variables: _callSign (str), _name (str)\n• Constructor initialises _callSign and _name\n• Getter properties for callSign and name\n• Abstract method computePay(rounds) — no implementation\n• __str__ returns: "Name: Lim Kee  CallSign: DP-007"',
+  starter:'from abc import ABC, abstractmethod\n\nclass DeliveryPartner(ABC):\n    pass',
+  hints:[
+    'Abstract classes inherit from ABC. Abstract methods use @abstractmethod. The class cannot be instantiated directly — only concrete subclasses can.',
+    'Keywords: ABC, @abstractmethod, _FEES_PER_ROUND = 32, @property, def computePay'
+  ],
+  rubric:[
+    {criterion:'class DeliveryPartner(ABC) with _FEES_PER_ROUND = 32', marks:2},
+    {criterion:'__init__ sets _callSign and _name with single underscore (protected)', marks:2},
+    {criterion:'Getter @property for callSign and name', marks:2},
+    {criterion:'@abstractmethod on computePay(rounds)', marks:2},
+    {criterion:'__str__ returns correct formatted string', marks:1}
+  ],
+  model:'from abc import ABC, abstractmethod\n\nclass DeliveryPartner(ABC):\n    _FEES_PER_ROUND = 32\n\n    def __init__(self, callSign, name):\n        self._callSign = callSign\n        self._name = name\n\n    @property\n    def callSign(self):\n        return self._callSign\n\n    @property\n    def name(self):\n        return self._name\n\n    @abstractmethod\n    def computePay(self, rounds):\n        pass\n\n    def __str__(self):\n        return f\'Name: {self._name}  CallSign: {self._callSign}\'',
+  e:'Note single underscore (_callSign, _name) — protected so subclasses can access directly. @abstractmethod forces all concrete subclasses to implement computePay or they cannot be instantiated.'
+},
+{
+  id:104, type:'code_write', topic:'Composition',
+  marks:10,
+  q:'Write the Passenger class using object composition with a Flight object.\n\nPassenger has:\n• __init__(self, ppNo: str, name: str, flight: Flight)\n• Getter properties for ppNo, name, flight\n• Setter property for flight\n• getDepartureDate() — returns the departureDate of the flight\n• __str__ returns: "Name: John  Flight: SQ1  Destination: LA"',
+  starter:'class Passenger:\n    pass',
+  hints:[
+    'Composition: Passenger HAS-A Flight stored as self.__flight. Delegate to it via self.__flight.departureDate — do NOT copy the date into Passenger.',
+    'Keywords: @property, @flight.setter, def getDepartureDate, self.__flight.departureDate'
+  ],
+  rubric:[
+    {criterion:'__init__ stores ppNo, name, flight as private instance variables', marks:2},
+    {criterion:'Getter @property for ppNo, name, flight', marks:2},
+    {criterion:'Setter @property for flight', marks:1},
+    {criterion:'getDepartureDate() delegates to self.__flight.departureDate', marks:2},
+    {criterion:'__str__ returns correctly formatted string', marks:3}
+  ],
+  model:'class Passenger:\n    def __init__(self, ppNo, name, flight):\n        self.__ppNo = ppNo\n        self.__name = name\n        self.__flight = flight\n\n    @property\n    def ppNo(self):\n        return self.__ppNo\n\n    @property\n    def name(self):\n        return self.__name\n\n    @property\n    def flight(self):\n        return self.__flight\n\n    @flight.setter\n    def flight(self, newFlight):\n        self.__flight = newFlight\n\n    def getDepartureDate(self):\n        return self.__flight.departureDate\n\n    def __str__(self):\n        return f\'Name: {self.__name}  {self.__flight}\'',
+  e:'getDepartureDate() calls self.__flight.departureDate — it delegates to the composed object. __str__ reuses Flight.__str__ by embedding self.__flight in the f-string.'
+},
+{
+  id:105, type:'code_write', topic:'Exception Handling',
+  marks:8,
+  q:'Write BoxException and Box:\n\n1. BoxException — subclass of Exception, no extra attributes\n2. Box with:\n   • Class variable _maxItems = 10\n   • __init__(numberOfItems) — raises BoxException if > _maxItems\n   • add(items) — raises BoxException if result exceeds _maxItems\n   • remove(items) — raises BoxException if result goes negative\n   • __str__ returns: "Number of items: 5"',
+  starter:'class BoxException(Exception):\n    pass\n\nclass Box:\n    _maxItems = 10\n    pass',
+  hints:[
+    'Custom exceptions only need to inherit from Exception — no __init__ needed unless you want a custom message. Use raise BoxException("message") to raise.',
+    'Keywords: raise BoxException, _maxItems, def add, def remove, f-string or format()'
+  ],
+  rubric:[
+    {criterion:'BoxException inherits from Exception', marks:1},
+    {criterion:'__init__ sets numberOfItems and raises if > _maxItems', marks:2},
+    {criterion:'add() raises BoxException when max exceeded', marks:2},
+    {criterion:'remove() raises BoxException when result negative', marks:2},
+    {criterion:'__str__ returns correct format', marks:1}
+  ],
+  model:'class BoxException(Exception):\n    pass\n\nclass Box:\n    _maxItems = 10\n\n    def __init__(self, numberOfItems):\n        if numberOfItems > Box._maxItems:\n            raise BoxException(f\'Cannot create box with more than {Box._maxItems} items\')\n        self.__numberOfItems = numberOfItems\n\n    def add(self, items):\n        if self.__numberOfItems + items > Box._maxItems:\n            raise BoxException(f\'Cannot add — exceeds max of {Box._maxItems}\')\n        self.__numberOfItems += items\n\n    def remove(self, items):\n        if self.__numberOfItems - items < 0:\n            raise BoxException(\'Cannot remove — would result in negative items\')\n        self.__numberOfItems -= items\n\n    def __str__(self):\n        return f\'Number of items: {self.__numberOfItems}\'',
+  e:'Check condition BEFORE modifying state. Raising an exception stops the method from changing data. BoxException needs nothing extra — inheriting from Exception is sufficient.'
+},
+{
+  id:106, type:'code_write', topic:'Collections',
+  marks:10,
+  q:'Write the TutorialGroup class managing Assessment objects in a dictionary.\n\nTutorialGroup:\n• __init__(name) — name (str), __assessments = {} (empty dict)\n• addAssessment(id, mark) — creates Assessment(id, mark), adds to dict with id as key; raises InvalidAssessmentException if id already exists\n• removeAssessment(id) — removes from dict; raises InvalidAssessmentException if id not found OR mark is not 0\n• __str__ — returns all assessments one per line\n\nAssume InvalidAssessmentException and Assessment classes exist.',
+  starter:'class TutorialGroup:\n    def __init__(self, name):\n        self.__name = name\n        self.__assessments = {}',
+  hints:[
+    'Use "if id in self.__assessments" to check key existence. To add: self.__assessments[id] = Assessment(id, mark). To remove: del self.__assessments[id].',
+    'Keywords: if id in self.__assessments, raise InvalidAssessmentException, del self.__assessments[id], for ... in self.__assessments.values()'
+  ],
+  rubric:[
+    {criterion:'addAssessment creates Assessment and adds to dict correctly', marks:3},
+    {criterion:'addAssessment raises exception if id already exists', marks:2},
+    {criterion:'removeAssessment raises exception if id not found', marks:2},
+    {criterion:'removeAssessment raises exception if mark is not 0', marks:2},
+    {criterion:'__str__ iterates dictionary values and returns all assessments', marks:1}
+  ],
+  model:'class TutorialGroup:\n    def __init__(self, name):\n        self.__name = name\n        self.__assessments = {}\n\n    def addAssessment(self, id, mark):\n        if id in self.__assessments:\n            raise InvalidAssessmentException(f\'Assessment for {id} already added!\')\n        self.__assessments[id] = Assessment(id, mark)\n\n    def removeAssessment(self, id):\n        if id not in self.__assessments:\n            raise InvalidAssessmentException(f\'Assessment for {id} not found!\')\n        if self.__assessments[id].mark != 0:\n            raise InvalidAssessmentException(\'Cannot remove if assessment mark is not 0\')\n        del self.__assessments[id]\n\n    def __str__(self):\n        result = \'\'\n        for a in self.__assessments.values():\n            result += str(a) + \'\\n\'\n        return result',
+  e:'Check existence first, then check mark. del dict[key] removes the entry. Iterate .values() to get objects. The order of checks in removeAssessment matters.'
+},
+{
+  id:107, type:'code_write', topic:'Abstract Classes',
+  marks:12,
+  q:'JAN 2024 exam: Implement abstract class CCA and concrete subclass SportsGroup.\n\nCCA (abstract):\n• Class variable _STANDARD_FEES = 20.0\n• Instance variable _name (str)\n• Constructor, getter property for name\n• Abstract method getFees()\n• __str__ returns CCA name\n\nSportsGroup(CCA):\n• Additional instance variable _venue (str)\n• Constructor calls super().__init__(name) and sets _venue\n• getFees() returns _STANDARD_FEES\n• __str__ includes name and venue',
+  starter:'from abc import ABC, abstractmethod\n\nclass CCA(ABC):\n    _STANDARD_FEES = 20.0\n    pass\n\nclass SportsGroup(CCA):\n    pass',
+  hints:[
+    'Abstract classes use ABC and @abstractmethod. Concrete subclasses MUST implement ALL abstract methods or they cannot be instantiated.',
+    'Keywords: ABC, @abstractmethod, super().__init__(name), def getFees, @property, type(self)._STANDARD_FEES'
+  ],
+  rubric:[
+    {criterion:'CCA(ABC) with _STANDARD_FEES class variable', marks:1},
+    {criterion:'CCA __init__ sets _name, getter @property for name', marks:2},
+    {criterion:'@abstractmethod on getFees()', marks:2},
+    {criterion:'CCA __str__ returns name', marks:1},
+    {criterion:'SportsGroup calls super().__init__(name) and sets _venue', marks:2},
+    {criterion:'getFees() returns _STANDARD_FEES', marks:2},
+    {criterion:'SportsGroup __str__ includes name and venue', marks:2}
+  ],
+  model:'from abc import ABC, abstractmethod\n\nclass CCA(ABC):\n    _STANDARD_FEES = 20.0\n\n    def __init__(self, name):\n        self._name = name\n\n    @property\n    def name(self):\n        return self._name\n\n    @abstractmethod\n    def getFees(self):\n        pass\n\n    def __str__(self):\n        return f\'CCA: {self._name}\'\n\nclass SportsGroup(CCA):\n    def __init__(self, name, venue):\n        super().__init__(name)\n        self._venue = venue\n\n    def getFees(self):\n        return type(self)._STANDARD_FEES\n\n    def __str__(self):\n        return super().__str__() + f\'  Venue: {self._venue}\'',
+  e:'type(self)._STANDARD_FEES resolves to the subclass rate if overridden. super().__str__() in SportsGroup reuses CCA.__str__ — overriding by refinement, same pattern as MemberCashCard.'
+},
+{
+  id:108, type:'code_write', topic:'Composition',
+  marks:10,
+  q:'JUL 2024 exam: Implement ServiceStaff and ServiceJob.\n\nServiceStaff:\n• __init__(name, skillFactor, rate)\n• Getter properties for skillFactor and rate\n\nServiceJob:\n• Class variable _BASIC_FEES = 50.0\n• __init__(jobId, hours, staff: ServiceStaff)\n• Getter property for hours\n• computeJobDuration() returns hours * staff.skillFactor\n• computeCharges() returns _BASIC_FEES + hours * staff.rate',
+  starter:'class ServiceStaff:\n    pass\n\nclass ServiceJob:\n    _BASIC_FEES = 50.0\n    pass',
+  hints:[
+    'ServiceJob HAS-A ServiceStaff. computeJobDuration and computeCharges delegate to self.__staff via self.__staff.skillFactor and self.__staff.rate.',
+    'Keywords: @property, def computeJobDuration, def computeCharges, self.__staff.skillFactor, self.__staff.rate'
+  ],
+  rubric:[
+    {criterion:'ServiceStaff __init__ with name, skillFactor, rate', marks:1},
+    {criterion:'Getter @property for skillFactor and rate', marks:2},
+    {criterion:'ServiceJob __init__ with jobId, hours, staff', marks:2},
+    {criterion:'Getter @property for hours', marks:1},
+    {criterion:'computeJobDuration() returns hours * staff.skillFactor', marks:2},
+    {criterion:'computeCharges() returns _BASIC_FEES + hours * staff.rate', marks:2}
+  ],
+  model:'class ServiceStaff:\n    def __init__(self, name, skillFactor, rate):\n        self.__name = name\n        self.__skillFactor = skillFactor\n        self.__rate = rate\n\n    @property\n    def skillFactor(self):\n        return self.__skillFactor\n\n    @property\n    def rate(self):\n        return self.__rate\n\n\nclass ServiceJob:\n    _BASIC_FEES = 50.0\n\n    def __init__(self, jobId, hours, staff):\n        self.__jobId = jobId\n        self.__hours = hours\n        self.__staff = staff\n\n    @property\n    def hours(self):\n        return self.__hours\n\n    def computeJobDuration(self):\n        return self.__hours * self.__staff.skillFactor\n\n    def computeCharges(self):\n        return ServiceJob._BASIC_FEES + self.__hours * self.__staff.rate',
+  e:'computeJobDuration and computeCharges access staff properties through self.__staff. This is the composition delegation pattern.'
+},
+{
+  id:109, type:'code_write', topic:'Classes & Objects',
+  marks:9,
+  q:'Write a Person class:\n• __init__(self, gender: str, name: str, lastName: str)\n• Getter @property for gender, name, lastName\n• Setter @property for name only\n• getFullName() — returns "Mr. Ong Ah Seng" or "Ms. Tan Bee Leng" based on gender (m/f)\n• getInitials() — returns first letter of name + "." + lastName e.g. "A. Ong"\n• __str__ returns: "Name: Ong Ah Seng  Gender: Male"',
+  starter:'class Person:\n    pass',
+  hints:[
+    'Use an if/else on self.__gender to decide "Mr." or "Ms." in getFullName(). The format is salutation + lastName + name (last name first).',
+    'Keywords: @property, @name.setter, def getFullName, def getInitials, def __str__, f-string'
+  ],
+  rubric:[
+    {criterion:'__init__ with gender, name, lastName using self.__', marks:2},
+    {criterion:'Getter @property for gender, name, lastName; setter for name only', marks:2},
+    {criterion:'getFullName() returns correct salutation + lastName + name', marks:2},
+    {criterion:'getInitials() returns first letter + "." + lastName', marks:2},
+    {criterion:'__str__ returns correctly formatted string', marks:1}
+  ],
+  model:'class Person:\n    def __init__(self, gender, name, lastName):\n        self.__gender = gender\n        self.__name = name\n        self.__lastName = lastName\n\n    @property\n    def gender(self):\n        return self.__gender\n\n    @property\n    def name(self):\n        return self.__name\n\n    @name.setter\n    def name(self, newName):\n        self.__name = newName\n\n    @property\n    def lastName(self):\n        return self.__lastName\n\n    def getFullName(self):\n        salutation = "Mr." if self.__gender == "m" else "Ms."\n        return f\'{salutation} {self.__lastName} {self.__name}\'\n\n    def getInitials(self):\n        return f\'{self.__name[0]}. {self.__lastName}\'\n\n    def __str__(self):\n        genderWord = "Male" if self.__gender == "m" else "Female"\n        return f\'Name: {self.__lastName} {self.__name}  Gender: {genderWord}\'',
+  e:'getFullName places lastName before name. getInitials uses self.__name[0] to get the first character. The setter only covers name — gender and lastName have no setter.'
+},
+{
+  id:110, type:'code_write', topic:'Classes & Objects',
+  marks:8,
+  q:'Write a Rectangle class:\n• __init__(self, length: float, width: float)\n• Getter and setter @property for length and width\n• getArea() returns length * width\n• getPerimeter() returns 2 * (length + width)\n• increaseSize(deltaLength, deltaWidth) increases both dimensions\n• isBigger(rect) returns True if this rectangle\'s area > rect\'s area\n• __str__ returns: "Length: 2.0  Width: 5.0  Area: 10.0  Perimeter: 14.0"',
+  starter:'class Rectangle:\n    pass',
+  hints:[
+    'isBigger(rect) should call self.getArea() and rect.getArea() — do not access rect.__length directly as it is private.',
+    'Keywords: @property, @length.setter, @width.setter, def getArea, def getPerimeter, def increaseSize, def isBigger'
+  ],
+  rubric:[
+    {criterion:'__init__ with length, width as private attributes', marks:1},
+    {criterion:'Getter and setter @property for length and width', marks:2},
+    {criterion:'getArea() and getPerimeter() correct', marks:2},
+    {criterion:'increaseSize() updates both dimensions', marks:1},
+    {criterion:'isBigger() compares areas using getArea()', marks:1},
+    {criterion:'__str__ returns correctly formatted string', marks:1}
+  ],
+  model:'class Rectangle:\n    def __init__(self, length, width):\n        self.__length = length\n        self.__width = width\n\n    @property\n    def length(self):\n        return self.__length\n\n    @length.setter\n    def length(self, val):\n        self.__length = val\n\n    @property\n    def width(self):\n        return self.__width\n\n    @width.setter\n    def width(self, val):\n        self.__width = val\n\n    def getArea(self):\n        return self.__length * self.__width\n\n    def getPerimeter(self):\n        return 2 * (self.__length + self.__width)\n\n    def increaseSize(self, deltaLength, deltaWidth):\n        self.__length += deltaLength\n        self.__width += deltaWidth\n\n    def isBigger(self, rect):\n        return self.getArea() > rect.getArea()\n\n    def __str__(self):\n        return f\'Length: {self.__length}  Width: {self.__width}  Area: {self.getArea()}  Perimeter: {self.getPerimeter()}\'',
+  e:'isBigger uses getArea() to compare — never access rect.__length because name mangling makes it _Rectangle__length and it is considered bad practice. __str__ reuses getArea() and getPerimeter() for DRY code.'
+},
+{
+  id:111, type:'code_write', topic:'Inheritance',
+  marks:11,
+  q:'Write FullTimeDeliveryPartner and PartTimeDeliveryPartner as subclasses of DeliveryPartner (JUL 2023 exam).\n\nFullTimeDeliveryPartner:\n• Additional instance variable __basicSalary (float)\n• computePay(rounds) = basicSalary + rounds * _FEES_PER_ROUND\n\nPartTimeDeliveryPartner:\n• No extra instance variables\n• computePay(rounds): if rounds <= 30: rounds * fees; else 30 * fees + (rounds-30) * fees * 1.85\n• __str__ overrides to add "(Part-time)" label',
+  starter:'class FullTimeDeliveryPartner(DeliveryPartner):\n    pass\n\nclass PartTimeDeliveryPartner(DeliveryPartner):\n    pass',
+  hints:[
+    'Both classes must call super().__init__(callSign, name) in their constructors. computePay must be implemented (it was abstract in DeliveryPartner).',
+    'Keywords: super().__init__, def computePay, self._FEES_PER_ROUND, override by replacement vs refinement'
+  ],
+  rubric:[
+    {criterion:'FullTimeDeliveryPartner calls super().__init__ and sets __basicSalary', marks:2},
+    {criterion:'FullTimeDeliveryPartner computePay correct formula', marks:2},
+    {criterion:'PartTimeDeliveryPartner calls super().__init__', marks:1},
+    {criterion:'PartTimeDeliveryPartner computePay handles both <= 30 and > 30 cases', marks:4},
+    {criterion:'PartTimeDeliveryPartner __str__ calls super().__str__() and appends label', marks:2}
+  ],
+  model:'class FullTimeDeliveryPartner(DeliveryPartner):\n    def __init__(self, callSign, name, basicSalary):\n        super().__init__(callSign, name)\n        self.__basicSalary = basicSalary\n\n    def computePay(self, rounds):\n        return self.__basicSalary + rounds * DeliveryPartner._FEES_PER_ROUND\n\n\nclass PartTimeDeliveryPartner(DeliveryPartner):\n    def __init__(self, callSign, name):\n        super().__init__(callSign, name)\n\n    def computePay(self, rounds):\n        f = DeliveryPartner._FEES_PER_ROUND\n        if rounds <= 30:\n            return rounds * f\n        return 30 * f + (rounds - 30) * (f * 1.85)\n\n    def __str__(self):\n        return super().__str__() + \' (Part-time)\'',
+  e:'Both constructors MUST call super().__init__. computePay implements the abstract method — required for instantiation. PartTimeDeliveryPartner.__str__ is overriding by refinement (calls super()).'
+},
+{
+  id:112, type:'code_write', topic:'Exception Handling',
+  marks:9,
+  q:'Write InvalidAssessmentException and Assessment classes.\n\nInvalidAssessmentException — subclass of Exception, no extra attributes.\n\nAssessment:\n• Class variable _max = 100\n• Instance variables id and mark\n• Constructor initialises both; mark setter raises InvalidAssessmentException if mark not in [0, _max]\n• Class methods: getMaxMark() returns _max; setMaxMark(mark) sets _max\n• Getter for id and mark; setter for mark with validation\n• __str__ returns id and mark',
+  starter:'class InvalidAssessmentException(Exception):\n    pass\n\nclass Assessment:\n    _max = 100\n    pass',
+  hints:[
+    'Class methods use the @classmethod decorator and take cls as first parameter instead of self. They access class variables via cls._max.',
+    'Keywords: @classmethod, cls, @property, @mark.setter, raise InvalidAssessmentException'
+  ],
+  rubric:[
+    {criterion:'InvalidAssessmentException inherits from Exception', marks:1},
+    {criterion:'Assessment __init__ with id and mark, uses setter for mark validation', marks:2},
+    {criterion:'@classmethod getMaxMark and setMaxMark correct', marks:2},
+    {criterion:'Getter @property for id and mark', marks:1},
+    {criterion:'Setter @property for mark raises exception if out of range', marks:2},
+    {criterion:'__str__ returns id and mark', marks:1}
+  ],
+  model:'class InvalidAssessmentException(Exception):\n    pass\n\nclass Assessment:\n    _max = 100\n\n    def __init__(self, id, mark):\n        self.__id = id\n        self.mark = mark\n\n    @classmethod\n    def getMaxMark(cls):\n        return cls._max\n\n    @classmethod\n    def setMaxMark(cls, mark):\n        cls._max = mark\n\n    @property\n    def id(self):\n        return self.__id\n\n    @property\n    def mark(self):\n        return self.__mark\n\n    @mark.setter\n    def mark(self, value):\n        if value < 0 or value > Assessment._max:\n            raise InvalidAssessmentException(f\'Mark can only be between 0 and {Assessment._max}\')\n        self.__mark = value\n\n    def __str__(self):\n        return f\'Id: {self.__id}  Mark: {self.__mark}\'',
+  e:'The constructor calls self.mark = mark (uses the setter) so validation runs at creation time too. @classmethod takes cls not self and accesses class variables via cls. Setter raises exception before setting.'
+},
+{
+  id:113, type:'code_write', topic:'Composition',
+  marks:10,
+  q:'Write the Booking class for the Airline system (Lab 2).\n\nBooking:\n• Class variable bkNum = 1 (auto-incrementing booking ID)\n• Instance variables: __id (from bkNum), __passenger (Passenger object), __flight (Flight object)\n• Constructor increments bkNum, sets all three\n• Getter @property for id, passenger, flight\n• Setter @property for flight (allow flight change)\n• __str__ shows booking id, passenger name, and flight details',
+  starter:'class Booking:\n    bkNum = 1\n    pass',
+  hints:[
+    'self.__id = Booking.bkNum then Booking.bkNum += 1. The booking ID is set BEFORE incrementing so the first booking gets ID 1.',
+    'Keywords: Booking.bkNum, @property, @flight.setter, self.__passenger.name, self.__flight'
+  ],
+  rubric:[
+    {criterion:'Class variable bkNum = 1 used correctly; __id set then bkNum incremented', marks:2},
+    {criterion:'__init__ stores passenger and flight objects', marks:2},
+    {criterion:'Getter @property for id, passenger, flight', marks:2},
+    {criterion:'Setter @property for flight', marks:1},
+    {criterion:'__str__ shows booking id, passenger and flight details', marks:3}
+  ],
+  model:'class Booking:\n    bkNum = 1\n\n    def __init__(self, passenger, flight):\n        self.__id = Booking.bkNum\n        Booking.bkNum += 1\n        self.__passenger = passenger\n        self.__flight = flight\n\n    @property\n    def id(self):\n        return self.__id\n\n    @property\n    def passenger(self):\n        return self.__passenger\n\n    @property\n    def flight(self):\n        return self.__flight\n\n    @flight.setter\n    def flight(self, newFlight):\n        self.__flight = newFlight\n\n    def __str__(self):\n        return f\'Booking id: {self.__id}\\nPassenger: {self.__passenger.name}\\n{self.__flight}\'',
+  e:'Set self.__id = Booking.bkNum FIRST, then increment. self.__passenger.name accesses the passenger\'s name property through composition. self.__flight in an f-string calls Flight.__str__ automatically.'
+},
+{
+  id:114, type:'code_write', topic:'Inheritance',
+  marks:10,
+  q:'Write MovieCard and HSBCMovieCard classes (Lab 3).\n\nMovieCard:\n• __init__(price) — sets price and calculates tickets (10 if price=70, else 15)\n• Getter @property for tickets\n• redeemTicket(qty=1) — max 2 per redemption; returns True if successful, False if no tickets\n• __str__ returns: "Ticket price: $70, tickets remaining: 8"\n\nHSBCMovieCard(MovieCard):\n• Additional instance variable __cardNo (str)\n• redeemTicket(qty=1) — same as parent but HSBC members get 1 bonus ticket per redemption\n• __str__ includes card number',
+  starter:'class MovieCard:\n    pass\n\nclass HSBCMovieCard(MovieCard):\n    pass',
+  hints:[
+    'redeemTicket checks qty <= 2 first, then checks if tickets remain. The HSBC override adds 1 bonus ticket AFTER calling super().redeemTicket() successfully.',
+    'Keywords: super().__init__(price), @property, def redeemTicket, qty <= 2, self.__tickets'
+  ],
+  rubric:[
+    {criterion:'MovieCard __init__ sets price and calculates tickets correctly', marks:2},
+    {criterion:'Getter @property for tickets', marks:1},
+    {criterion:'redeemTicket limits to max 2, returns True/False', marks:3},
+    {criterion:'HSBCMovieCard calls super().__init__ and sets __cardNo', marks:2},
+    {criterion:'HSBCMovieCard redeemTicket adds bonus ticket via super()', marks:2}
+  ],
+  model:'class MovieCard:\n    def __init__(self, price):\n        self.__price = price\n        self.__tickets = 10 if price == 70 else 15\n\n    @property\n    def tickets(self):\n        return self.__tickets\n\n    def redeemTicket(self, qty=1):\n        if qty > 2:\n            return False\n        if self.__tickets <= 0:\n            return False\n        self.__tickets -= qty\n        return True\n\n    def __str__(self):\n        return f\'Ticket price: ${self.__price}, tickets remaining: {self.__tickets}\'\n\n\nclass HSBCMovieCard(MovieCard):\n    def __init__(self, price, cardNo):\n        super().__init__(price)\n        self.__cardNo = cardNo\n\n    def redeemTicket(self, qty=1):\n        if super().redeemTicket(qty):\n            super().redeemTicket(-1)\n            return True\n        return False\n\n    def __str__(self):\n        return super().__str__() + f\'  Card: {self.__cardNo}\'',
+  e:'MovieCard calculates tickets in __init__ based on price. HSBCMovieCard.redeemTicket is overriding by refinement — it calls super() and then adjusts. The bonus ticket means one fewer is deducted net.'
+},
+{
+  id:115, type:'code_write', topic:'Classes & Objects',
+  marks:10,
+  q:'Write a CapitaStar class (JAN 2025 exam):\n• Instance variables: phone (int), name (str), starDollars (int) = 0\n• Constructor initialises phone and name only (starDollars defaults to 0)\n• Getter @property for phone, name, starDollars\n• earnStars(amount) — awards 1 STAR$ per $5 spent; adds to starDollars\n• redeemStars(stars) — deducts stars if sufficient; returns True/False\n• __str__ returns: "Name: Alice  Phone: 91234567  Stars: 10"',
+  starter:'class CapitaStar:\n    pass',
+  hints:[
+    'earnStars(amount): starDollars += amount // 5 (integer division gives whole STAR$ per $5 block)',
+    'Keywords: @property, def earnStars, def redeemStars, // operator for integer division, returns True/False'
+  ],
+  rubric:[
+    {criterion:'__init__ with phone, name; starDollars = 0 hardcoded', marks:2},
+    {criterion:'Getter @property for phone, name, starDollars', marks:2},
+    {criterion:'earnStars uses integer division // 5', marks:2},
+    {criterion:'redeemStars checks sufficiency and returns True/False', marks:2},
+    {criterion:'__str__ returns correctly formatted string', marks:2}
+  ],
+  model:'class CapitaStar:\n    def __init__(self, phone, name):\n        self.__phone = phone\n        self.__name = name\n        self.__starDollars = 0\n\n    @property\n    def phone(self):\n        return self.__phone\n\n    @property\n    def name(self):\n        return self.__name\n\n    @property\n    def starDollars(self):\n        return self.__starDollars\n\n    def earnStars(self, amount):\n        self.__starDollars += amount // 5\n\n    def redeemStars(self, stars):\n        if stars <= self.__starDollars:\n            self.__starDollars -= stars\n            return True\n        return False\n\n    def __str__(self):\n        return f\'Name: {self.__name}  Phone: {self.__phone}  Stars: {self.__starDollars}\'',
+  e:'starDollars is initialised to 0 in __init__ directly — NOT as a parameter. earnStars uses // (floor division) to get whole STAR$. redeemStars checks before deducting.'
+},
+{
+  id:116, type:'code_write', topic:'Inheritance',
+  marks:10,
+  q:'Write CapitaCard as a subclass of CapitaStar (JAN 2025 exam).\n\nCapitaCard:\n• Additional class variable _MULTIPLIER = 6\n• Additional instance variable __cardNo (str)\n• Constructor calls super().__init__(phone, name) and sets __cardNo\n• Getter @property for cardNo\n• earnStars(amount) — overrides to give _MULTIPLIER times more STAR$ (6 STAR$ per $5 block)\n• __str__ overrides to include card number',
+  starter:'class CapitaCard(CapitaStar):\n    _MULTIPLIER = 6\n    pass',
+  hints:[
+    'earnStars override: self.__starDollars += (amount // 5) * _MULTIPLIER. But __starDollars is private to CapitaStar — use super().earnStars() multiple times OR call the parent earnStars and then add extra.',
+    'Keywords: super().__init__, super().earnStars, _MULTIPLIER, @property, override by refinement'
+  ],
+  rubric:[
+    {criterion:'CapitaCard(CapitaStar) with _MULTIPLIER = 6', marks:1},
+    {criterion:'__init__ calls super().__init__ and sets __cardNo', marks:2},
+    {criterion:'Getter @property for cardNo', marks:1},
+    {criterion:'earnStars correctly awards 6x STAR$ per $5 block', marks:4},
+    {criterion:'__str__ includes parent info and card number', marks:2}
+  ],
+  model:'class CapitaCard(CapitaStar):\n    _MULTIPLIER = 6\n\n    def __init__(self, phone, name, cardNo):\n        super().__init__(phone, name)\n        self.__cardNo = cardNo\n\n    @property\n    def cardNo(self):\n        return self.__cardNo\n\n    def earnStars(self, amount):\n        stars = (amount // 5) * type(self)._MULTIPLIER\n        for _ in range(stars):\n            super().earnStars(5)\n\n    def __str__(self):\n        return super().__str__() + f\'  Card: {self.__cardNo}\'',
+  e:'Because __starDollars is private to CapitaStar, the cleanest way to add stars is to call super().earnStars(5) once per star (each call adds 1 star for $5). Alternatively, add a protected _addStars method to CapitaStar.'
+},
+{
+  id:117, type:'code_write', topic:'Exception Handling',
+  marks:8,
+  q:'Enhance BankAccount with a custom exception.\n\n1. Write InsufficientFundsError — subclass of Exception\n2. Modify withdraw(amount) in BankAccount to:\n   • Raise InsufficientFundsError with message "Insufficient funds: balance $X, requested $Y" if amount > balance\n   • Otherwise deduct and return True\n3. Write a deposit(amount) that raises ValueError if amount <= 0',
+  starter:'class InsufficientFundsError(Exception):\n    pass\n\nclass BankAccount:\n    def __init__(self, accountId, balance=100.0):\n        self.__accountId = accountId\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance',
+  hints:[
+    'raise InsufficientFundsError(f"message {self.__balance:.2f}") before modifying balance. For deposit, raise ValueError("Amount must be positive") if amount <= 0.',
+    'Keywords: raise InsufficientFundsError, raise ValueError, f-string with :.2f'
+  ],
+  rubric:[
+    {criterion:'InsufficientFundsError inherits from Exception', marks:1},
+    {criterion:'withdraw raises InsufficientFundsError with correct message when funds insufficient', marks:3},
+    {criterion:'withdraw deducts and returns True when funds sufficient', marks:2},
+    {criterion:'deposit raises ValueError if amount <= 0', marks:2}
+  ],
+  model:'class InsufficientFundsError(Exception):\n    pass\n\nclass BankAccount:\n    def __init__(self, accountId, balance=100.0):\n        self.__accountId = accountId\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError("Amount must be positive")\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount > self.__balance:\n            raise InsufficientFundsError(\n                f\'Insufficient funds: balance ${self.__balance:.2f}, requested ${amount:.2f}\')\n        self.__balance -= amount\n        return True',
+  e:'Raise BEFORE modifying state. InsufficientFundsError is domain-specific — more meaningful than a generic ValueError. deposit uses ValueError since a negative deposit amount is a general input error, not a domain rule.'
+},
+{
+  id:118, type:'code_write', topic:'Composition',
+  marks:9,
+  q:'Write the Airline class that manages Bookings in a dictionary (Lab 2, Q3).\n\nAirline:\n• __init__(name) — name (str), __bookings = {} (empty dict)\n• addBooking(booking) — adds to dict with booking.id as key; returns True if added, False if id already exists\n• removeBooking(bookingId) — removes from dict; returns True if removed, False if not found\n• getBooking(bookingId) — returns Booking object or None if not found\n• __str__ — returns airline name and all booking details',
+  starter:'class Airline:\n    def __init__(self, name):\n        self.__name = name\n        self.__bookings = {}',
+  hints:[
+    'Use booking.id as the dictionary key. Check "if booking.id in self.__bookings" before adding. Use .get(key, None) for getBooking.',
+    'Keywords: booking.id, self.__bookings[booking.id] = booking, del self.__bookings[bookingId], self.__bookings.get(bookingId)'
+  ],
+  rubric:[
+    {criterion:'addBooking uses booking.id as key, checks for duplicate, returns True/False', marks:3},
+    {criterion:'removeBooking checks existence, removes with del, returns True/False', marks:3},
+    {criterion:'getBooking returns object or None using .get()', marks:2},
+    {criterion:'__str__ shows airline name and iterates all bookings', marks:1}
+  ],
+  model:'class Airline:\n    def __init__(self, name):\n        self.__name = name\n        self.__bookings = {}\n\n    def addBooking(self, booking):\n        if booking.id in self.__bookings:\n            return False\n        self.__bookings[booking.id] = booking\n        return True\n\n    def removeBooking(self, bookingId):\n        if bookingId not in self.__bookings:\n            return False\n        del self.__bookings[bookingId]\n        return True\n\n    def getBooking(self, bookingId):\n        return self.__bookings.get(bookingId, None)\n\n    def __str__(self):\n        result = f\'Airline: {self.__name}\\n\'\n        for b in self.__bookings.values():\n            result += str(b) + \'\\n\'\n        return result',
+  e:'Use booking.id (property) as the key, not booking.__id (mangled). .get(key, None) is cleaner than if/else for lookup. del self.__bookings[key] removes the entry.'
+},
+{
+  id:119, type:'code_write', topic:'Abstract Classes',
+  marks:11,
+  q:'Write abstract class Customer and concrete subclass Individual (Lab 6).\n\nCustomer (abstract):\n• Instance variables _email, _name\n• Constructor, getter @property for email\n• Abstract method getDiscount() — no implementation\n• __str__ returns email and name\n\nIndividual(Customer):\n• Class variable discount = 0.9 (for skillUpgrade)\n• Additional instance variable __skillUpgrade (bool)\n• getDiscount() returns discount (0.9) if skillUpgrade else 0\n• __str__ includes email, name and skillUpgrade status',
+  starter:'from abc import ABC, abstractmethod\n\nclass Customer(ABC):\n    pass\n\nclass Individual(Customer):\n    discount = 0.9\n    pass',
+  hints:[
+    'Abstract classes cannot be instantiated. Individual MUST implement getDiscount() to be concrete. skillUpgrade is a boolean so use "Yes" or "No" in __str__.',
+    'Keywords: ABC, @abstractmethod, super().__init__, def getDiscount, type(self).discount'
+  ],
+  rubric:[
+    {criterion:'Customer(ABC) with _email, _name; getter @property for email', marks:2},
+    {criterion:'@abstractmethod on getDiscount()', marks:1},
+    {criterion:'Customer __str__ returns email and name', marks:1},
+    {criterion:'Individual calls super().__init__ and sets __skillUpgrade', marks:2},
+    {criterion:'getDiscount() returns correct discount based on skillUpgrade', marks:3},
+    {criterion:'Individual __str__ includes all fields with Yes/No', marks:2}
+  ],
+  model:'from abc import ABC, abstractmethod\n\nclass Customer(ABC):\n    def __init__(self, email, name):\n        self._email = email\n        self._name = name\n\n    @property\n    def email(self):\n        return self._email\n\n    @abstractmethod\n    def getDiscount(self):\n        pass\n\n    def __str__(self):\n        return f\'Email: {self._email}  Name: {self._name}\'\n\n\nclass Individual(Customer):\n    discount = 0.9\n\n    def __init__(self, email, name, skillUpgrade):\n        super().__init__(email, name)\n        self.__skillUpgrade = skillUpgrade\n\n    def getDiscount(self):\n        return type(self).discount if self.__skillUpgrade else 0\n\n    def __str__(self):\n        status = "Yes" if self.__skillUpgrade else "No"\n        return super().__str__() + f\'  SkillUpgrade: {status}\'',
+  e:'type(self).discount picks up any subclass override. Individual.__str__ calls super().__str__() (refinement) and appends the skillUpgrade status converted to Yes/No.'
+},
+{
+  id:120, type:'code_write', topic:'Classes & Objects',
+  marks:8,
+  q:'Write a Point class modelling a 2D point (x, y):\n• __init__(self, x=0, y=0) — default values of 0\n• Getter and setter @property for x and y\n• move(dx, dy) — moves point to (x+dx, y+dy)\n• distanceTo(aPoint) — returns distance using sqrt((x-x1)^2 + (y-y1)^2)\n• quadrant() — returns 1/2/3/4 based on signs of x and y; returns 0 if on an axis\n• __str__ returns: "(5, 3)"',
+  starter:'import math\n\nclass Point:\n    pass',
+  hints:[
+    'For quadrant(): if x > 0 and y > 0 → 1, x < 0 and y > 0 → 2, x < 0 and y < 0 → 3, x > 0 and y < 0 → 4. Any zero → return 0.',
+    'Keywords: @property, @x.setter, @y.setter, math.sqrt, def move, def distanceTo, def quadrant'
+  ],
+  rubric:[
+    {criterion:'__init__ with x=0, y=0 defaults; getter and setter @property for x and y', marks:2},
+    {criterion:'move(dx, dy) updates x and y correctly', marks:1},
+    {criterion:'distanceTo uses math.sqrt correctly', marks:2},
+    {criterion:'quadrant() returns correct value including 0 for axis', marks:2},
+    {criterion:'__str__ returns correct format', marks:1}
+  ],
+  model:'import math\n\nclass Point:\n    def __init__(self, x=0, y=0):\n        self.__x = x\n        self.__y = y\n\n    @property\n    def x(self):\n        return self.__x\n\n    @x.setter\n    def x(self, val):\n        self.__x = val\n\n    @property\n    def y(self):\n        return self.__y\n\n    @y.setter\n    def y(self, val):\n        self.__y = val\n\n    def move(self, dx, dy):\n        self.__x += dx\n        self.__y += dy\n\n    def distanceTo(self, aPoint):\n        return math.sqrt((self.__x - aPoint.x) ** 2 + (self.__y - aPoint.y) ** 2)\n\n    def quadrant(self):\n        if self.__x == 0 or self.__y == 0:\n            return 0\n        if self.__x > 0 and self.__y > 0:\n            return 1\n        if self.__x < 0 and self.__y > 0:\n            return 2\n        if self.__x < 0 and self.__y < 0:\n            return 3\n        return 4\n\n    def __str__(self):\n        return f\'({self.__x}, {self.__y})\'',
+  e:'quadrant() checks for axis (zero) FIRST before checking sign combinations. distanceTo accesses aPoint.x and aPoint.y via properties — never aPoint.__x.'
+},
+{
+  id:121, type:'code_write', topic:'Composition',
+  marks:10,
+  q:'Write a CourseOffering class using composition with Course and Instructor (Lab 6).\n\nCourseOffering:\n• Class variable _schId = 1 (auto-incrementing)\n• Instance variables: scheduleId (course code + "_" + _schId), course (Course), instructor (Instructor), startDate (datetime), duration (int)\n• Constructor increments _schId after setting scheduleId\n• Getter @property for scheduleId and startDate\n• Class method changeSchId(anotherId) — sets _schId to anotherId\n• getCourseCode() — returns course code via composition\n• getInstructorEmail() — returns instructor email via composition\n• courseFee() — returns course.devCost + duration * instructor.ratePerDay\n• __str__ shows schedule id, start date, duration, course and instructor',
+  starter:'from datetime import datetime\n\nclass CourseOffering:\n    _schId = 1\n    pass',
+  hints:[
+    'scheduleId = course.code + "_" + str(CourseOffering._schId). getCourseCode() and getInstructorEmail() delegate to the composed objects — they do NOT copy the values.',
+    'Keywords: @classmethod, cls._schId, self.__course.code, self.__instructor.email, self.__instructor.ratePerDay'
+  ],
+  rubric:[
+    {criterion:'scheduleId built from course.code + "_" + _schId; _schId incremented after', marks:2},
+    {criterion:'Getter @property for scheduleId and startDate', marks:1},
+    {criterion:'@classmethod changeSchId sets cls._schId', marks:1},
+    {criterion:'getCourseCode() delegates to self.__course.code', marks:1},
+    {criterion:'getInstructorEmail() delegates to self.__instructor.email', marks:1},
+    {criterion:'courseFee() correct formula using composition', marks:2},
+    {criterion:'__str__ shows all required fields', marks:2}
+  ],
+  model:'from datetime import datetime\n\nclass CourseOffering:\n    _schId = 1\n\n    def __init__(self, course, instructor, startDate, duration):\n        self.__scheduleId = course.code + "_" + str(CourseOffering._schId)\n        CourseOffering._schId += 1\n        self.__course = course\n        self.__instructor = instructor\n        self.__startDate = startDate\n        self.__duration = duration\n\n    @property\n    def scheduleId(self):\n        return self.__scheduleId\n\n    @property\n    def startDate(self):\n        return self.__startDate\n\n    @classmethod\n    def changeSchId(cls, anotherId):\n        cls._schId = anotherId\n\n    def getCourseCode(self):\n        return self.__course.code\n\n    def getInstructorEmail(self):\n        return self.__instructor.email\n\n    def courseFee(self):\n        return self.__course.devCost + self.__duration * self.__instructor.ratePerDay\n\n    def __str__(self):\n        return (f\'Schedule Id: {self.__scheduleId}  Start Date: {self.__startDate:%d/%m/%Y}  Duration: {self.__duration} days\\n\'\n                f\'{self.__course}\\n{self.__instructor}\')',
+  e:'Set scheduleId BEFORE incrementing _schId so first offering gets _1. getCourseCode and getInstructorEmail are pure delegation — this is the composition pattern. courseFee combines data from two composed objects.'
+},
+{
+  id:122, type:'code_write', topic:'Exception Handling',
+  marks:8,
+  q:'Write a Dice class with a roll method that raises a custom exception.\n\n1. Write DiceException — subclass of Exception\n2. Write Dice with:\n   • Class variable _sides = 6\n   • __init__() — initialises __value using random roll\n   • Getter @property for value\n   • roll() — sets new random value\n   • setValue(val) — sets value; raises DiceException if val not in range [1, _sides]\n   • @classmethod setSides(n) — sets _sides; raises DiceException if n < 4',
+  starter:'from random import randint\n\nclass DiceException(Exception):\n    pass\n\nclass Dice:\n    _sides = 6\n    pass',
+  hints:[
+    'randint(1, Dice._sides) generates a random integer in the range. @classmethod uses cls not self. setValue validates before setting.',
+    'Keywords: randint, @classmethod, cls._sides, raise DiceException, def setValue, def roll'
+  ],
+  rubric:[
+    {criterion:'DiceException inherits from Exception', marks:1},
+    {criterion:'__init__ uses randint and @property for value', marks:2},
+    {criterion:'roll() sets new random value', marks:1},
+    {criterion:'setValue raises DiceException if out of range', marks:2},
+    {criterion:'@classmethod setSides raises DiceException if n < 4', marks:2}
+  ],
+  model:'from random import randint\n\nclass DiceException(Exception):\n    pass\n\nclass Dice:\n    _sides = 6\n\n    def __init__(self):\n        self.__value = randint(1, Dice._sides)\n\n    @property\n    def value(self):\n        return self.__value\n\n    def roll(self):\n        self.__value = randint(1, Dice._sides)\n\n    def setValue(self, val):\n        if val < 1 or val > Dice._sides:\n            raise DiceException(f\'Value must be between 1 and {Dice._sides}\')\n        self.__value = val\n\n    @classmethod\n    def setSides(cls, n):\n        if n < 4:\n            raise DiceException("Dice must have at least 4 sides")\n        cls._sides = n',
+  e:'@classmethod uses cls so it works on the class. setSides validates before setting. setValue raises before modifying. randint(1, n) is inclusive on both ends.'
+},
+{
+  id:123, type:'code_write', topic:'Collections',
+  marks:10,
+  q:'Write a PhoneBook class managing Contact objects in a list.\n\nPhoneBook:\n• __init__(name) — name (str), __contacts = [] (empty list)\n• addContact(contact) — appends to list\n• findContact(name) — returns Contact object if found by name, None otherwise\n• removeContact(name) — removes first match by name; returns True if removed, False if not found\n• __str__ — returns phonebook name and all contacts',
+  starter:'class PhoneBook:\n    def __init__(self, name):\n        self.__name = name\n        self.__contacts = []',
+  hints:[
+    'findContact loops through self.__contacts and compares c.name == name. removeContact calls findContact first, then uses self.__contacts.remove(c) if found.',
+    'Keywords: for c in self.__contacts, if c.name == name, self.__contacts.remove(c), return None'
+  ],
+  rubric:[
+    {criterion:'addContact appends contact to list', marks:1},
+    {criterion:'findContact iterates and returns correct object or None', marks:3},
+    {criterion:'removeContact uses findContact, removes if found, returns True/False', marks:4},
+    {criterion:'__str__ shows phonebook name and all contacts', marks:2}
+  ],
+  model:'class PhoneBook:\n    def __init__(self, name):\n        self.__name = name\n        self.__contacts = []\n\n    def addContact(self, contact):\n        self.__contacts.append(contact)\n\n    def findContact(self, name):\n        for c in self.__contacts:\n            if c.name == name:\n                return c\n        return None\n\n    def removeContact(self, name):\n        c = self.findContact(name)\n        if c is not None:\n            self.__contacts.remove(c)\n            return True\n        return False\n\n    def __str__(self):\n        result = f\'PhoneBook: {self.__name}\\n\'\n        for c in self.__contacts:\n            result += str(c) + \'\\n\'\n        return result',
+  e:'findContact returns None (not False) when not found — use "if c is not None" in removeContact, not just "if c". self.__contacts.remove(c) removes the first matching object reference.'
+},
+{
+  id:124, type:'code_write', topic:'Inheritance',
+  marks:10,
+  q:'Write abstract class Payment and concrete subclasses CashPayment and CardPayment.\n\nPayment (abstract):\n• _transactionId class variable starting at 1 (auto-increment)\n• Instance variables: _id (from _transactionId), _amount (float)\n• Constructor; getter @property for id and amount\n• Abstract method process() — no implementation\n• __str__ returns transaction id and amount\n\nCashPayment(Payment):\n• process() returns "Cash payment of $X processed"\n\nCardPayment(Payment):\n• Additional instance variable __cardNo\n• process() returns "Card ****XXXX payment of $X processed" (last 4 digits only)',
+  starter:'from abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    _transactionId = 1\n    pass',
+  hints:[
+    'self._id = Payment._transactionId then Payment._transactionId += 1. For CardPayment, last 4 digits: self.__cardNo[-4:] or str(self.__cardNo)[-4:]',
+    'Keywords: ABC, @abstractmethod, Payment._transactionId, super().__init__, self.__cardNo[-4:]'
+  ],
+  rubric:[
+    {criterion:'Payment(ABC) with auto-increment _transactionId; __init__ sets _id and _amount', marks:2},
+    {criterion:'Getter @property for id and amount; @abstractmethod on process()', marks:2},
+    {criterion:'CashPayment calls super().__init__ and implements process()', marks:2},
+    {criterion:'CardPayment calls super().__init__ and sets __cardNo', marks:2},
+    {criterion:'CardPayment process() shows last 4 digits only', marks:2}
+  ],
+  model:'from abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    _transactionId = 1\n\n    def __init__(self, amount):\n        self._id = Payment._transactionId\n        Payment._transactionId += 1\n        self._amount = amount\n\n    @property\n    def id(self):\n        return self._id\n\n    @property\n    def amount(self):\n        return self._amount\n\n    @abstractmethod\n    def process(self):\n        pass\n\n    def __str__(self):\n        return f\'Transaction {self._id}: ${self._amount:.2f}\'\n\n\nclass CashPayment(Payment):\n    def __init__(self, amount):\n        super().__init__(amount)\n\n    def process(self):\n        return f\'Cash payment of ${self._amount:.2f} processed\'\n\n\nclass CardPayment(Payment):\n    def __init__(self, amount, cardNo):\n        super().__init__(amount)\n        self.__cardNo = str(cardNo)\n\n    def process(self):\n        return f\'Card ****{self.__cardNo[-4:]} payment of ${self._amount:.2f} processed\'',
+  e:'_id uses single underscore (protected) so subclasses access it via self._id. self.__cardNo[-4:] slices the last 4 characters. process() is abstract in Payment but concrete in both subclasses.'
+},
+{
+  id:125, type:'code_write', topic:'Composition',
+  marks:9,
+  q:'Write an Order class and a PizzaHouse class demonstrating composition and collections.\n\nOrder:\n• __init__(orderId, customer) — orderId (str), customer (str), __items = [] (empty list)\n• Getter @property for orderId, customer, items\n• addItem(pizza) — appends pizza to items list\n• totalPrice() — returns sum of pizza.price for all items\n• __str__ returns orderId, customer, and total\n\nPizzaHouse:\n• __init__(name) — name (str), __orders = {} (empty dict)\n• addOrder(order) — adds to dict using orderId as key\n• getOrder(orderId) — returns Order object or None\n• totalRevenue() — returns sum of all order totals\n• __str__ returns name and number of orders',
+  starter:'class Order:\n    pass\n\nclass PizzaHouse:\n    pass',
+  hints:[
+    'Order.totalPrice(): use sum(p.price for p in self.__items). PizzaHouse.totalRevenue(): use sum(o.totalPrice() for o in self.__orders.values())',
+    'Keywords: self.__items.append, sum(), self.__orders[order.orderId] = order, self.__orders.get(orderId)'
+  ],
+  rubric:[
+    {criterion:'Order __init__ with orderId, customer, empty list; getter properties', marks:2},
+    {criterion:'addItem appends pizza; totalPrice uses sum()', marks:2},
+    {criterion:'PizzaHouse __init__ with name and empty dict; addOrder uses orderId as key', marks:2},
+    {criterion:'getOrder returns Order or None using .get()', marks:1},
+    {criterion:'totalRevenue sums all order totals using .values()', marks:2}
+  ],
+  model:'class Order:\n    def __init__(self, orderId, customer):\n        self.__orderId = orderId\n        self.__customer = customer\n        self.__items = []\n\n    @property\n    def orderId(self):\n        return self.__orderId\n\n    @property\n    def customer(self):\n        return self.__customer\n\n    @property\n    def items(self):\n        return self.__items\n\n    def addItem(self, pizza):\n        self.__items.append(pizza)\n\n    def totalPrice(self):\n        return sum(p.price for p in self.__items)\n\n    def __str__(self):\n        return f\'Order {self.__orderId}  Customer: {self.__customer}  Total: ${self.totalPrice():.2f}\'\n\n\nclass PizzaHouse:\n    def __init__(self, name):\n        self.__name = name\n        self.__orders = {}\n\n    def addOrder(self, order):\n        self.__orders[order.orderId] = order\n\n    def getOrder(self, orderId):\n        return self.__orders.get(orderId, None)\n\n    def totalRevenue(self):\n        return sum(o.totalPrice() for o in self.__orders.values())\n\n    def __str__(self):\n        return f\'PizzaHouse: {self.__name}  Orders: {len(self.__orders)}\'',
+  e:'sum(p.price for p in self.__items) uses a generator expression — clean and Pythonic. totalRevenue() delegates to each Order.totalPrice() — this is composition at work. .get(key, None) is safer than direct key access.'
+}
+];
+
+
+
+// ════════════════════════════════════════════════
+// PYTHON BASICS — 50 MCQ (ids 500–549)
+// Topics: for loops, while, lists, dicts, tuples,
+//         strings, file I/O, operators, functions,
+//         conditionals, range, comprehensions
+// ════════════════════════════════════════════════
+const BASICS_Q = [
+
+// ── FOR LOOPS ────────────────────────────────────
+{
+  id:500, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\nfor i in range(5):\n    print(i, end=" ")',
+  o:['1 2 3 4 5','0 1 2 3 4','0 1 2 3 4 5','1 2 3 4'],
+  a:1,
+  e:'range(5) generates 0, 1, 2, 3, 4. end=" " prints each number on the same line separated by spaces.'
+},
+{
+  id:501, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\ntotal = 0\nfor n in [2, 4, 6, 8]:\n    total += n\nprint(total)',
+  o:['20','10','24','0'],
+  a:0,
+  e:'total accumulates 2+4+6+8 = 20.'
+},
+{
+  id:502, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\nfor i in range(2, 10, 3):\n    print(i, end=" ")',
+  o:['2 5 8','2 4 6 8','3 6 9','2 5 8 11'],
+  a:0,
+  e:'range(start=2, stop=10, step=3) generates 2, 5, 8. 11 would exceed stop=10 so it is excluded.'
+},
+{
+  id:503, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\nwords = ["cat", "dog", "bird"]\nfor w in words:\n    print(w[0].upper(), end="")',
+  o:['CDB','cat dog bird','C D B','cdb'],
+  a:0,
+  e:'w[0] gets the first character of each word. .upper() capitalises it. end="" joins them with no separator. Result: CDB.'
+},
+{
+  id:504, type:'mcq', topic:'For Loops',
+  q:'What is the output?\n\nfor i in range(3):\n    for j in range(3):\n        if i == j:\n            print(i, end=" ")',
+  o:['0 1 2','0 0 1 1 2 2','1 2 3','0 1 2 3'],
+  a:0,
+  e:'The inner loop prints i only when i == j. This happens at (0,0), (1,1), (2,2). Output: 0 1 2.'
+},
+{
+  id:505, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\nfor i in range(5):\n    if i == 3:\n        break\n    print(i, end=" ")',
+  o:['0 1 2 3','0 1 2','1 2 3','0 1 2 3 4'],
+  a:1,
+  e:'break exits the loop when i == 3. Values 0, 1, 2 are printed before that.'
+},
+{
+  id:506, type:'mcq', topic:'For Loops',
+  q:'What is printed?\n\nfor i in range(5):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")',
+  o:['0 2 4','1 3','0 1 2 3 4','2 4'],
+  a:1,
+  e:'continue skips the rest of the loop body when i is even. Only odd numbers (1, 3) are printed.'
+},
+
+// ── WHILE LOOPS ──────────────────────────────────
+{
+  id:507, type:'mcq', topic:'While Loops',
+  q:'What is printed?\n\nx = 10\nwhile x > 0:\n    x -= 3\nprint(x)',
+  o:['0','1','-2','3'],
+  a:2,
+  e:'x goes: 10 → 7 → 4 → 1 → -2. The loop exits when x <= 0, so x is -2.'
+},
+{
+  id:508, type:'mcq', topic:'While Loops',
+  q:'How many times does this loop run?\n\ncount = 0\nwhile count < 5:\n    count += 2\nprint(count)',
+  o:['5 times, prints 5','3 times, prints 6','2 times, prints 4','4 times, prints 8'],
+  a:1,
+  e:'count goes: 0 → 2 → 4 → 6. Loop runs 3 times (0<5, 2<5, 4<5). At 6, the condition is False. Prints 6.'
+},
+
+// ── STRINGS ──────────────────────────────────────
+{
+  id:509, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\ns = "Hello, World!"\nprint(s[7:12])',
+  o:['World','World!','Hello','ello,'],
+  a:0,
+  e:'Slicing s[7:12] extracts characters at indices 7,8,9,10,11. "Hello, World!" → index 7 is W, giving "World".'
+},
+{
+  id:510, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\ns = "python"\nprint(s.upper())\nprint(s)',
+  o:['PYTHON\nPYTHON','PYTHON\npython','python\nPYTHON','python\npython'],
+  a:1,
+  e:'Strings are immutable. .upper() returns a NEW string in uppercase but does not change s. s remains "python".'
+},
+{
+  id:511, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\ns = "  hello world  "\nprint(s.strip().title())',
+  o:['  Hello World  ','Hello World','hello world','HELLO WORLD'],
+  a:1,
+  e:'.strip() removes leading/trailing whitespace giving "hello world". .title() capitalises each word giving "Hello World".'
+},
+{
+  id:512, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\nwords = ["one", "two", "three"]\nresult = "-".join(words)\nprint(result)',
+  o:['one two three','one-two-three','["one","two","three"]','onettwothree'],
+  a:1,
+  e:'"-".join(iterable) concatenates all strings in the list with "-" as the separator between each element.'
+},
+{
+  id:513, type:'mcq', topic:'Strings',
+  q:'What is the output?\n\ns = "banana"\nprint(s.count("a"))\nprint(s.find("n"))',
+  o:['3\n2','2\n3','3\n3','2\n2'],
+  a:0,
+  e:'"banana" has 3 "a" characters. .find("n") returns the index of the FIRST "n", which is at index 2.'
+},
+{
+  id:514, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\nname = "Alice"\nage = 25\nprint(f"My name is {name} and I am {age} years old.")',
+  o:['My name is {name} and I am {age} years old.',
+     'My name is Alice and I am 25 years old.',
+     'My name is Alice and I am {age} years old.',
+     'Error'],
+  a:1,
+  e:'f-strings evaluate expressions inside {}. {name} is replaced with "Alice" and {age} with 25.'
+},
+{
+  id:515, type:'mcq', topic:'Strings',
+  q:'What is printed?\n\ns = "Hello"\nprint(s[::-1])',
+  o:['Hello','olleH','H','lleH'],
+  a:1,
+  e:'s[::-1] uses a step of -1, which reverses the string. "Hello" becomes "olleH".'
+},
+
+// ── LISTS ────────────────────────────────────────
+{
+  id:516, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\nnums = [3, 1, 4, 1, 5, 9]\nnums.sort()\nprint(nums)',
+  o:['[3, 1, 4, 1, 5, 9]','[1, 1, 3, 4, 5, 9]','[9, 5, 4, 3, 1, 1]','[1, 3, 4, 5, 9]'],
+  a:1,
+  e:'.sort() sorts the list IN PLACE in ascending order. The original list is modified. Duplicates are kept.'
+},
+{
+  id:517, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\na = [1, 2, 3]\nb = a\nb.append(4)\nprint(a)',
+  o:['[1, 2, 3]','[1, 2, 3, 4]','[4]','Error'],
+  a:1,
+  e:'b = a does NOT copy the list — both a and b point to the SAME list object. Appending to b also modifies a. Use b = a.copy() or b = a[:] for an independent copy.'
+},
+{
+  id:518, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\nnums = [10, 20, 30, 40, 50]\nprint(nums[-1])\nprint(nums[-2])',
+  o:['50\n40','10\n20','40\n50','50\n30'],
+  a:0,
+  e:'Negative indexing counts from the end. nums[-1] is the last element (50). nums[-2] is the second-to-last (40).'
+},
+{
+  id:519, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\nresult = [x**2 for x in range(1, 6)]\nprint(result)',
+  o:['[1, 4, 9, 16, 25]','[0, 1, 4, 9, 16]','[1, 2, 3, 4, 5]','[2, 4, 6, 8, 10]'],
+  a:0,
+  e:'List comprehension [x**2 for x in range(1,6)] creates a list of squares: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25.'
+},
+{
+  id:520, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\nnums = [1, 2, 3, 4, 5]\nprint(nums[1:4])',
+  o:['[1, 2, 3, 4]','[2, 3, 4]','[2, 3, 4, 5]','[1, 2, 3]'],
+  a:1,
+  e:'Slicing nums[1:4] extracts indices 1, 2, 3 (stop is exclusive). Elements at those indices are 2, 3, 4.'
+},
+{
+  id:521, type:'mcq', topic:'Lists',
+  q:'What is printed?\n\nnums = [5, 3, 8, 1, 9, 2]\nprint(min(nums))\nprint(max(nums))\nprint(sum(nums))',
+  o:['1\n9\n28','5\n9\n28','1\n9\n27','3\n8\n28'],
+  a:0,
+  e:'min() returns 1, max() returns 9, sum() adds all elements: 5+3+8+1+9+2 = 28.'
+},
+
+// ── DICTIONARIES ─────────────────────────────────
+{
+  id:522, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nd = {"name": "Alice", "age": 25, "city": "Singapore"}\nprint(d["age"])\nprint(len(d))',
+  o:['25\n3','Alice\n3','25\n2','age\n3'],
+  a:0,
+  e:'d["age"] retrieves the value for key "age" which is 25. len(d) returns the number of key-value pairs, which is 3.'
+},
+{
+  id:523, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nd = {"a": 1, "b": 2}\nd["c"] = 3\nd["a"] = 10\nprint(d)',
+  o:['{"a": 1, "b": 2}',
+     '{"a": 10, "b": 2, "c": 3}',
+     '{"a": 1, "b": 2, "c": 3}',
+     'Error — cannot reassign'],
+  a:1,
+  e:'d["c"] = 3 adds a new key. d["a"] = 10 updates the existing key "a". Dictionaries are mutable.'
+},
+{
+  id:524, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nd = {"x": 10, "y": 20, "z": 30}\nprint(d.get("w", 0))\nprint(d.get("x", 0))',
+  o:['0\n10','None\n10','0\n0','KeyError'],
+  a:0,
+  e:'.get(key, default) returns the value if the key exists, otherwise the default. "w" does not exist → 0. "x" exists → 10.'
+},
+{
+  id:525, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nscores = {"Alice": 85, "Bob": 72, "Carol": 91}\nfor name, score in scores.items():\n    if score > 80:\n        print(name)',
+  o:['Alice\nCarol','Alice\nBob\nCarol','Carol\nAlice','Bob'],
+  a:0,
+  e:'.items() returns key-value pairs. Alice has 85 > 80 and Carol has 91 > 80. Bob has 72 which is not > 80. Order follows insertion order in Python 3.7+.'
+},
+{
+  id:526, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nd = {"a": 1, "b": 2, "c": 3}\nkeys = list(d.keys())\nvalues = list(d.values())\nprint(keys)\nprint(values)',
+  o:["['a', 'b', 'c']\n[1, 2, 3]",
+     "[1, 2, 3]\n['a', 'b', 'c']",
+     "dict_keys(['a','b','c'])\ndict_values([1,2,3])",
+     'Error'],
+  a:0,
+  e:'.keys() returns a view of keys. .values() returns a view of values. Wrapping in list() converts them to lists. Keys are strings, values are ints.'
+},
+{
+  id:527, type:'mcq', topic:'Dictionaries',
+  q:'What is printed?\n\nd = {"apple": 3, "banana": 5, "cherry": 2}\ndel d["banana"]\nprint(len(d))\nprint("banana" in d)',
+  o:['2\nFalse','3\nFalse','2\nTrue','Error'],
+  a:0,
+  e:'del removes the key "banana" from the dictionary. len(d) is now 2. "banana" in d checks key membership which is now False.'
+},
+
+// ── TUPLES ───────────────────────────────────────
+{
+  id:528, type:'mcq', topic:'Tuples',
+  q:'What is printed?\n\nt = (1, 2, 3, 4, 5)\nprint(t[2])\nprint(t[-1])',
+  o:['3\n5','2\n4','3\n4','2\n5'],
+  a:0,
+  e:'Tuples support indexing like lists. t[2] is 3 (zero-based). t[-1] is the last element, 5.'
+},
+{
+  id:529, type:'mcq', topic:'Tuples',
+  q:'What happens?\n\nt = (1, 2, 3)\nt[0] = 10',
+  o:['t becomes (10, 2, 3)','TypeError: tuples are immutable','ValueError','No error'],
+  a:1,
+  e:'Tuples are IMMUTABLE — you cannot change their elements after creation. Attempting to assign raises TypeError.'
+},
+{
+  id:530, type:'mcq', topic:'Tuples',
+  q:'What is printed?\n\ncoords = (10, 20)\nx, y = coords\nprint(f"x={x}, y={y}")',
+  o:['x=10, y=20','x=(10, 20), y=error','x=20, y=10','Error'],
+  a:0,
+  e:'Tuple unpacking assigns each element to a variable in order. x gets 10, y gets 20.'
+},
+{
+  id:531, type:'mcq', topic:'Tuples',
+  q:'What is printed?\n\nt1 = (1, 2, 3)\nt2 = (4, 5)\nresult = t1 + t2\nprint(result)\nprint(len(result))',
+  o:['(1, 2, 3, 4, 5)\n5','(1, 2, 3)(4, 5)\n2','Error','(5, 7, 3)\n3'],
+  a:0,
+  e:'Tuples support concatenation with +, creating a new tuple. (1,2,3) + (4,5) = (1,2,3,4,5). len() is 5.'
+},
+{
+  id:532, type:'mcq', topic:'Tuples',
+  q:'What is printed?\n\nt = (3, 1, 4, 1, 5, 9, 2, 6)\nprint(t.count(1))\nprint(t.index(5))',
+  o:['2\n4','1\n5','2\n5','1\n4'],
+  a:0,
+  e:'.count(1) returns how many times 1 appears — twice (indices 1 and 3). .index(5) returns the index of the first occurrence of 5, which is index 4.'
+},
+{
+  id:533, type:'mcq', topic:'Tuples',
+  q:'What is the key difference between a list and a tuple?',
+  o:['Tuples can hold more elements than lists',
+     'Lists are immutable, tuples are mutable',
+     'Tuples are immutable (cannot be changed), lists are mutable',
+     'Tuples use [] and lists use ()'],
+  a:2,
+  e:'The core difference: tuples are immutable (cannot be modified after creation), lists are mutable. Tuples use () and lists use []. Tuples are typically used for fixed collections like coordinates or RGB values.'
+},
+
+// ── FILE I/O ─────────────────────────────────────
+{
+  id:534, type:'mcq', topic:'File I/O',
+  q:'Which code correctly writes text to a file?',
+  o:['file = open("data.txt")\nfile.write("Hello")\nfile.close()',
+     'with open("data.txt", "w") as f:\n    f.write("Hello")',
+     'with open("data.txt", "r") as f:\n    f.write("Hello")',
+     'open("data.txt").write("Hello")'],
+  a:1,
+  e:'Mode "w" opens for writing. Using "with" automatically closes the file. Mode "r" is for reading — writing to it raises an error. Always use "with open()" for safe file handling.'
+},
+{
+  id:535, type:'mcq', topic:'File I/O',
+  q:'What does this code do?\n\nwith open("data.txt", "r") as f:\n    lines = f.readlines()\nprint(len(lines))',
+  o:['Reads the entire file as one string',
+     'Reads all lines into a list, then prints how many lines there are',
+     'Reads only the first line',
+     'Writes an empty list to the file'],
+  a:1,
+  e:'.readlines() reads ALL lines and returns them as a list of strings (each ending in \\n). len(lines) gives the number of lines in the file.'
+},
+{
+  id:536, type:'mcq', topic:'File I/O',
+  q:'Which mode appends to an existing file without overwriting it?',
+  o:['"w"','"r"','"a"','"x"'],
+  a:2,
+  e:'"a" (append) opens the file and adds content at the END, preserving existing content. "w" overwrites the file entirely. "r" is read-only. "x" creates a new file but fails if it already exists.'
+},
+{
+  id:537, type:'mcq', topic:'File I/O',
+  q:'What is printed if data.txt contains:\nHello\nWorld\n\nwith open("data.txt", "r") as f:\n    content = f.read()\nprint(content.strip())',
+  o:['Hello World','Hello\nWorld','Hello','World'],
+  a:1,
+  e:'.read() reads the entire file as a single string including newlines. .strip() removes leading/trailing whitespace but NOT internal newlines. Result: "Hello\\nWorld".'
+},
+{
+  id:538, type:'mcq', topic:'File I/O',
+  q:'What is the correct way to read a file line by line efficiently?',
+  o:['content = open("file.txt").read().split()',
+     'with open("file.txt") as f:\n    for line in f:\n        print(line.strip())',
+     'lines = open("file.txt").readlines()\nfor l in lines: print(l)',
+     'f = open("file.txt")\nprint(f.readline())'],
+  a:1,
+  e:'Iterating directly over the file object reads one line at a time without loading the entire file into memory — the most memory-efficient approach. .strip() removes the trailing newline from each line.'
+},
+
+// ── OPERATORS & EXPRESSIONS ──────────────────────
+{
+  id:539, type:'mcq', topic:'Operators',
+  q:'What is printed?\n\nprint(17 // 5)\nprint(17 % 5)\nprint(2 ** 8)',
+  o:['3\n2\n256','3.4\n2\n256','3\n2\n16','4\n2\n256'],
+  a:0,
+  e:'// is floor division (17÷5=3 remainder 2, floor=3). % is modulo (remainder=2). ** is exponentiation (2^8=256).'
+},
+{
+  id:540, type:'mcq', topic:'Operators',
+  q:'What is printed?\n\nx = 5\nprint(x > 3 and x < 10)\nprint(x > 3 or x > 10)\nprint(not x == 5)',
+  o:['True\nTrue\nFalse','True\nFalse\nTrue','False\nTrue\nFalse','True\nTrue\nTrue'],
+  a:0,
+  e:'5>3 and 5<10 → True and True → True. 5>3 or 5>10 → True or False → True. not (5==5) → not True → False.'
+},
+{
+  id:541, type:'mcq', topic:'Operators',
+  q:'What is printed?\n\nprint(type(7 / 2))\nprint(type(7 // 2))',
+  o:["<class 'float'>\n<class 'int'>",
+     "<class 'int'>\n<class 'int'>",
+     "<class 'float'>\n<class 'float'>",
+     "<class 'int'>\n<class 'float'>"],
+  a:0,
+  e:'/ always returns float in Python 3 (7/2 = 3.5). // (floor division) returns int when both operands are int (7//2 = 3).'
+},
+
+// ── FUNCTIONS ────────────────────────────────────
+{
+  id:542, type:'mcq', topic:'Functions',
+  q:'What is printed?\n\ndef greet(name, greeting="Hello"):\n    return f"{greeting}, {name}!"\n\nprint(greet("Alice"))\nprint(greet("Bob", "Hi"))',
+  o:['Hello, Alice!\nHi, Bob!','Hello, Alice!\nHello, Bob!','Alice!\nBob!','Error'],
+  a:0,
+  e:'"greeting" has a default value of "Hello". greet("Alice") uses the default. greet("Bob", "Hi") overrides the default with "Hi".'
+},
+{
+  id:543, type:'mcq', topic:'Functions',
+  q:'What is printed?\n\ndef mystery(lst):\n    return [x * 2 for x in lst if x % 2 == 0]\n\nprint(mystery([1, 2, 3, 4, 5, 6]))',
+  o:['[2, 4, 6, 8, 10, 12]','[4, 8, 12]','[2, 6, 10]','[1, 3, 5]'],
+  a:1,
+  e:'The comprehension filters for even numbers (x%2==0 → 2, 4, 6) then doubles them (2→4, 4→8, 6→12). Result: [4, 8, 12].'
+},
+{
+  id:544, type:'mcq', topic:'Functions',
+  q:'What is printed?\n\ndef add(a, b):\n    return a + b\n\nresult = add(3, 4)\nprint(result)\nprint(add("Hello", " World"))',
+  o:['7\nHello World','7\nError','Error\nHello World','7\n7'],
+  a:0,
+  e:'Python uses duck typing — add() works for any type that supports +. For ints it performs addition (3+4=7). For strings it performs concatenation ("Hello"+" World"="Hello World").'
+},
+{
+  id:545, type:'mcq', topic:'Functions',
+  q:'What is the scope issue here?\n\nx = 10\n\ndef change():\n    x = 20\n    print(x)\n\nchange()\nprint(x)',
+  o:['20\n20','20\n10','10\n20','Error'],
+  a:1,
+  e:'x = 20 inside change() creates a LOCAL variable that shadows the global x. The global x is unchanged. change() prints 20 (local). The final print(x) prints 10 (global).'
+},
+
+// ── CONDITIONALS ─────────────────────────────────
+{
+  id:546, type:'mcq', topic:'Conditionals',
+  q:'What is printed?\n\nscore = 72\nif score >= 80:\n    grade = "A"\nelif score >= 70:\n    grade = "B"\nelif score >= 60:\n    grade = "C"\nelse:\n    grade = "F"\nprint(grade)',
+  o:['A','B','C','F'],
+  a:1,
+  e:'72 is not >= 80 (A skipped). 72 >= 70 is True so grade = "B". Python stops checking once a condition matches.'
+},
+{
+  id:547, type:'mcq', topic:'Conditionals',
+  q:'What is printed?\n\nvalue = None\nif value:\n    print("truthy")\nelse:\n    print("falsy")',
+  o:['truthy','falsy','None','Error'],
+  a:1,
+  e:'In Python, None, 0, empty string "", empty list [], and empty dict {} are all falsy. None evaluates to False in a boolean context, so the else branch runs.'
+},
+{
+  id:548, type:'mcq', topic:'Conditionals',
+  q:'What is printed?\n\nx = 15\nresult = "big" if x > 10 else "small"\nprint(result)',
+  o:['big','small','True','15'],
+  a:0,
+  e:'"big" if x > 10 else "small" is a ternary (inline) conditional. Since 15 > 10 is True, result = "big".'
+},
+{
+  id:549, type:'mcq', topic:'Conditionals',
+  q:'What is printed?\n\nfor i in range(1, 6):\n    print("fizz" if i % 3 == 0 else i, end=" ")',
+  o:['1 2 fizz 4 5','fizz 2 3 4 fizz','1 2 3 4 5','1 2 fizz 4 fizz'],
+  a:0,
+  e:'Only i=3 satisfies i%3==0 in range 1-5. So output is: 1 2 fizz 4 5. The ternary runs for each loop iteration.'
+}
+];
+
+
+// Dedup guard — OOP questions
+const seen = new Set();
+const QUESTIONS = Q.filter(q => { if(seen.has(q.id)) return false; seen.add(q.id); return true; });
+
+const MCQ_Q = QUESTIONS.filter(q => q.type === 'mcq');
+const CODE_Q = QUESTIONS.filter(q => q.type === 'code_write');
+
+// Dedup guard — Basics questions (separate pool)
+const seenB = new Set();
+const BASICS_POOL = BASICS_Q.filter(q => { if(seenB.has(q.id)) return false; seenB.add(q.id); return true; });
+
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let state = {
+  mode: 'mixed',       // 'mcq' | 'code' | 'mixed'
+  examMode: false,
+  quiz: [],            // current question list
+  cur: 0,
+  answers: [],         // {selected, score, studentCode, markingResult}
+  qtimes: [],          // seconds per question
+  qStart: null,
+  timerTick: null,
+  totalStart: null,
+  hintsUsed: []        // per question
+};
+
+// ══════════════════════════════════════════════════════════════
+//  SETTINGS & PERSISTENCE
+// ══════════════════════════════════════════════════════════════
+function loadSettings() {
+  const key = sessionStorage.getItem('ict162_apikey') || '';
+  document.getElementById('apiKeyInput').value = key;
+  const em = localStorage.getItem('ict162_exammode') === 'true';
+  state.examMode = em;
+  const tog = document.getElementById('examModeToggle');
+  if(em) tog.classList.add('on'); else tog.classList.remove('on');
+}
+
+function saveSettings() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if(key) sessionStorage.setItem('ict162_apikey', key);
+  localStorage.setItem('ict162_exammode', state.examMode);
+  closeSettings();
+}
+
+function toggleExamMode() {
+  state.examMode = !state.examMode;
+  const tog = document.getElementById('examModeToggle');
+  if(state.examMode) tog.classList.add('on'); else tog.classList.remove('on');
+}
+
+function openSettings() { loadSettings(); document.getElementById('settingsOverlay').classList.add('active'); }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('active'); }
+function openHistory() { renderHistory(); document.getElementById('historyOverlay').classList.add('active'); }
+function closeHistory() { document.getElementById('historyOverlay').classList.remove('active'); }
+
+// ── Progress persistence ─────────────────────────────────────
+function saveRun(result) {
+  const history = JSON.parse(localStorage.getItem('ict162_history') || '[]');
+  history.unshift(result);
+  if(history.length > 10) history.splice(10);
+  localStorage.setItem('ict162_history', JSON.stringify(history));
+}
+
+function loadLastRun() {
+  const history = JSON.parse(localStorage.getItem('ict162_history') || '[]');
+  if(!history.length) return;
+  const last = history[0];
+  const card = document.getElementById('lastRunCard');
+  card.classList.add('visible');
+  const pct = Math.round(last.pct);
+  document.getElementById('lrScore').textContent = pct + '%';
+  document.getElementById('lrScore').style.color = pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('lrTime').textContent = fmtSec(last.totalTime);
+  const d = new Date(last.date);
+  document.getElementById('lrDate').textContent = d.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+}
+
+function renderHistory() {
+  const history = JSON.parse(localStorage.getItem('ict162_history') || '[]');
+  const el = document.getElementById('historyList');
+  if(!history.length) {
+    el.innerHTML = '<div class="empty-history">No runs yet. Start a quiz to see your history.</div>';
+    return;
+  }
+  el.innerHTML = history.map(h => {
+    const pct = Math.round(h.pct);
+    const cls = pct >= 70 ? 'score-green' : pct >= 50 ? 'score-amber' : 'score-red';
+    const d = new Date(h.date);
+    const dateStr = d.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+    const timeStr = d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+    return `<div class="history-item">
+      <div>
+        <div class="history-date">${dateStr} · ${timeStr}</div>
+        <div class="history-mode">${h.mode === 'mcq' ? 'MCQ Practice' : h.mode === 'code' ? 'Code Write' : 'Mixed Run'}</div>
+        <div class="history-time">⏱ ${fmtSec(h.totalTime)} · ${h.correct}/${h.total} correct</div>
+      </div>
+      <div class="history-score ${cls}">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  QUIZ ENGINE
+// ══════════════════════════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for(let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz(mode) {
+  state.mode = mode;
+  state.cur = 0;
+  state.answers = [];
+  state.qtimes = [];
+  state.hintsUsed = [];
+
+  if(mode === 'mcq') {
+    state.quiz = shuffle(MCQ_Q).slice(0, 20);
+  } else if(mode === 'code') {
+    state.quiz = shuffle(CODE_Q).slice(0, 10);
+  } else if(mode === 'basics') {
+    state.quiz = shuffle(BASICS_POOL).slice(0, 20);
+  } else {
+    const mcqs = shuffle(MCQ_Q).slice(0, 13);
+    const codes = shuffle(CODE_Q).slice(0, 7);
+    state.quiz = shuffle([...mcqs, ...codes]);
+  }
+
+  state.quiz.forEach(() => {
+    state.answers.push(null);
+    state.qtimes.push(null);
+    state.hintsUsed.push([false, false]);
+  });
+
+  state.totalStart = Date.now();
+
+  const mi = document.getElementById('modeIndicator');
+  if(mode === 'basics') {
+    mi.textContent = 'Basics';
+    mi.className = 'mode-indicator';
+    mi.style.background = 'rgba(16,185,129,0.12)';
+    mi.style.color = 'var(--green)';
+    mi.style.border = '1px solid rgba(16,185,129,0.3)';
+  } else if(state.examMode) {
+    mi.style.background = '';
+    mi.style.color = '';
+    mi.style.border = '';
+    mi.textContent = 'Exam';
+    mi.className = 'mode-indicator exam';
+  } else {
+    mi.style.background = '';
+    mi.style.color = '';
+    mi.style.border = '';
+    mi.textContent = 'Tutor';
+    mi.className = 'mode-indicator tutor';
+  }
+
+  showScreen('quizScreen');
+  renderQ();
+}
+
+function renderQ() {
+  const q = state.quiz[state.cur];
+  const total = state.quiz.length;
+  const pct = (state.cur / total) * 100;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('quizCounter').textContent = `${state.cur + 1} / ${total}`;
+
+  startTimer();
+
+  if(q.type === 'mcq') renderMCQ(q);
+  else renderCodeWrite(q);
+}
+
+function startTimer() {
+  clearInterval(state.timerTick);
+  const already = state.qtimes[state.cur];
+  if(already !== null) {
+    document.getElementById('quizTimer').textContent = fmtSec(already);
+    return;
+  }
+  state.qStart = Date.now();
+  state.timerTick = setInterval(() => {
+    const sec = Math.floor((Date.now() - state.qStart) / 1000);
+    const el = document.getElementById('quizTimer');
+    el.textContent = fmtSec(sec);
+    el.className = 'quiz-timer' + (sec > 90 ? ' warn' : '');
+  }, 500);
+}
+
+function stopTimer() {
+  clearInterval(state.timerTick);
+  if(state.qtimes[state.cur] === null) {
+    state.qtimes[state.cur] = Math.floor((Date.now() - state.qStart) / 1000);
+  }
+}
+
+function fmtSec(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+// ── MCQ render ───────────────────────────────────────────────
+function renderMCQ(q) {
+  const answered = state.answers[state.cur];
+  const letters = ['A', 'B', 'C', 'D'];
+
+  let optionsHtml = q.o.map((opt, i) => {
+    let cls = 'option-btn';
+    if(answered !== null) {
+      if(i === q.a) cls += ' correct';
+      else if(i === answered.selected && i !== q.a) cls += ' wrong';
+    }
+    return `<button class="${cls}" onclick="pickMCQ(${i})" ${answered !== null ? 'disabled' : ''}>
+      <span class="option-letter">${letters[i]}</span>
+      <span style="white-space:pre-wrap">${escHtml(opt)}</span>
+    </button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if(answered !== null) {
+    const correct = answered.selected === q.a;
+    feedbackHtml = `<div class="feedback-box visible">
+      <div class="feedback-title ${correct ? 'correct-title' : 'wrong-title'}">
+        ${correct ? '✅ Correct' : '❌ Incorrect'}
+      </div>
+      <div class="feedback-text">${escHtml(q.e)}</div>
+    </div>`;
+  }
+
+  document.getElementById('quizBody').innerHTML = `
+    <div class="q-meta">
+      <span class="q-tag mcq">MCQ</span>
+      <span class="q-topic">${q.topic}</span>
+    </div>
+    <div class="q-text">${escHtml(q.q)}</div>
+    <div class="options-list">${optionsHtml}</div>
+    ${feedbackHtml}
+    <div class="nav-row">
+      ${state.cur > 0 ? '<button class="btn-nav" onclick="navigate(-1)">← Back</button>' : ''}
+      ${answered !== null ? `<button class="btn-nav primary-nav" onclick="navigate(1)">${state.cur === state.quiz.length - 1 ? 'Finish →' : 'Next →'}</button>` : ''}
+    </div>`;
+}
+
+function pickMCQ(i) {
+  stopTimer();
+  const q = state.quiz[state.cur];
+  state.answers[state.cur] = { selected: i, score: i === q.a ? 1 : 0 };
+  renderMCQ(q);
+}
+
+// ── Code Write render ────────────────────────────────────────
+function renderCodeWrite(q) {
+  const answered = state.answers[state.cur];
+  const hints = state.hintsUsed[state.cur];
+
+  const starterHtml = q.starter
+    ? `<div class="starter-code">${escHtml(q.starter)}</div>`
+    : '';
+
+  const hintsHtml = !state.examMode ? `
+    <div class="hints-area">
+      <button class="hint-btn" id="hintBtn1" onclick="showHint(0)" ${hints[0] ? 'disabled' : ''}>
+        💡 ${hints[0] ? 'Hint 1 shown' : 'Hint 1 — Concept'}
+      </button>
+      <button class="hint-btn" id="hintBtn2" onclick="showHint(1)" ${!hints[0] || hints[1] ? 'disabled' : ''}>
+        🔑 ${hints[1] ? 'Hint 2 shown' : 'Hint 2 — Keywords'}
+      </button>
+      <div class="hint-card ${hints[0] ? 'visible' : ''}" id="hintCard0">
+        <div class="hint-label">Concept Nudge</div>
+        <div class="hint-text">${escHtml(q.hints[0])}</div>
+      </div>
+      <div class="hint-card ${hints[1] ? 'visible' : ''}" id="hintCard1">
+        <div class="hint-label">Syntax Keywords</div>
+        <div class="hint-text">${escHtml(q.hints[1])}</div>
+      </div>
+    </div>` : '';
+
+  const prevCode = answered ? answered.studentCode : (q.starter || '');
+
+  let markingHtml = '';
+  if(answered && answered.markingResult) {
+    markingHtml = renderMarkingResult(q, answered.markingResult, answered.studentCode);
+  }
+
+  const submitDisabled = answered !== null ? 'disabled' : '';
+
+  document.getElementById('quizBody').innerHTML = `
+    <div class="q-meta">
+      <span class="q-tag code">CODE WRITE</span>
+      <span class="q-topic">${q.topic}</span>
+      <span class="q-marks">${q.marks} marks</span>
+    </div>
+    <div class="q-text">${escHtml(q.q)}</div>
+    ${starterHtml}
+    ${hintsHtml}
+    <div class="textarea-wrap">
+      <textarea class="code-textarea" id="codeAnswer" spellcheck="false" ${submitDisabled}>${escHtml(prevCode)}</textarea>
+      <div class="textarea-hint">Tab key → 4 spaces &nbsp;|&nbsp; Write Python as you would in Examena</div>
+    </div>
+    <div class="api-error" id="apiError"></div>
+    ${markingHtml}
+    <div class="submit-row">
+      <button class="btn-submit" id="submitBtn" onclick="submitCode()" ${submitDisabled}>
+        <span class="spinner" id="submitSpinner"></span>
+        ${answered ? '✅ Submitted' : '🤖 Submit for AI Marking'}
+      </button>
+    </div>
+    <div class="nav-row">
+      ${state.cur > 0 ? '<button class="btn-nav" onclick="navigate(-1)">← Back</button>' : ''}
+      ${answered !== null ? `<button class="btn-nav primary-nav" onclick="navigate(1)">${state.cur === state.quiz.length - 1 ? 'Finish →' : 'Next →'}</button>` : ''}
+    </div>`;
+
+  // Tab key handler
+  const ta = document.getElementById('codeAnswer');
+  if(ta) {
+    ta.addEventListener('keydown', function(e) {
+      if(e.key === 'Tab') {
+        e.preventDefault();
+        const s = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.substring(0, s) + '    ' + this.value.substring(end);
+        this.selectionStart = this.selectionEnd = s + 4;
+      }
+    });
+  }
+}
+
+function showHint(idx) {
+  state.hintsUsed[state.cur][idx] = true;
+  document.getElementById('hintCard' + idx).classList.add('visible');
+  document.getElementById('hintBtn' + (idx === 0 ? '1' : '2')).disabled = true;
+  if(idx === 0) document.getElementById('hintBtn2').disabled = false;
+}
+
+function renderMarkingResult(q, result, studentCode) {
+  const pct = result.score / result.max;
+  const scoreColor = pct >= 0.7 ? 'var(--green)' : pct >= 0.5 ? 'var(--amber)' : 'var(--red)';
+
+  const rubricHtml = result.feedback.map(f => {
+    const cls = f.awarded === f.max ? 'full' : f.awarded > 0 ? 'partial' : 'zero';
+    return `<div class="rubric-item">
+      <div>
+        <div class="rubric-criterion">${escHtml(f.criterion)}</div>
+        <div class="rubric-comment">${escHtml(f.comment)}</div>
+      </div>
+      <div class="rubric-marks ${cls}">${f.awarded}/${f.max}</div>
+    </div>`;
+  }).join('');
+
+  const modelHtml = (!state.examMode || result.score === result.max) ? `
+    <div class="model-answer-section">
+      <div class="model-label">Model Answer</div>
+      <div class="model-code">${escHtml(q.model)}</div>
+    </div>` : `
+    <div class="model-answer-section">
+      <div class="model-label" style="color:var(--red)">Model answer hidden in Exam Mode</div>
+    </div>`;
+
+  return `<div class="marking-result visible">
+    <div class="marking-header">
+      <div class="marking-score-big" style="color:${scoreColor}">${result.score}/${result.max}</div>
+      <div class="marking-overall">${escHtml(result.overall)}</div>
+    </div>
+    <div class="rubric-list">${rubricHtml}</div>
+    ${modelHtml}
+  </div>`;
+}
+
+// ── AI Marking ───────────────────────────────────────────────
+async function submitCode() {
+  const ta = document.getElementById('codeAnswer');
+  if(!ta) return;
+  const studentCode = ta.value.trim();
+  if(!studentCode) { ta.focus(); return; }
+
+  stopTimer();
+
+  const q = state.quiz[state.cur];
+  const apiKey = sessionStorage.getItem('ict162_apikey') || '';
+
+  const btn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('submitSpinner');
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+  btn.innerHTML = '<span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;"></span> Marking...';
+
+  const errorEl = document.getElementById('apiError');
+  errorEl.classList.remove('visible');
+
+  if(!apiKey) {
+    fallbackMark(q, studentCode);
+    return;
+  }
+
+  const prompt = buildMarkingPrompt(q, studentCode);
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if(!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const text = data.content.map(c => c.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+
+    state.answers[state.cur] = { studentCode, score: result.score, markingResult: result };
+    renderCodeWrite(q);
+
+  } catch(err) {
+    errorEl.textContent = `⚠️ API error: ${err.message}. Showing model answer for self-marking.`;
+    errorEl.classList.add('visible');
+    fallbackMark(q, studentCode);
+  }
+}
+
+function fallbackMark(q, studentCode) {
+  const fallback = {
+    score: 0,
+    max: q.marks,
+    feedback: q.rubric.map(r => ({ criterion: r.criterion, awarded: 0, max: r.marks, comment: 'Self-mark against the model answer.' })),
+    overall: 'API unavailable — compare your answer to the model answer and self-mark.',
+    indentation_issues: false,
+    syntax_errors: []
+  };
+  state.answers[state.cur] = { studentCode, score: 0, markingResult: fallback };
+  renderCodeWrite(q);
+}
+
+function buildMarkingPrompt(q, studentCode) {
+  return `You are marking a Python OOP exam question for a university student.
+
+MARKING MODE: ${state.examMode ? 'STRICT EXAM — penalise all indentation errors, syntax errors as a real examiner would' : 'TUTOR — be encouraging, explain errors clearly, award partial marks generously'}
+
+QUESTION:
+${q.q}
+
+MARKS AVAILABLE: ${q.marks}
+
+RUBRIC:
+${q.rubric.map(r => `- ${r.criterion} [${r.marks} marks]`).join('\n')}
+
+MODEL ANSWER:
+${q.model}
+
+STUDENT ANSWER:
+${studentCode}
+
+Respond ONLY with valid JSON (no markdown fences, no preamble):
+{
+  "score": <total marks awarded as number>,
+  "max": ${q.marks},
+  "feedback": [
+    { "criterion": "...", "awarded": <number>, "max": <number>, "comment": "specific feedback on this criterion" }
+  ],
+  "overall": "one sentence summary of the answer",
+  "indentation_issues": true or false,
+  "syntax_errors": ["description of any syntax errors, or empty array"]
+}`;
+}
+
+// ── Navigation ───────────────────────────────────────────────
+function navigate(dir) {
+  const next = state.cur + dir;
+  if(next < 0) return;
+  if(next >= state.quiz.length) {
+    showResults();
+    return;
+  }
+  state.cur = next;
+  renderQ();
+  window.scrollTo(0, 0);
+}
+
+function confirmBack() {
+  if(confirm('Exit this quiz? Your progress will be lost.')) {
+    clearInterval(state.timerTick);
+    goHome();
+  }
+}
+
+function goHome() {
+  clearInterval(state.timerTick);
+  showScreen('homeScreen');
+  loadLastRun();
+  window.scrollTo(0, 0);
+}
+
+function rerun() {
+  startQuiz(state.mode);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════════════════════════
+function showResults() {
+  clearInterval(state.timerTick);
+  const totalSec = Math.floor((Date.now() - state.totalStart) / 1000);
+  const qtimes = state.qtimes.map(t => t === null ? 0 : t);
+
+  // Score calculation
+  let totalPoints = 0, maxPoints = 0;
+  state.quiz.forEach((q, i) => {
+    const ans = state.answers[i];
+    if(q.type === 'mcq') {
+      maxPoints += 1;
+      if(ans && ans.score) totalPoints += 1;
+    } else {
+      maxPoints += q.marks;
+      if(ans && ans.score) totalPoints += ans.score;
+    }
+  });
+
+  const pct = maxPoints > 0 ? (totalPoints / maxPoints) * 100 : 0;
+  const correct = state.answers.filter((a, i) => {
+    if(!a) return false;
+    const q = state.quiz[i];
+    return q.type === 'mcq' ? a.score === 1 : a.score >= q.marks * 0.5;
+  }).length;
+
+  // Save to history
+  saveRun({
+    date: new Date().toISOString(),
+    mode: state.mode,
+    pct,
+    totalTime: totalSec,
+    correct,
+    total: state.quiz.length
+  });
+
+  // Render score ring
+  const ringFill = document.getElementById('scoreRingFill');
+  const circumference = 314;
+  const offset = circumference - (pct / 100) * circumference;
+  const color = pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--amber)' : 'var(--red)';
+  ringFill.style.stroke = color;
+  setTimeout(() => { ringFill.style.strokeDashoffset = offset; }, 100);
+
+  document.getElementById('scorePct').textContent = Math.round(pct) + '%';
+  document.getElementById('scorePct').style.color = color;
+
+  const msgs = pct >= 80 ? ['Excellent Work!', 'You\'re well prepared for the exam.']
+             : pct >= 60 ? ['Good Progress', 'Keep practising the weaker topics.']
+             : ['Keep Going', 'Review the explanations and try again.'];
+  document.getElementById('resultsTitle').textContent = msgs[0];
+  document.getElementById('resultsSubtitle').textContent = msgs[1];
+
+  // Stats
+  document.getElementById('rTotalTime').textContent = fmtSec(totalSec);
+  const avg = qtimes.length ? Math.round(qtimes.reduce((a, b) => a + b, 0) / qtimes.length) : 0;
+  document.getElementById('rAvgTime').textContent = fmtSec(avg);
+  document.getElementById('rCorrect').textContent = `${correct}/${state.quiz.length}`;
+
+  // Topic breakdown
+  const topicMap = {};
+  state.quiz.forEach((q, i) => {
+    if(!topicMap[q.topic]) topicMap[q.topic] = { got: 0, max: 0 };
+    const ans = state.answers[i];
+    topicMap[q.topic].max += q.type === 'mcq' ? 1 : q.marks;
+    topicMap[q.topic].got += ans ? (ans.score || 0) : 0;
+  });
+
+  const topicHtml = Object.entries(topicMap).map(([t, v]) => {
+    const tp = v.max > 0 ? (v.got / v.max) * 100 : 0;
+    const tc = tp >= 70 ? 'var(--green)' : tp >= 50 ? 'var(--amber)' : 'var(--red)';
+    return `<div class="topic-row">
+      <div class="topic-name">${t}</div>
+      <div class="topic-bar-wrap"><div class="topic-bar-fill" style="width:${tp}%;background:${tc}"></div></div>
+      <div class="topic-pct" style="color:${tc}">${Math.round(tp)}%</div>
+    </div>`;
+  }).join('');
+  document.getElementById('topicGrid').innerHTML = topicHtml;
+
+  // Review
+  const reviewHtml = state.quiz.map((q, i) => {
+    const ans = state.answers[i];
+    const t = qtimes[i];
+    let icon = ans ? (q.type === 'mcq' ? (ans.score ? '✅' : '❌') : (ans.score >= q.marks * 0.5 ? '✅' : '❌')) : '⬜';
+    const preview = q.q.replace(/\n/g, ' ').substring(0, 60) + '...';
+
+    let bodyContent = '';
+    if(q.type === 'mcq' && ans) {
+      const letters = ['A','B','C','D'];
+      bodyContent = `<div class="review-detail-label">Your answer</div>
+        <div style="margin-bottom:0.5rem;font-size:0.83rem;color:${ans.score ? 'var(--green)' : 'var(--red)'}">
+          ${letters[ans.selected]}: ${escHtml(q.o[ans.selected])}
+        </div>
+        ${!ans.score ? `<div class="review-detail-label">Correct answer</div>
+        <div style="margin-bottom:0.5rem;font-size:0.83rem;color:var(--green)">${letters[q.a]}: ${escHtml(q.o[q.a])}</div>` : ''}
+        <div class="review-detail-label">Explanation</div>
+        <div style="font-size:0.83rem;color:var(--text-muted)">${escHtml(q.e)}</div>`;
+    } else if(q.type === 'code_write' && ans) {
+      bodyContent = `<div class="review-detail-label">Your Code</div>
+        <div class="review-code">${escHtml(ans.studentCode || '')}</div>
+        <div class="review-detail-label">Model Answer</div>
+        <div class="review-code">${escHtml(q.model)}</div>`;
+    }
+
+    return `<div class="review-item">
+      <div class="review-item-header" onclick="toggleReview(this)">
+        <span class="review-icon">${icon}</span>
+        <span class="review-q-text">[${q.type === 'mcq' ? 'MCQ' : 'CODE'}] ${escHtml(preview)}</span>
+        <span class="review-time">${fmtSec(t)}</span>
+      </div>
+      <div class="review-item-body">${bodyContent}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('reviewList').innerHTML = reviewHtml;
+
+  showScreen('resultsScreen');
+  window.scrollTo(0,0);
+}
+
+function toggleReview(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function escHtml(str) {
+  if(!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Close overlays on backdrop click ─────────────────────────
+document.getElementById('settingsOverlay').addEventListener('click', function(e) {
+  if(e.target === this) closeSettings();
+});
+document.getElementById('historyOverlay').addEventListener('click', function(e) {
+  if(e.target === this) closeHistory();
+});
+
+// ── Init ─────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  loadSettings();
+  loadLastRun();
+  initPWA();
+});
+
+// ── PWA Setup ────────────────────────────────────────────────
+function makeSVGIcon(size) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <rect width="${size}" height="${size}" rx="${size*0.18}" fill="#0a0e14"/>
+    <rect width="${size}" height="${size}" rx="${size*0.18}" fill="url(#g)"/>
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0a0e14"/>
+        <stop offset="100%" stop-color="#111720"/>
+      </linearGradient>
+    </defs>
+    <text x="50%" y="44%" dominant-baseline="middle" text-anchor="middle"
+          font-size="${size*0.38}" font-family="serif">🐍</text>
+    <text x="50%" y="76%" dominant-baseline="middle" text-anchor="middle"
+          font-size="${size*0.13}" font-family="monospace" font-weight="bold" fill="#00d4ff"
+          letter-spacing="1">OOP</text>
+  </svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+function initPWA() {
+  const icon192 = makeSVGIcon(192);
+  const icon512 = makeSVGIcon(512);
+
+  // Inject apple touch icon
+  document.getElementById('appleTouchIcon').href = makeSVGIcon(180);
+
+  // Build and inject manifest
+  const manifest = {
+    name: 'ICT162 OOP Prep',
+    short_name: 'OOP Prep',
+    description: 'ICT162 OOP Python exam prep quiz for SUSS',
+    start_url: './',
+    scope: './',
+    display: 'standalone',
+    orientation: 'portrait-primary',
+    background_color: '#0a0e14',
+    theme_color: '#0a0e14',
+    categories: ['education'],
+    icons: [
+      { src: icon192, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+      { src: icon512, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+    ]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  document.getElementById('pwaManifest').href = URL.createObjectURL(manifestBlob);
+
+  // Register service worker (inline via blob)
+  if('serviceWorker' in navigator) {
+    const swCode = `
+const CACHE = 'oop-prep-v2';
+const OFFLINE_URL = self.location.href;
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll([OFFLINE_URL]))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', e => {
+  if(e.request.method !== 'GET') return;
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      return cached || fetch(e.request).then(resp => {
+        const clone = resp.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return resp;
+      }).catch(() => caches.match(OFFLINE_URL));
+    })
+  );
+});`;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swURL = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swURL, { scope: './' })
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW skipped (file://):', e.message));
+  }
+}
+
+// ── Install prompt (Android) ──────────────────────────────────
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  if(document.getElementById('installBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.style.cssText = `
+    position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+    background:#1a2332;border:1px solid #243347;border-radius:12px;
+    padding:0.85rem 1.25rem;display:flex;align-items:center;gap:0.75rem;
+    font-family:'DM Sans',sans-serif;font-size:0.85rem;color:#e2eaf5;
+    z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.4);max-width:320px;width:90%;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:1.3rem">📲</span>
+    <span style="flex:1">Install as app for offline use</span>
+    <button onclick="installPWA()" style="
+      background:linear-gradient(135deg,#7c3aed,#6d28d9);border:none;
+      border-radius:8px;color:white;font-family:'DM Sans',sans-serif;
+      font-weight:600;font-size:0.8rem;padding:0.5rem 0.9rem;cursor:pointer;">
+      Install
+    </button>
+    <button onclick="this.parentElement.remove()" style="
+      background:none;border:none;color:#6b82a0;cursor:pointer;font-size:1rem;padding:0.25rem;">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+function installPWA() {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    const b = document.getElementById('installBanner');
+    if(b) b.remove();
+  });
+}
+</script>
+</body>
+</html>
