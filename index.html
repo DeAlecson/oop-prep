@@ -79,43 +79,82 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
+  padding: 0 1rem 3rem;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.home-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  animation: fadeUp 0.6s ease both;
+/* Top utility bar */
+.home-topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 0 0;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.4s ease both;
 }
 
 .home-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   background: rgba(0,212,255,0.08);
-  border: 1px solid rgba(0,212,255,0.2);
+  border: 1px solid rgba(0,212,255,0.15);
   border-radius: 100px;
-  padding: 0.35rem 1rem;
+  padding: 0.3rem 0.85rem;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--accent);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
+}
+
+.home-topbar-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.topbar-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.15s;
+  color: var(--text-muted);
+}
+
+.topbar-btn:hover {
+  border-color: var(--accent);
+  background: rgba(0,212,255,0.06);
+}
+
+/* Hero */
+.home-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.5s 0.05s ease both;
+  width: 100%;
 }
 
 .home-title {
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-size: clamp(2rem, 7vw, 3.2rem);
   font-weight: 300;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--text);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .home-title span {
-  font-weight: 700;
+  font-weight: 800;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -123,21 +162,21 @@ body::before {
 }
 
 .home-subtitle {
-  color: var(--text-muted);
-  font-size: 1rem;
+  color: var(--text-dim);
+  font-size: 0.88rem;
   font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
 /* Last run card */
 #lastRunCard {
   width: 100%;
-  max-width: 480px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 2rem;
-  animation: fadeUp 0.6s 0.1s ease both;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  animation: fadeUp 0.5s 0.1s ease both;
   display: none;
 }
 
@@ -145,11 +184,11 @@ body::before {
 
 .last-run-label {
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
 }
 
 .last-run-grid {
@@ -160,34 +199,163 @@ body::before {
 
 .last-run-stat .stat-val {
   font-family: var(--mono);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--accent);
   line-height: 1;
 }
 
 .last-run-stat .stat-lbl {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
-/* Mode cards */
+/* Section labels */
+.home-section-label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+  animation: fadeUp 0.5s 0.12s ease both;
+}
+
+.section-pill {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.learn-pill {
+  background: rgba(251,146,60,0.12);
+  border: 1px solid rgba(251,146,60,0.25);
+  color: #fb923c;
+}
+
+.practice-pill {
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.25);
+  color: #a78bfa;
+}
+
+.section-caption {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+/* Learn card */
+.home-learn-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.5s 0.14s ease both;
+}
+
+.home-learn-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(251,146,60,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.home-learn-card:hover {
+  border-color: #fb923c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(251,146,60,0.1);
+}
+
+.home-learn-card:hover::before { opacity: 1; }
+
+.learn-card-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.learn-card-icon { font-size: 1.8rem; flex-shrink: 0; }
+
+.learn-card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.learn-card-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.learn-su-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.su-pill {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  background: var(--surface2);
+  transition: all 0.2s;
+}
+
+.su-pill.done {
+  background: rgba(16,185,129,0.12);
+  border-color: rgba(16,185,129,0.3);
+  color: var(--green);
+}
+
+.su-pill.done::after { content: ' ✓'; }
+
+.learn-card-arrow {
+  font-size: 1.5rem;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.home-learn-card:hover .learn-card-arrow { transform: translateX(4px); color: #fb923c; }
+
+/* Practice mode grid */
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.85rem;
   width: 100%;
-  max-width: 480px;
-  margin-bottom: 1.5rem;
-  animation: fadeUp 0.6s 0.15s ease both;
+  max-width: 600px;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.5s 0.16s ease both;
 }
 
 .mode-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.5rem 1.25rem;
+  padding: 1.25rem 1.1rem;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -206,38 +374,18 @@ body::before {
 
 .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .mode-card:hover::before { opacity: 1; }
-
-.mode-card.full-width {
-  grid-column: 1 / -1;
-}
-
-.mode-card.full-width::before {
-  background: linear-gradient(135deg, rgba(124,58,237,0.06), transparent);
-}
-
+.mode-card.full-width { grid-column: 1 / -1; }
+.mode-card.full-width::before { background: linear-gradient(135deg, rgba(124,58,237,0.06), transparent); }
 .mode-card.full-width:hover { border-color: var(--accent2); }
 
-.mode-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.mode-title {
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 0.25rem;
-}
-
-.mode-desc {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
+.mode-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+.mode-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+.mode-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
 
 .mode-badge {
   display: inline-block;
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   padding: 0.15rem 0.5rem;
   border-radius: 100px;
   margin-top: 0.5rem;
@@ -258,20 +406,17 @@ body::before {
   border: 1px solid rgba(16,185,129,0.2);
 }
 
-.basics-card::before {
-  background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent) !important;
-}
-
+.basics-card::before { background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent) !important; }
 .basics-card:hover { border-color: var(--green) !important; }
 
 .warmup-divider {
   width: 100%;
-  max-width: 480px;
+  max-width: 600px;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin: 0.5rem 0 1rem;
-  animation: fadeUp 0.6s 0.2s ease both;
+  margin: 0.25rem 0 0.85rem;
+  animation: fadeUp 0.5s 0.18s ease both;
 }
 
 .warmup-divider::before,
@@ -283,38 +428,134 @@ body::before {
 }
 
 .warmup-divider span {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-dim);
   font-family: var(--mono);
   letter-spacing: 0.1em;
   white-space: nowrap;
 }
 
-/* Bottom bar */
-.home-bottom {
-  display: flex;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 480px;
-  animation: fadeUp 0.6s 0.2s ease both;
+/* ─── LEARN SELECT SCREEN ──────────────────── */
+.learn-select-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
 }
 
-.btn-outline {
-  flex: 1;
-  padding: 0.75rem;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-muted);
-  font-family: var(--sans);
+.learn-select-intro {
   font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  padding: 0 0.25rem;
+}
+
+.su-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.su-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-outline:hover {
-  border-color: var(--text-muted);
-  color: var(--text);
+.su-card:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
+.su-card.unlocked:hover { border-color: #fb923c; }
+.su-card.locked { opacity: 0.45; cursor: not-allowed; }
+.su-card.completed { border-color: rgba(16,185,129,0.3); }
+.su-card.completed:hover { border-color: var(--green); }
+
+.su-card-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.su-card.unlocked .su-card-num { background: rgba(251,146,60,0.1); border-color: rgba(251,146,60,0.3); color: #fb923c; }
+.su-card.completed .su-card-num { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--green); }
+
+.su-card-info { flex: 1; min-width: 0; }
+
+.su-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.su-card-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.su-card-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.su-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--surface3);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.su-progress-fill {
+  height: 100%;
+  background: #fb923c;
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+.su-card.completed .su-progress-fill { background: var(--green); }
+
+.su-progress-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.su-card-status {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Learn indicator in quiz header */
+.learn-indicator {
+  background: rgba(251,146,60,0.15) !important;
+  color: #fb923c !important;
+  border-color: rgba(251,146,60,0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .mode-grid { grid-template-columns: 1fr; }
+  .home-learn-card { padding: 1rem 1.1rem; }
+  .learn-card-icon { font-size: 1.5rem; }
 }
 
 /* ─── HISTORY OVERLAY ──────────────────────────── */
@@ -361,6 +602,238 @@ body::before {
   font-size: 1.2rem;
   line-height: 1;
 }
+
+/* ─── LEARN EXERCISE ────────────────────────────── */
+.learn-exercise {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.lab-banner {
+  background: linear-gradient(135deg, rgba(251,146,60,0.15), rgba(251,146,60,0.05));
+  border: 1px solid rgba(251,146,60,0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  font-size: 0.82rem;
+  color: #fb923c;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.learn-ex-header { margin-bottom: 1.25rem; }
+
+.learn-su-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.35rem;
+}
+
+.learn-ex-title { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+
+.learn-concept-block, .learn-example-block, .learn-task-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.learn-concept-block { border-left: 3px solid var(--accent); }
+.learn-example-block { border-left: 3px solid var(--accent2); }
+.learn-task-block    { border-left: 3px solid #fb923c; }
+
+.learn-block-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.6rem;
+}
+
+.learn-concept-text, .learn-task-text {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.learn-code-example {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin: 0;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.learn-code-example code { color: var(--text); font-family: var(--mono); }
+
+.learn-editor-wrap { margin-bottom: 1rem; }
+
+.learn-editor-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.done-badge {
+  background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.3);
+  color: var(--green);
+  border-radius: 100px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.62rem;
+}
+
+.learn-textarea {
+  width: 100%;
+  min-height: 200px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.learn-textarea:focus { border-color: #fb923c; }
+
+.learn-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.learn-btn-skip {
+  padding: 0.75rem 1.25rem;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.learn-btn-skip:hover { border-color: var(--text-muted); color: var(--text); }
+
+.learn-btn-submit {
+  flex: 1;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.learn-btn-submit:hover { opacity: 0.9; }
+.learn-btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.learn-nav {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+}
+
+.learn-nav-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.learn-nav-btn:hover { border-color: #fb923c; color: #fb923c; }
+
+.learn-feedback {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.learn-feedback-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.learn-feedback-content {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.learn-feedback-content strong { color: var(--text); }
+.learn-feedback-content p { margin: 0.5rem 0; }
+
+.feedback-code {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.feedback-code code { color: var(--text); font-family: var(--mono); }
+.feedback-error { color: var(--amber); font-size: 0.85rem; }
+
+.learn-feedback-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.learn-btn-next {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.learn-btn-next:hover { opacity: 0.9; }
 
 /* ─── LEADERBOARD ───────────────────────────────── */
 .lb-filters {
@@ -1672,12 +2145,24 @@ body::before {
 <!--  HOME SCREEN                                       -->
 <!-- ══════════════════════════════════════════════════ -->
 <div id="homeScreen" class="screen active">
-  <div class="home-header">
-    <div class="home-badge">🐍 ICT162 · SUSS · v2</div>
-    <h1 class="home-title">OOP<br><span>Practice Quiz</span></h1>
-    <p class="home-subtitle">Object Oriented Programming · Exam Prep</p>
+
+  <!-- Top utility bar -->
+  <div class="home-topbar">
+    <div class="home-badge">🐍 ICT162 · SUSS</div>
+    <div class="home-topbar-actions">
+      <button class="topbar-btn" onclick="openLeaderboard()" title="Leaderboard">🏆</button>
+      <button class="topbar-btn" onclick="openHistory()" title="History">📊</button>
+      <button class="topbar-btn" onclick="openSettings()" title="Settings">⚙️</button>
+    </div>
   </div>
 
+  <!-- Hero -->
+  <div class="home-hero">
+    <h1 class="home-title">ICT162 <span>OOP Prep</span></h1>
+    <p class="home-subtitle">Object Oriented Programming · SUSS Exam Prep</p>
+  </div>
+
+  <!-- Last run strip -->
   <div id="lastRunCard">
     <div class="last-run-label">⏱ Last Run</div>
     <div class="last-run-grid">
@@ -1696,18 +2181,49 @@ body::before {
     </div>
   </div>
 
+  <!-- ── LEARN SECTION ──────────────────────── -->
+  <div class="home-section-label">
+    <span class="section-pill learn-pill">📚 Learn</span>
+    <span class="section-caption">Build your OOP foundation step by step</span>
+  </div>
+
+  <div class="home-learn-card" onclick="openLearnSelect()">
+    <div class="learn-card-left">
+      <div class="learn-card-icon">📚</div>
+      <div>
+        <div class="learn-card-title">Learn Mode</div>
+        <div class="learn-card-desc">Guided lessons · AI tutor feedback · Lab capstones</div>
+        <div class="learn-su-pills" id="learnSuPills">
+          <span class="su-pill" data-su="1">SU1</span>
+          <span class="su-pill" data-su="2">SU2</span>
+          <span class="su-pill" data-su="3">SU3</span>
+          <span class="su-pill" data-su="4">SU4</span>
+          <span class="su-pill" data-su="5">SU5</span>
+          <span class="su-pill" data-su="6">SU6</span>
+        </div>
+      </div>
+    </div>
+    <div class="learn-card-arrow">›</div>
+  </div>
+
+  <!-- ── PRACTICE SECTION ───────────────────── -->
+  <div class="home-section-label" style="margin-top:1.75rem">
+    <span class="section-pill practice-pill">🎯 Practice</span>
+    <span class="section-caption">Test yourself under exam conditions</span>
+  </div>
+
   <div class="mode-grid">
     <div class="mode-card" onclick="startQuiz('mcq')">
       <div class="mode-icon">🔍</div>
       <div class="mode-title">MCQ Practice</div>
-      <div class="mode-desc">Output tracing, error spotting, concept identification</div>
-      <span class="mode-badge">70 questions · shuffled</span>
+      <div class="mode-desc">Output tracing, error spotting, concept ID</div>
+      <span class="mode-badge">70 questions</span>
     </div>
     <div class="mode-card" onclick="startQuiz('code')">
       <div class="mode-icon">✍️</div>
       <div class="mode-title">Code Write</div>
-      <div class="mode-desc">Write Python OOP code from memory with AI marking</div>
-      <span class="mode-badge">25 questions · shuffled</span>
+      <div class="mode-desc">Write OOP code from memory with AI marking</div>
+      <span class="mode-badge">25 questions</span>
     </div>
     <div class="mode-card full-width" onclick="startQuiz('mixed')">
       <div class="mode-icon">🎯</div>
@@ -1717,24 +2233,51 @@ body::before {
     </div>
   </div>
 
-  <div class="warmup-divider">
-    <span>— warmup —</span>
-  </div>
+  <!-- ── WARMUP ─────────────────────────────── -->
+  <div class="warmup-divider"><span>— warmup —</span></div>
 
-  <div class="mode-grid" style="max-width:480px;width:100%">
+  <div class="mode-grid" style="max-width:600px;width:100%">
     <div class="mode-card full-width basics-card" onclick="startQuiz('basics')">
       <div class="mode-icon">🐍</div>
       <div class="mode-title">Python Basics</div>
-      <div class="mode-desc">Loops, strings, lists, dicts, tuples, file I/O, operators, functions. Great warmup or quick refresher — not part of the OOP bank.</div>
+      <div class="mode-desc">Loops, strings, lists, dicts, tuples, file I/O. Quick refresher before OOP practice.</div>
       <span class="mode-badge basics-badge">50 questions · 20 per run</span>
     </div>
   </div>
 
-  <div class="home-bottom">
-    <button class="btn-outline" onclick="openHistory()">📊 History</button>
-    <button class="btn-outline" onclick="openLeaderboard()">🏆 Leaderboard</button>
-    <button class="btn-outline" onclick="openSettings()">⚙️ Settings</button>
+  <div style="height:2rem"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  LEARN SELECT SCREEN                               -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="learnSelectScreen" class="screen">
+  <div class="learn-select-inner">
+    <div class="settings-topbar">
+      <button class="settings-back" onclick="showScreen('homeScreen')">← Back</button>
+      <span class="settings-title">Learn Mode</span>
+      <span style="width:60px"></span>
+    </div>
+    <p class="learn-select-intro">Work through each Study Unit in order. Complete all exercises and the Lab capstone to unlock the next unit.</p>
+    <div class="su-card-list" id="suCardList"></div>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!--  LEARN EXERCISE SCREEN                             -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="learnScreen" class="screen">
+  <div class="quiz-header">
+    <button class="quiz-back" onclick="confirmLearnBack()">← Exit</button>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="learnProgressFill"></div>
+      </div>
+      <div class="quiz-counter" id="learnCounter">1 / 6</div>
+    </div>
+    <div class="mode-indicator learn-indicator">Learn</div>
+  </div>
+  <div class="quiz-body" id="learnBody"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════════ -->
@@ -2570,7 +3113,7 @@ const Q = [
     {criterion:'withdraw checks balance before deducting, returns True/False', marks:3},
     {criterion:'__str__ returns correctly formatted string', marks:2}
   ],
-  model:'class BankAccount:\n    def __init__(self, accountId, pin, balance=100.0):\n        self.__accountId = accountId\n        self.__pin = pin\n        self.__balance = balance\n\n    @property\n    def accountId(self):\n        return self.__accountId\n\n    @property\n    def pin(self):\n        return self.__pin\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount <= self.__balance:\n            self.__balance -= amount\n            return True\n        return False\n\n    def __str__(self):\n        return f\'Account: {self.__accountId}  Balance: ${self.__balance:.2f}\'',
+  model:'class BankAccount:\n    def __init__(self, accountId, pin, balance=100.0):\n        self.__accountId = accountId\n        self.__pin = pin\n        self.__balance = balance\n\n    @property\n    def accountId(self):\n        return self.__accountId\n\n    @property\n    def pin(self):\n        return self.__pin\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount <= self.__balance:\n            self.__balance -= amount\n            return True\n        return False\n\n    def __str__(self):\n        return f\'Account: {self.__accountId}  Balance: " + str(self.__balance:.2f) + "\'',
   e:'Key points: double-underscore for private attributes, @property for getters, withdraw checks before deducting and returns bool, __str__ uses :.2f for 2 decimal places.'
 },
 {
@@ -2823,7 +3366,7 @@ const Q = [
     {criterion:'HSBCMovieCard calls super().__init__ and sets __cardNo', marks:2},
     {criterion:'HSBCMovieCard redeemTicket adds bonus ticket via super()', marks:2}
   ],
-  model:'class MovieCard:\n    def __init__(self, price):\n        self.__price = price\n        self.__tickets = 10 if price == 70 else 15\n\n    @property\n    def tickets(self):\n        return self.__tickets\n\n    def redeemTicket(self, qty=1):\n        if qty > 2:\n            return False\n        if self.__tickets <= 0:\n            return False\n        self.__tickets -= qty\n        return True\n\n    def __str__(self):\n        return f\'Ticket price: ${self.__price}, tickets remaining: {self.__tickets}\'\n\n\nclass HSBCMovieCard(MovieCard):\n    def __init__(self, price, cardNo):\n        super().__init__(price)\n        self.__cardNo = cardNo\n\n    def redeemTicket(self, qty=1):\n        if super().redeemTicket(qty):\n            super().redeemTicket(-1)\n            return True\n        return False\n\n    def __str__(self):\n        return super().__str__() + f\'  Card: {self.__cardNo}\'',
+  model:'class MovieCard:\n    def __init__(self, price):\n        self.__price = price\n        self.__tickets = 10 if price == 70 else 15\n\n    @property\n    def tickets(self):\n        return self.__tickets\n\n    def redeemTicket(self, qty=1):\n        if qty > 2:\n            return False\n        if self.__tickets <= 0:\n            return False\n        self.__tickets -= qty\n        return True\n\n    def __str__(self):\n        return f\'Ticket price: " + str(self.__price) + ", tickets remaining: {self.__tickets}\'\n\n\nclass HSBCMovieCard(MovieCard):\n    def __init__(self, price, cardNo):\n        super().__init__(price)\n        self.__cardNo = cardNo\n\n    def redeemTicket(self, qty=1):\n        if super().redeemTicket(qty):\n            super().redeemTicket(-1)\n            return True\n        return False\n\n    def __str__(self):\n        return super().__str__() + f\'  Card: {self.__cardNo}\'',
   e:'MovieCard calculates tickets in __init__ based on price. HSBCMovieCard.redeemTicket is overriding by refinement — it calls super() and then adjusts. The bonus ticket means one fewer is deducted net.'
 },
 {
@@ -2879,7 +3422,7 @@ const Q = [
     {criterion:'withdraw deducts and returns True when funds sufficient', marks:2},
     {criterion:'deposit raises ValueError if amount <= 0', marks:2}
   ],
-  model:'class InsufficientFundsError(Exception):\n    pass\n\nclass BankAccount:\n    def __init__(self, accountId, balance=100.0):\n        self.__accountId = accountId\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError("Amount must be positive")\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount > self.__balance:\n            raise InsufficientFundsError(\n                f\'Insufficient funds: balance ${self.__balance:.2f}, requested ${amount:.2f}\')\n        self.__balance -= amount\n        return True',
+  model:'class InsufficientFundsError(Exception):\n    pass\n\nclass BankAccount:\n    def __init__(self, accountId, balance=100.0):\n        self.__accountId = accountId\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError("Amount must be positive")\n        self.__balance += amount\n\n    def withdraw(self, amount):\n        if amount > self.__balance:\n            raise InsufficientFundsError(\n                f\'Insufficient funds: balance " + str(self.__balance:.2f) + ", requested ${amount:.2f}\')\n        self.__balance -= amount\n        return True',
   e:'Raise BEFORE modifying state. InsufficientFundsError is domain-specific — more meaningful than a generic ValueError. deposit uses ValueError since a negative deposit amount is a general input error, not a domain rule.'
 },
 {
@@ -3013,7 +3556,7 @@ const Q = [
     {criterion:'CardPayment calls super().__init__ and sets __cardNo', marks:2},
     {criterion:'CardPayment process() shows last 4 digits only', marks:2}
   ],
-  model:'from abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    _transactionId = 1\n\n    def __init__(self, amount):\n        self._id = Payment._transactionId\n        Payment._transactionId += 1\n        self._amount = amount\n\n    @property\n    def id(self):\n        return self._id\n\n    @property\n    def amount(self):\n        return self._amount\n\n    @abstractmethod\n    def process(self):\n        pass\n\n    def __str__(self):\n        return f\'Transaction {self._id}: ${self._amount:.2f}\'\n\n\nclass CashPayment(Payment):\n    def __init__(self, amount):\n        super().__init__(amount)\n\n    def process(self):\n        return f\'Cash payment of ${self._amount:.2f} processed\'\n\n\nclass CardPayment(Payment):\n    def __init__(self, amount, cardNo):\n        super().__init__(amount)\n        self.__cardNo = str(cardNo)\n\n    def process(self):\n        return f\'Card ****{self.__cardNo[-4:]} payment of ${self._amount:.2f} processed\'',
+  model:'from abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    _transactionId = 1\n\n    def __init__(self, amount):\n        self._id = Payment._transactionId\n        Payment._transactionId += 1\n        self._amount = amount\n\n    @property\n    def id(self):\n        return self._id\n\n    @property\n    def amount(self):\n        return self._amount\n\n    @abstractmethod\n    def process(self):\n        pass\n\n    def __str__(self):\n        return f\'Transaction {self._id}: " + str(self._amount:.2f) + "\'\n\n\nclass CashPayment(Payment):\n    def __init__(self, amount):\n        super().__init__(amount)\n\n    def process(self):\n        return f\'Cash payment of " + str(self._amount:.2f) + " processed\'\n\n\nclass CardPayment(Payment):\n    def __init__(self, amount, cardNo):\n        super().__init__(amount)\n        self.__cardNo = str(cardNo)\n\n    def process(self):\n        return f\'Card ****{self.__cardNo[-4:]} payment of " + str(self._amount:.2f) + " processed\'',
   e:'_id uses single underscore (protected) so subclasses access it via self._id. self.__cardNo[-4:] slices the last 4 characters. process() is abstract in Payment but concrete in both subclasses.'
 },
 {
@@ -3032,7 +3575,7 @@ const Q = [
     {criterion:'getOrder returns Order or None using .get()', marks:1},
     {criterion:'totalRevenue sums all order totals using .values()', marks:2}
   ],
-  model:'class Order:\n    def __init__(self, orderId, customer):\n        self.__orderId = orderId\n        self.__customer = customer\n        self.__items = []\n\n    @property\n    def orderId(self):\n        return self.__orderId\n\n    @property\n    def customer(self):\n        return self.__customer\n\n    @property\n    def items(self):\n        return self.__items\n\n    def addItem(self, pizza):\n        self.__items.append(pizza)\n\n    def totalPrice(self):\n        return sum(p.price for p in self.__items)\n\n    def __str__(self):\n        return f\'Order {self.__orderId}  Customer: {self.__customer}  Total: ${self.totalPrice():.2f}\'\n\n\nclass PizzaHouse:\n    def __init__(self, name):\n        self.__name = name\n        self.__orders = {}\n\n    def addOrder(self, order):\n        self.__orders[order.orderId] = order\n\n    def getOrder(self, orderId):\n        return self.__orders.get(orderId, None)\n\n    def totalRevenue(self):\n        return sum(o.totalPrice() for o in self.__orders.values())\n\n    def __str__(self):\n        return f\'PizzaHouse: {self.__name}  Orders: {len(self.__orders)}\'',
+  model:'class Order:\n    def __init__(self, orderId, customer):\n        self.__orderId = orderId\n        self.__customer = customer\n        self.__items = []\n\n    @property\n    def orderId(self):\n        return self.__orderId\n\n    @property\n    def customer(self):\n        return self.__customer\n\n    @property\n    def items(self):\n        return self.__items\n\n    def addItem(self, pizza):\n        self.__items.append(pizza)\n\n    def totalPrice(self):\n        return sum(p.price for p in self.__items)\n\n    def __str__(self):\n        return f\'Order {self.__orderId}  Customer: {self.__customer}  Total: " + str(self.totalPrice():.2f) + "\'\n\n\nclass PizzaHouse:\n    def __init__(self, name):\n        self.__name = name\n        self.__orders = {}\n\n    def addOrder(self, order):\n        self.__orders[order.orderId] = order\n\n    def getOrder(self, orderId):\n        return self.__orders.get(orderId, None)\n\n    def totalRevenue(self):\n        return sum(o.totalPrice() for o in self.__orders.values())\n\n    def __str__(self):\n        return f\'PizzaHouse: {self.__name}  Orders: {len(self.__orders)}\'',
   e:'sum(p.price for p in self.__items) uses a generator expression — clean and Pythonic. totalRevenue() delegates to each Order.totalPrice() — this is composition at work. .get(key, None) is safer than direct key access.'
 }
 ];
@@ -3522,6 +4065,876 @@ function openSettings() {
 
 function closeSettings() {
   document.getElementById('settingsOverlay').classList.remove('active');
+}
+
+// ═══════════════════════════════════════════════════════════
+// LEARN MODE
+// ═══════════════════════════════════════════════════════════
+
+const LEARN_UNITS = [
+  {
+    id: 1,
+    title: 'Classes & Objects',
+    icon: '🏗️',
+    topics: '__init__ · self · @property · setter · __str__',
+    exercises: [
+      {
+        title: 'Your first class',
+        concept: 'A class is a blueprint. Every class needs __init__(self) to set up instance variables. self refers to the current object — always the first parameter.',
+        example: `class Dog:
+    def __init__(self, name, age):
+        self.__name = name   # private with __
+        self.__age = age
+
+d = Dog("Rex", 3)`,
+        task: 'Write a class called Car with two instance variables: make (str) and year (int). Add an __init__ method that takes both as parameters and stores them as private attributes.',
+        hint: 'Use self.__make and self.__year to make them private.'
+      },
+      {
+        title: '@property getters',
+        concept: 'Instead of getMake() methods, Python uses @property. This lets you access attributes like d.name instead of d.getName(). The method name becomes the "property name".',
+        example: `class Dog:
+    def __init__(self, name):
+        self.__name = name
+
+    @property
+    def name(self):
+        return self.__name
+
+d = Dog("Rex")
+print(d.name)  # Rex`,
+        task: 'Extend your Car class from exercise 1. Add @property getters for both make and year.',
+        hint: 'Each property is a method decorated with @property that just returns the private attribute.'
+      },
+      {
+        title: 'Setter with validation',
+        concept: 'A setter lets you control what values are assigned. Use @propertyname.setter and add validation logic inside. If invalid, you can raise a ValueError.',
+        example: `@name.setter
+def name(self, new_name):
+    if len(new_name) == 0:
+        raise ValueError("Name cannot be empty")
+    self.__name = new_name`,
+        task: 'Add a setter for year in your Car class. The year must be between 1900 and 2030. If not, raise a ValueError with a suitable message.',
+        hint: 'Use @year.setter and check the value with an if statement before assigning.'
+      },
+      {
+        title: '__str__ method',
+        concept: '__str__ is called automatically when you print an object or use str(). It must return a string. Without it, printing an object shows something like <__main__.Car object at 0x...>.',
+        example: `def __str__(self):
+    return f"Dog: {self.__name}, Age: {self.__age}"
+
+d = Dog("Rex", 3)
+print(d)  # Dog: Rex, Age: 3`,
+        task: 'Add a __str__ method to your Car class that returns a string in this format:\nMake: Toyota  Year: 2020',
+        hint: 'Use an f-string: return f"Make: {self.__make}  Year: {self.__year}"'
+      },
+      {
+        title: 'Full class from scratch',
+        concept: 'Put it all together. A well-written class has: private attributes, @property getters, at least one setter with validation, and __str__.',
+        example: `# Full pattern:
+class Item:
+    def __init__(self, name, price):
+        self.__name = name
+        self.__price = price
+
+    @property
+    def name(self): return self.__name
+
+    @property
+    def price(self): return self.__price
+
+    @price.setter
+    def price(self, val):
+        if val < 0: raise ValueError("Price cannot be negative")
+        self.__price = val
+
+    def __str__(self):
+        return f"{self.__name}: " + str(self.__price:.2f) + ""`,
+        task: 'Write a complete Student class with:\n- Private attributes: student_id (str), name (str), gpa (float)\n- @property getters for all three\n- A setter for gpa that only accepts values 0.0–4.0\n- __str__ returning: ID: S001  Name: Alice  GPA: 3.8',
+        hint: 'Follow the full pattern shown. Write __init__ first, then properties, then __str__.'
+      },
+      {
+        title: '🏆 Lab Capstone — Person class',
+        isLab: true,
+        concept: 'This is based on ICT162 Lab 1, Question 1. Apply everything from this unit to build a complete, real lab question.',
+        example: `# Expected output examples:
+# getFullName()  →  "Mr. Ong Ah Seng"
+# getInitials()  →  "A. Ong"
+# __str__()      →  "Name: Ong Ah Seng Gender: Male"`,
+        task: `Write a Person class with:
+- 3 private instance variables: gender (str: 'm' or 'f'), name (str), last_name (str)
+- Constructor that initialises all three
+- @property getters for all three
+- A setter for name only
+- getFullName() — returns salutation + last_name + name e.g. "Mr. Ong Ah Seng"
+- getInitials() — returns first letter of name + ". " + last_name e.g. "A. Ong"
+- __str__() — returns "Name: {last_name} {name}  Gender: {'Male' if m else 'Female'}"
+
+Then create a Person object and call all the methods.`,
+        hint: 'For getFullName(): salutation is "Mr." if gender == "m" else "Ms.". Use an f-string to build the full name.'
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Composition',
+    icon: '🔗',
+    topics: 'HAS-A · delegation · object as attribute · collections',
+    exercises: [
+      {
+        title: 'HAS-A relationship',
+        concept: 'Composition means one class contains an instance of another class as an attribute. This is a HAS-A relationship. E.g. a Car HAS-A Engine. The outer class delegates behaviour to the inner object.',
+        example: `class Engine:
+    def __init__(self, horsepower):
+        self.__hp = horsepower
+    @property
+    def horsepower(self): return self.__hp
+
+class Car:
+    def __init__(self, make, engine):
+        self.__make = make
+        self.__engine = engine  # HAS-A Engine`,
+        task: 'Write an Address class with private attributes: street (str), city (str), postal_code (str). Add @property getters and a __str__ method. Then write a Person class that HAS-A Address. Person has name (str) and address (Address) as attributes.',
+        hint: 'In Person.__init__, accept an Address object as a parameter and store it as self.__address.'
+      },
+      {
+        title: 'Delegation',
+        concept: 'When the outer class needs to access the inner object\'s data, it delegates — it calls the inner object\'s methods. The outer class does not need to know the inner object\'s implementation.',
+        example: `class Car:
+    def __init__(self, make, engine):
+        self.__make = make
+        self.__engine = engine
+
+    def getHorsepower(self):
+        return self.__engine.horsepower  # delegation`,
+        task: 'Add a getCity() method to your Person class from exercise 1. It should return the city by delegating to the Address object.',
+        hint: 'return self.__address.city — accessing the Address object\'s property through the Person.'
+      },
+      {
+        title: 'Setter for composed object',
+        concept: 'You can replace the composed object entirely using a setter. This is common when the relationship can change — e.g. a passenger can change their flight.',
+        example: `@address.setter
+def address(self, new_address):
+    self.__address = new_address`,
+        task: 'Add an @property getter and setter for address in your Person class. The setter should accept an Address object and replace the existing one.',
+        hint: 'No validation needed for this setter — just assign the new Address object.'
+      },
+      {
+        title: 'List of composed objects',
+        concept: 'A class can HAS-A list of other objects. This models one-to-many relationships. E.g. a School HAS many Students. You add objects to the list in a method.',
+        example: `class School:
+    def __init__(self, name):
+        self.__name = name
+        self.__students = []  # empty list
+
+    def addStudent(self, student):
+        self.__students.append(student)
+
+    def __str__(self):
+        result = f"School: {self.__name}\\n"
+        for s in self.__students:
+            result += f"  {s}\\n"
+        return result`,
+        task: 'Write a Team class with a name (str) and a private list of members. Add:\n- addMember(member_name) — appends to the list\n- removeMember(member_name) — removes if found, returns True/False\n- __str__ — lists all members',
+        hint: 'Use self.__members = [] in __init__. For remove, check "if member_name in self.__members" before calling .remove().'
+      },
+      {
+        title: 'Full composition pattern',
+        concept: 'In a full composition system, the outer class manages the inner objects completely — including creating them, storing them, and delegating to them.',
+        example: `# Pattern: outer manages a collection of inner objects
+class Library:
+    def __init__(self, name):
+        self.__name = name
+        self.__books = {}  # dict: isbn → Book
+
+    def addBook(self, book):
+        self.__books[book.isbn] = book
+
+    def findBook(self, isbn):
+        return self.__books.get(isbn, None)`,
+        task: 'Write a Playlist class that manages Song objects.\n- Song has: title (str), artist (str), duration (int seconds)\n- Playlist has: name (str), list of Song objects\n- Methods: addSong(song), removeSong(title), getTotalDuration(), __str__',
+        hint: 'getTotalDuration() should loop through songs and sum their duration properties.'
+      },
+      {
+        title: '🏆 Lab Capstone — Passenger & Flight',
+        isLab: true,
+        concept: 'This is based on ICT162 Lab 2, Question 1. A Passenger HAS-A Flight.',
+        example: `# Flight class is given. You write Passenger.
+# Expected:
+# p1.__str__() → "Name: John  Flight: SQ1  Destination: LA  Departure: 25/12/2024 04:15"`,
+        task: `The Flight class is already written (assume it exists with flightNo, destination, departureDate properties and __str__).
+
+Write the Passenger class with:
+- Private attributes: pp_no (str), name (str), flight (Flight)
+- Constructor with pp_no, name, flight as parameters
+- @property getters for pp_no, name, flight
+- Setter for flight (to assign a different flight)
+- getDepartureDate() — returns the departureDate by delegating to the Flight object
+- __str__() — returns "Name: {name}  Flight: {flightNo}  Destination: {destination}  Departure Date: {departureDate}"
+
+Then write test code:
+a) Create Flight f1 (SQ1, LA, any date)
+b) Create Passenger p1 (John, PP1, f1)
+c) Print p1's departure date
+d) Create Passenger p2 also on f1
+e) Print both passengers using __str__
+f) Change f1's departure date. Print both again — observe how both update.`,
+        hint: 'For getDepartureDate(), just return self.__flight.departureDate. Both p1 and p2 reference the SAME flight object, so changing it affects both.'
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Inheritance',
+    icon: '🧬',
+    topics: 'IS-A · super() · override by replacement · override by refinement',
+    exercises: [
+      {
+        title: 'IS-A and super().__init__',
+        concept: 'Inheritance means a child class IS-A parent class. Use class Child(Parent). You must call super().__init__() to set up the parent\'s attributes, then add the child\'s own.',
+        example: `class Animal:
+    def __init__(self, name):
+        self.__name = name
+    @property
+    def name(self): return self.__name
+
+class Dog(Animal):  # Dog IS-A Animal
+    def __init__(self, name, breed):
+        super().__init__(name)   # set up Animal part
+        self.__breed = breed     # Dog's own attribute`,
+        task: 'Write a Vehicle class with make (str) and year (int) as private attributes, @property getters, and __str__. Then write an ElectricVehicle class that IS-A Vehicle with one extra attribute: battery_range (int km). Call super().__init__ properly.',
+        hint: 'super().__init__(make, year) passes the parent\'s parameters up. Then add self.__battery_range = battery_range.'
+      },
+      {
+        title: 'Override by replacement',
+        concept: 'Override by replacement means the child completely replaces the parent\'s method — super() is NOT called. The parent\'s version is ignored entirely.',
+        example: `class Animal:
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):          # REPLACES Animal.speak entirely
+        return "Woof!"        # no super() call`,
+        task: 'Add a computeTax() method to Vehicle that returns 0. In ElectricVehicle, override computeTax() by replacement to return battery_range * 0.5. The parent\'s version should not be called.',
+        hint: 'Just write def computeTax(self) in ElectricVehicle and return the new value. No super() needed.'
+      },
+      {
+        title: 'Override by refinement',
+        concept: 'Override by refinement means the child EXTENDS the parent\'s method. You call super().method() to run the parent\'s version first, then add extra behaviour.',
+        example: `class Animal:
+    def __str__(self):
+        return f"Animal: {self.__name}"
+
+class Dog(Animal):
+    def __str__(self):
+        parent_str = super().__str__()   # run parent first
+        return parent_str + f", Breed: {self.__breed}"  # add more`,
+        task: 'Override __str__ in ElectricVehicle by refinement. Call super().__str__() to get the Vehicle string, then append "  Battery Range: {battery_range}km".',
+        hint: 'return super().__str__() + f"  Battery Range: {self.__battery_range}km"'
+      },
+      {
+        title: 'Class variables in inheritance',
+        concept: 'Class variables (defined at class level) are shared across all instances. In inheritance, you can give the child its own class variable with the same name — it overrides the parent\'s for that class.',
+        example: `class BankAccount:
+    _interestRate = 0.03   # class variable
+
+class JuniorAccount(BankAccount):
+    _interestRate = 0.04   # overrides for JuniorAccount only`,
+        task: 'Write a BankAccount class with a class variable _interest_rate = 0.03, instance variables id and balance, and a method accumulateInterest() that adds balance * _interest_rate to balance. Then write SavingsAccount(BankAccount) with _interest_rate = 0.05.',
+        hint: 'Use type(self)._interest_rate in accumulateInterest() to get the correct subclass rate at runtime.'
+      },
+      {
+        title: 'Full inheritance hierarchy',
+        concept: 'A complete inheritance chain: write both parent and child from scratch, with proper super() calls, overriding, and class variables.',
+        example: `# Full pattern:
+# Parent: attributes, methods, __str__
+# Child: super().__init__, extra attributes,
+#        override some methods (replacement or refinement)`,
+        task: 'Write a Shape class with colour (str) and a computeArea() method that returns 0. Then write Circle(Shape) with radius (float). Circle should:\n- Call super().__init__(colour)\n- Override computeArea() by replacement (return π * r²)\n- Override __str__ by refinement (add radius info to parent string)',
+        hint: 'Use import math at the top and math.pi * self.__radius ** 2 for the area.'
+      },
+      {
+        title: '🏆 Lab Capstone — MovieCard & HSBCMovieCard',
+        isLab: true,
+        concept: 'This is based on ICT162 Lab 3, Questions 3 and 4. Write parent and child class with override by refinement.',
+        example: `# MovieCard: price $70 → 10 tickets, $100 → 15 tickets
+# HSBCMovieCard: 2 extra tickets, can redeem up to 4 at once`,
+        task: `Write MovieCard with:
+- Constructor taking price (70 or 100). Set tickets: 10 if price==70, else 15
+- @property tickets returning remaining ticket count
+- redeemTicket(qty=1) — max 2 tickets per redemption. Return True if successful, False if not enough tickets
+- __str__ returning "Ticket price: $X, tickets remaining: Y"
+
+Then write HSBCMovieCard(MovieCard) with:
+- Constructor taking name and price. Call super().__init__(price) then add 2 bonus tickets
+- Override redeemTicket(qty=1) by replacement — max 4 per redemption (not 2)
+- Override __str__ by refinement — add name to the parent string
+
+Write test code for both classes.`,
+        hint: 'In HSBCMovieCard.__init__, call super().__init__(price) first, then do self._MovieCard__tickets += 2 — but actually better to track tickets in a separate way. Tip: store tickets in a protected _tickets variable in MovieCard so the child can access it.'
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: 'Abstract Classes',
+    icon: '🎭',
+    topics: 'ABC · @abstractmethod · polymorphism · concrete subclasses',
+    exercises: [
+      {
+        title: 'Importing ABC',
+        concept: 'An abstract class cannot be instantiated directly. It defines a contract — subclasses must implement certain methods. Use from abc import ABC, abstractmethod.',
+        example: `from abc import ABC, abstractmethod
+
+class Shape(ABC):   # abstract class
+    def __init__(self, colour):
+        self.__colour = colour
+
+    @abstractmethod
+    def computeArea(self):  # no implementation
+        pass`,
+        task: 'Write an abstract class Animal with a constructor taking name (str) and an abstract method speak() with no implementation. Try to instantiate Animal directly and observe the error.',
+        hint: 'Animal("Rex") will raise TypeError: Can\'t instantiate abstract class. This is expected — write a comment showing you understand why.'
+      },
+      {
+        title: 'Concrete subclass',
+        concept: 'A concrete class inherits from an abstract class and implements ALL abstract methods. If any abstract method is missing, the class is still abstract and cannot be instantiated.',
+        example: `class Circle(Shape):
+    def __init__(self, colour, radius):
+        super().__init__(colour)
+        self.__radius = radius
+
+    def computeArea(self):     # MUST implement this
+        return 3.14159 * self.__radius ** 2`,
+        task: 'Write two concrete subclasses of Animal: Dog (speak returns "Woof!") and Cat (speak returns "Meow!"). Both should call super().__init__(name).',
+        hint: 'If you forget to implement speak() in a subclass, Python will refuse to instantiate it.'
+      },
+      {
+        title: 'Polymorphism',
+        concept: 'Polymorphism means different objects respond to the same method call in different ways. The power is that you can write code that works on the abstract type, and it automatically calls the right subclass version.',
+        example: `shapes = [Circle("red", 5), Rectangle("blue", 3, 4)]
+for shape in shapes:
+    print(shape.computeArea())  # calls correct version automatically`,
+        task: 'Create a list containing one Dog and one Cat. Write a loop that calls speak() on each animal and prints the result. This demonstrates polymorphism.',
+        hint: 'The loop doesn\'t need to know whether each item is a Dog or Cat — it just calls .speak() and polymorphism handles the rest.'
+      },
+      {
+        title: 'Abstract + concrete methods',
+        concept: 'An abstract class can have both abstract methods (no implementation, subclass must override) and concrete methods (with implementation, subclass inherits directly).',
+        example: `class Employee(ABC):
+    def __init__(self, name, salary):
+        self.__name = name
+        self.__salary = salary
+
+    @property
+    def name(self): return self.__name   # concrete
+
+    @abstractmethod
+    def computeBonus(self):              # abstract
+        pass
+
+    def __str__(self):                   # concrete
+        return f"{self.__name}: " + str(self.__salary) + ""`,
+        task: 'Write an abstract class Vehicle with: concrete attributes make and year with getters, a concrete __str__, and an abstract method computeRoadTax(). Then write PassengerCar(Vehicle) where road tax = year * 0.01.',
+        hint: 'PassengerCar gets __str__ for free from Vehicle. It only needs to implement computeRoadTax().'
+      },
+      {
+        title: 'Full abstract hierarchy',
+        concept: 'In exams, abstract class questions almost always follow the same pattern: abstract parent with shared attributes + abstract method, two concrete subclasses that implement it differently.',
+        example: `# Exam pattern:
+# 1. Abstract parent — ABC, shared __init__, abstract method(s)
+# 2. Concrete child A — implements abstract methods one way
+# 3. Concrete child B — implements abstract methods another way
+# 4. Polymorphism demo — list + loop`,
+        task: 'Write an abstract class Discount with abstract method getDiscount() returning a float (0.0 to 1.0). Write two subclasses:\n- StudentDiscount: getDiscount() returns 0.2\n- SeniorDiscount: getDiscount() returns 0.15\n\nWrite a function applyDiscount(customer, original_price) that returns original_price * (1 - customer.getDiscount()). Test with both types.',
+        hint: 'applyDiscount works on anything that IS-A Discount — this is polymorphism in action.'
+      },
+      {
+        title: '🏆 Lab Capstone — Customer abstract class',
+        isLab: true,
+        concept: 'Based on ICT162 Lab 6, Question 2. This is the exact pattern that appears in the real exam.',
+        example: `# Individual with skillUpgrade=True → 90% discount
+# Corporate SME → 60% discount, non-SME → 50% discount`,
+        task: `Write an abstract class Customer with:
+- Private attributes: email (str), name (str)
+- Constructor initialising both
+- @property getter for email
+- Abstract method getDiscount() — no implementation
+- __str__ returning the email and name
+
+Write Individual(Customer) with:
+- Additional attribute: skill_upgrade (bool)
+- Class variable discount = 0.9
+- getDiscount() returns discount if skill_upgrade is True, else 0
+- __str__ returning email, name, skill_upgrade status
+
+Write Corporate(Customer) with:
+- Additional attributes: company (str), is_sme (bool)
+- Class variable discount = 0.5
+- getDiscount() returns 0.6 if is_sme else 0.5
+- __str__ returning email, name, company, is_sme status
+
+Demonstrate polymorphism with a list containing one Individual and one Corporate.`,
+        hint: 'Remember: from abc import ABC, abstractmethod at the top. Individual and Corporate must both implement getDiscount() or they cannot be instantiated.'
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: 'Exception Handling',
+    icon: '🛡️',
+    topics: 'try/except · else/finally · custom exceptions · raise',
+    exercises: [
+      {
+        title: 'Basic try/except',
+        concept: 'Wrap risky code in try. If an exception occurs, execution jumps to except. The program continues rather than crashing.',
+        example: `try:
+    number = int(input("Enter a number: "))
+    result = 10 / number
+    print(result)
+except ValueError:
+    print("That's not a valid number!")
+except ZeroDivisionError:
+    print("Cannot divide by zero!")`,
+        task: 'Write a function safeDivide(a, b) that tries to return a / b. Catch ZeroDivisionError and return None instead. Test it with safeDivide(10, 2) and safeDivide(10, 0).',
+        hint: 'Put return a / b inside try. In the except block, return None.'
+      },
+      {
+        title: 'try / except / else / finally',
+        concept: 'else runs if NO exception occurred. finally ALWAYS runs — exception or not. Use finally for cleanup like closing files.',
+        example: `try:
+    result = int(x) / int(y)
+except (ValueError, ZeroDivisionError) as e:
+    print(f"Error: {e}")
+else:
+    print(f"Result: {result}")   # only if no error
+finally:
+    print("Done.")               # always runs`,
+        task: 'Write a function readAge(value) that converts value to int. Use else to print "Valid age: X" if successful. Use finally to always print "Validation complete." Catch ValueError if conversion fails.',
+        hint: 'The else block only runs if no exception was raised in try. finally always runs after everything.'
+      },
+      {
+        title: 'Custom exception class',
+        concept: 'You can define your own exception by subclassing Exception. This lets you create meaningful, specific errors for your application.',
+        example: `class InsufficientFundsError(Exception):
+    pass   # no extra code needed
+
+# Now you can raise it:
+raise InsufficientFundsError("Balance too low!")`,
+        task: 'Write a custom exception class called InvalidAgeError that inherits from Exception. It requires no extra code. Then write a function validateAge(age) that raises InvalidAgeError("Age must be between 0 and 120") if age is outside that range.',
+        hint: 'class InvalidAgeError(Exception): pass — that\'s all you need for a basic custom exception.'
+      },
+      {
+        title: 'Raise inside a class',
+        concept: 'Classes raise exceptions in their methods when something invalid is attempted. The caller catches the exception. This is the main pattern used in ICT162 exam questions.',
+        example: `class BankAccount:
+    def withdraw(self, amount):
+        if amount > self.__balance:
+            raise ValueError("Insufficient funds")
+        self.__balance -= amount
+
+# Caller handles it:
+try:
+    account.withdraw(1000)
+except ValueError as e:
+    print(e)`,
+        task: 'Write a Box class with a private __items = 0 counter and a MAX_ITEMS = 5 class variable. Write add(n) that raises ValueError("Box is full") if adding n would exceed MAX_ITEMS. Write remove(n) that raises ValueError("Not enough items") if n > __items.',
+        hint: 'Check the condition first, raise if invalid, then update the counter only if valid.'
+      },
+      {
+        title: 'Full exception flow',
+        concept: 'In the exam, exception questions always combine: custom exception class + class that raises it + caller with try/except. Practise writing all three parts.',
+        example: `# Full pattern:
+# 1. Custom exception (inherits Exception)
+# 2. Class that raises it in methods
+# 3. Caller wraps calls in try/except`,
+        task: 'Write TemperatureError(Exception). Write a Thermostat class with temperature (float). Add a setTemperature(temp) method that raises TemperatureError("Too hot!") if temp > 100 and TemperatureError("Too cold!") if temp < -50. Write test code that catches and prints the exception messages.',
+        hint: 'Two separate raise statements in setTemperature — one for too hot, one for too cold. Test both cases.'
+      },
+      {
+        title: '🏆 Lab Capstone — Box & BoxException',
+        isLab: true,
+        concept: 'Based on ICT162 Lab 4, Question 1. The exact pattern used in exam questions.',
+        example: `# Box(3) → 3 items
+# box.add(8) → raises BoxException (would exceed max)
+# box.remove(5) → raises BoxException (negative)`,
+        task: `Write BoxException(Exception) — no extra code needed.
+
+Write a Box class with:
+- Class variable _maxItems = 10
+- Instance variable numberOfItems
+- Constructor that takes numberOfItems. If it exceeds _maxItems, raise BoxException with a message
+- remove(items) method — raises BoxException if removal would result in negative items
+- add(items) method — raises BoxException if addition would exceed _maxItems
+- __str__() returning "Number of items: X"
+
+Write test code that:
+a) Creates a Box with 5 items
+b) Tries to add 8 items (should raise exception — catch and print message)
+c) Removes 3 items (should succeed)
+d) Tries to remove 10 items (should raise exception — catch and print message)
+e) Prints the box status after each operation`,
+        hint: 'In remove: if self.__numberOfItems - items < 0 → raise. In add: if self.__numberOfItems + items > self._maxItems → raise.'
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: 'Putting It All Together',
+    icon: '🚀',
+    topics: 'Composition + Inheritance + Exceptions · class variables · real exam pattern',
+    exercises: [
+      {
+        title: 'Class variables and auto-incrementing IDs',
+        concept: 'A class variable shared across all instances can auto-generate unique IDs. Increment it in __init__ for every new object. This is a very common exam pattern.',
+        example: `class Booking:
+    _count = 1   # class variable
+
+    def __init__(self, customer):
+        self.__bookingId = Booking._count
+        Booking._count += 1
+        self.__customer = customer`,
+        task: 'Write a Ticket class with a class variable _nextId = 1. Every new Ticket gets a unique ID from _nextId (then increment it). Add event (str) and price (float) attributes. Print the IDs of 3 tickets to confirm they auto-increment.',
+        hint: 'self.__ticket_id = Ticket._nextId then Ticket._nextId += 1 — do both in __init__.'
+      },
+      {
+        title: 'Combining composition, inheritance and exceptions',
+        concept: 'Real exam questions combine all three concepts. An abstract parent, concrete children with composition, and exception handling in methods.',
+        example: `# Exam question structure:
+# - Abstract base class
+# - Concrete subclass that HAS-A composed object
+# - Methods that raise custom exceptions
+# - A manager/container class using a dict`,
+        task: 'Write a custom exception RegistrationError(Exception). Write an abstract class Customer with email and abstract method getDiscount(). Write IndividualCustomer(Customer) with getDiscount() returning 0.1. Write a Registry class that stores customers in a dict (email as key). addCustomer(customer) raises RegistrationError if email already exists.',
+        hint: 'if customer.email in self.__customers: raise RegistrationError("Already registered!"). Otherwise: self.__customers[customer.email] = customer.'
+      },
+      {
+        title: '🏆 Lab Capstone — CourseOffering system',
+        isLab: true,
+        concept: 'Based on ICT162 Lab 6, Questions 1–3. This is the hardest question type — combining everything. Take your time.',
+        example: `# CourseOffering has:
+# - Auto-incremented scheduleId (e.g. "PY214_1")
+# - course object (composition)
+# - instructor object (composition)
+# - courseFee() = course.devCost + duration * instructor.ratePerDay`,
+        task: `Assume a Course class exists with code, title, devCost attributes.
+
+Write the Instructor class with:
+- Private attributes: email, name, ratePerDay
+- Constructor, @property getter for email, getter and setter for ratePerDay
+- __str__ returning "Instructor email: xxx Name: Joe Wong"
+
+Write the CourseOffering class with:
+- Class variable _schId = 1 (auto-increments)
+- scheduleId = courseCode + "_" + str(_schId), then increment _schId
+- Attributes: course (Course), instructor (Instructor), startDate (str), duration (int days)
+- @property getter for scheduleId and startDate
+- Class method changeSchId(anotherId) that updates _schId
+- getCourseCode() — delegates to course
+- getInstructorEmail() — delegates to instructor
+- courseFee() = course.devCost + duration * instructor.ratePerDay
+- __str__ with schedule id, start date, duration, course and instructor info
+
+Write test code creating one Instructor, one Course, and two CourseOffering objects.`,
+        hint: 'For scheduleId: self.__scheduleId = f"{course.code}_{CourseOffering._schId}" then CourseOffering._schId += 1. For class method: use @classmethod and cls._schId.'
+      }
+    ]
+  }
+];
+
+// ── Learn state ───────────────────────────────────────────────
+let learnState = {
+  su: null,
+  exerciseIndex: 0,
+  feedback: null,
+  submitting: false
+};
+
+function getLearnProgress() {
+  return JSON.parse(localStorage.getItem('ict162_learn') || '{}');
+}
+
+function saveLearnProgress(data) {
+  localStorage.setItem('ict162_learn', JSON.stringify(data));
+}
+
+function getSUProgress(suId) {
+  const prog = getLearnProgress();
+  return prog[suId] || { completed: [], done: false };
+}
+
+function markExerciseDone(suId, exIndex) {
+  const prog = getLearnProgress();
+  if (!prog[suId]) prog[suId] = { completed: [], done: false };
+  if (!prog[suId].completed.includes(exIndex)) {
+    prog[suId].completed.push(exIndex);
+  }
+  const total = LEARN_UNITS.find(u => u.id === suId).exercises.length;
+  if (prog[suId].completed.length >= total) prog[suId].done = true;
+  saveLearnProgress(prog);
+}
+
+// ── Learn home screen SU pills ────────────────────────────────
+function refreshLearnPills() {
+  const prog = getLearnProgress();
+  document.querySelectorAll('.su-pill[data-su]').forEach(pill => {
+    const suId = parseInt(pill.dataset.su);
+    if (prog[suId] && prog[suId].done) pill.classList.add('done');
+    else pill.classList.remove('done');
+  });
+}
+
+// ── Open Learn Select ─────────────────────────────────────────
+function openLearnSelect() {
+  renderSUCards();
+  showScreen('learnSelectScreen');
+}
+
+function renderSUCards() {
+  const prog = getLearnProgress();
+  const list = document.getElementById('suCardList');
+  list.innerHTML = LEARN_UNITS.map((su, i) => {
+    const suProg = prog[su.id] || { completed: [], done: false };
+    const completed = suProg.completed.length;
+    const total = su.exercises.length;
+    const pct = Math.round((completed / total) * 100);
+    const isDone = suProg.done;
+    const isFirst = i === 0;
+    // Unlock if previous SU is done or it's the first
+    const prevDone = i === 0 || (prog[LEARN_UNITS[i-1].id] && prog[LEARN_UNITS[i-1].id].done);
+    const isLocked = !prevDone && !isDone && completed === 0;
+
+    const statusIcon = isDone ? '✅' : isLocked ? '🔒' : completed > 0 ? '▶️' : '○';
+    const cardClass = isDone ? 'su-card completed' : isLocked ? 'su-card locked' : 'su-card unlocked';
+    const onClick = isLocked ? '' : `onclick="startLearnSU(${su.id})"`;
+
+    return `<div class="${cardClass}" ${onClick}>
+      <div class="su-card-num">SU${su.id}</div>
+      <div class="su-card-info">
+        <div class="su-card-title">${su.icon} ${su.title}</div>
+        <div class="su-card-meta">${su.topics}</div>
+        <div class="su-card-progress">
+          <div class="su-progress-bar">
+            <div class="su-progress-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="su-progress-label">${completed}/${total} ${isDone ? '· Complete' : isLocked ? '· Locked' : ''}</div>
+        </div>
+      </div>
+      <div class="su-card-status">${statusIcon}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Start a SU ────────────────────────────────────────────────
+function startLearnSU(suId) {
+  const su = LEARN_UNITS.find(u => u.id === suId);
+  const prog = getSUProgress(suId);
+  // Find first uncompleted exercise
+  let startIndex = 0;
+  for (let i = 0; i < su.exercises.length; i++) {
+    if (!prog.completed.includes(i)) { startIndex = i; break; }
+    if (i === su.exercises.length - 1) startIndex = i; // all done, start last
+  }
+  learnState = { su, exerciseIndex: startIndex, feedback: null, submitting: false };
+  showScreen('learnScreen');
+  renderLearnExercise();
+}
+
+function renderLearnExercise() {
+  const { su, exerciseIndex } = learnState;
+  const ex = su.exercises[exerciseIndex];
+  const total = su.exercises.length;
+  const prog = getSUProgress(su.id);
+  const isDone = prog.completed.includes(exerciseIndex);
+
+  // Progress bar
+  document.getElementById('learnProgressFill').style.width = ((exerciseIndex + 1) / total * 100) + '%';
+  document.getElementById('learnCounter').textContent = `${exerciseIndex + 1} / ${total}`;
+
+  const isLab = !!ex.isLab;
+
+  document.getElementById('learnBody').innerHTML = `
+    <div class="learn-exercise ${isLab ? 'lab-exercise' : ''}">
+
+      ${isLab ? '<div class="lab-banner">🏆 Lab Capstone — Complete this to finish SU' + su.id + '</div>' : ''}
+
+      <div class="learn-ex-header">
+        <div class="learn-su-tag">SU${su.id} · ${su.title}</div>
+        <div class="learn-ex-title">${ex.title}</div>
+      </div>
+
+      <div class="learn-concept-block">
+        <div class="learn-block-label">💡 Concept</div>
+        <div class="learn-concept-text">${ex.concept}</div>
+      </div>
+
+      <div class="learn-example-block">
+        <div class="learn-block-label">👀 Example</div>
+        <pre class="learn-code-example"><code>${escHtml(ex.example)}</code></pre>
+      </div>
+
+      <div class="learn-task-block">
+        <div class="learn-block-label">✍️ Your Task</div>
+        <div class="learn-task-text">${escHtml(ex.task).replace(/\n/g, '<br>')}</div>
+      </div>
+
+      <div class="learn-editor-wrap">
+        <div class="learn-editor-label">
+          <span>Your Code</span>
+          ${isDone ? '<span class="done-badge">✓ Completed</span>' : ''}
+        </div>
+        <textarea class="learn-textarea" id="learnCodeInput" placeholder="Write your Python code here..." spellcheck="false"></textarea>
+      </div>
+
+      <div id="learnFeedbackBox" class="learn-feedback" style="display:none"></div>
+
+      <div class="learn-actions">
+        <button class="learn-btn-skip" onclick="skipLearnExercise()">
+          ${exerciseIndex < total - 1 ? 'Skip →' : 'Skip to End'}
+        </button>
+        <button class="learn-btn-submit" id="learnSubmitBtn" onclick="submitLearnAnswer()">
+          ${isDone ? '✓ Resubmit' : 'Submit for Feedback'}
+        </button>
+      </div>
+
+      <div class="learn-nav">
+        ${exerciseIndex > 0 ? `<button class="learn-nav-btn" onclick="goLearnExercise(${exerciseIndex - 1})">← Previous</button>` : '<span></span>'}
+        ${exerciseIndex < total - 1 ? `<button class="learn-nav-btn" onclick="goLearnExercise(${exerciseIndex + 1})">Next →</button>` : '<span></span>'}
+      </div>
+    </div>
+  `;
+
+  // Tab key support
+  document.getElementById('learnCodeInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = this.selectionStart, end = this.selectionEnd;
+      this.value = this.value.substring(0, s) + '    ' + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = s + 4;
+    }
+  });
+}
+
+function goLearnExercise(index) {
+  learnState.exerciseIndex = index;
+  learnState.feedback = null;
+  renderLearnExercise();
+  document.getElementById('learnBody').scrollTop = 0;
+  window.scrollTo(0, 0);
+}
+
+function skipLearnExercise() {
+  const { su, exerciseIndex } = learnState;
+  if (exerciseIndex < su.exercises.length - 1) {
+    goLearnExercise(exerciseIndex + 1);
+  } else {
+    // Last exercise — go back to select
+    showScreen('learnSelectScreen');
+    renderSUCards();
+  }
+}
+
+async function submitLearnAnswer() {
+  if (learnState.submitting) return;
+  const code = document.getElementById('learnCodeInput').value.trim();
+  if (!code) { showToast('Write some code first!'); return; }
+
+  const apiKey = sessionStorage.getItem('ict162_apikey');
+  if (!apiKey) {
+    document.getElementById('learnFeedbackBox').style.display = 'block';
+    document.getElementById('learnFeedbackBox').innerHTML = `<div class="feedback-error">⚠️ Add your Anthropic API key in ⚙️ Settings to get AI feedback.</div>`;
+    return;
+  }
+
+  learnState.submitting = true;
+  const btn = document.getElementById('learnSubmitBtn');
+  btn.textContent = 'Marking...';
+  btn.disabled = true;
+
+  const ex = learnState.su.exercises[learnState.exerciseIndex];
+  const feedbackBox = document.getElementById('learnFeedbackBox');
+  feedbackBox.style.display = 'block';
+  feedbackBox.innerHTML = '<div class="learn-feedback-loading"><div class="lb-spinner"></div> AI tutor is reviewing your code...</div>';
+
+  const prompt = `You are a patient Python OOP tutor for a university student studying ICT162 at SUSS Singapore.
+
+EXERCISE: ${ex.title}
+TASK: ${ex.task}
+
+STUDENT'S CODE:
+${code}
+
+Give warm, encouraging, constructive feedback as a tutor. Structure your response EXACTLY as:
+
+**What you got right:**
+[List specific things done correctly, with brief explanation]
+
+**What to improve:**
+[List specific issues with clear explanations of WHY, not just what]
+
+**Corrected/model code:**
+\`\`\`python
+[Show the correct version with brief inline comments]
+\`\`\`
+
+**Key takeaway:**
+[One sentence the student should remember]
+
+Keep feedback concise and focused. Use simple language. Be encouraging even when correcting errors. If the code is fully correct, say so clearly and explain what makes it good.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.map(c => c.text || '').join('') || 'No feedback received.';
+
+    // Mark exercise as done
+    markExerciseDone(learnState.su.id, learnState.exerciseIndex);
+    refreshLearnPills();
+
+    // Render feedback
+    feedbackBox.innerHTML = `<div class="learn-feedback-content">${renderLearnFeedback(text)}</div>
+      <div class="learn-feedback-actions">
+        ${learnState.exerciseIndex < learnState.su.exercises.length - 1
+          ? `<button class="learn-btn-next" onclick="goLearnExercise(${learnState.exerciseIndex + 1})">Next Exercise →</button>`
+          : `<button class="learn-btn-next" onclick="showScreen('learnSelectScreen');renderSUCards()">← Back to Study Units</button>`
+        }
+      </div>`;
+
+    btn.textContent = '✓ Resubmit';
+  } catch(e) {
+    feedbackBox.innerHTML = `<div class="feedback-error">⚠️ Could not get feedback: ${escHtml(e.message)}</div>`;
+    btn.textContent = 'Submit for Feedback';
+  }
+
+  btn.disabled = false;
+  learnState.submitting = false;
+}
+
+function renderLearnFeedback(text) {
+  // Convert markdown-ish text to HTML
+  return text
+    .replace(/```python\n?([\s\S]*?)```/g, '<pre class="feedback-code"><code>$1</code></pre>')
+    .replace(/```([\s\S]*?)```/g, '<pre class="feedback-code"><code>$1</code></pre>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^/, '<p>')
+    .replace(/$/, '</p>');
+}
+
+function confirmLearnBack() {
+  if (confirm('Exit Learn Mode? Your progress is saved.')) {
+    showScreen('learnSelectScreen');
+    renderSUCards();
+  }
 }
 
 function openHistory() { renderHistory(); document.getElementById('historyOverlay').classList.add('active'); }
@@ -4420,6 +5833,7 @@ window.addEventListener('load', () => {
   loadLastRun();
   initPWA();
   maybeShowIOSBanner();
+  refreshLearnPills();
   // Sheet URL is hardcoded — no user config needed
 });
 
