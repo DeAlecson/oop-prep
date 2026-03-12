@@ -2314,7 +2314,6 @@ body::before {
   .mode-card.full-width { grid-column: 1; }
   .quiz-header { padding: 0.6rem 1rem; gap: 0.5rem; }
   .quiz-body { padding: 1.25rem 1rem; }
-  .stats-strip { grid-template-columns: 1fr; }
   .stats-strip { border-radius: var(--radius-sm); }
   .last-run-grid { grid-template-columns: 1fr 1fr; }
 }
@@ -3139,6 +3138,14 @@ body::before {
 #sst-module .btn-retry:hover {
   background: rgba(16,185,129,.2);
   border-color: #10b981;
+}
+
+
+/* ── Compact stats strip for small screens ── */
+@media (max-width: 400px) {
+  .stat-cell { padding: .85rem .4rem; }
+  .stat-cell .val { font-size: 1.1rem; }
+  .stat-cell .lbl { font-size: .65rem; }
 }
 
 </style>
@@ -6274,7 +6281,7 @@ function openHistory() { renderHistory(); document.getElementById('historyOverla
 function closeHistory() { document.getElementById('historyOverlay').classList.remove('active'); }
 
 // ── Leaderboard ───────────────────────────────────────────────
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyiHfUr_meQE9Bto54iWhGFIGo4KCTOchcgcek3wXlRmhH8ls9C_dfxMbyQ-xyodoaeZg/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyRTyMQJ-TqKM2RMAo45p-A34c24mWzroGQHpJsktsuX_JedTro2EKov1oZlafXd273Sg/exec';
 let lbData = [];
 let lbFilter = 'all';
 
@@ -6471,7 +6478,7 @@ function maybeShowIOSBanner() {
 
 // ── Submit score to Google Sheet ──────────────────────────────
 async function submitToSheet(result) {
-  const url = 'https://script.google.com/macros/s/AKfycbyiHfUr_meQE9Bto54iWhGFIGo4KCTOchcgcek3wXlRmhH8ls9C_dfxMbyQ-xyodoaeZg/exec';
+  const url = 'https://script.google.com/macros/s/AKfycbyRTyMQJ-TqKM2RMAo45p-A34c24mWzroGQHpJsktsuX_JedTro2EKov1oZlafXd273Sg/exec';
   const name = localStorage.getItem('sa_name') || localStorage.getItem('ict162_name') || 'Anonymous';
   const modeLabel = { mcq:'MCQ', code:'Code Write', mixed:'Mixed', basics:'Python Basics' }[result.mode] || result.mode;
   try {
@@ -9311,7 +9318,7 @@ function sst_confirmExit() {
 // ═══════════════════════════════════════════════════════════════
 // GLOBAL LEADERBOARD  (v5)
 // ═══════════════════════════════════════════════════════════════
-const LB_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyiHfUr_meQE9Bto54iWhGFIGo4KCTOchcgcek3wXlRmhH8ls9C_dfxMbyQ-xyodoaeZg/exec';
+const LB_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyRTyMQJ-TqKM2RMAo45p-A34c24mWzroGQHpJsktsuX_JedTro2EKov1oZlafXd273Sg/exec';
 
 let lbAllData    = [];   // raw data from sheet
 let lbModFilter  = 'all';
@@ -9368,7 +9375,8 @@ async function lbLoad() {
   document.getElementById('lbTable2').style.display    = 'none';
 
   try {
-    const resp = await fetch(LB_SHEET_URL, { redirect: 'follow' });
+    const url  = LB_SHEET_URL + '?t=' + Date.now();
+    const resp = await fetch(url);
     const json = await resp.json();
     if (json.status !== 'ok') throw new Error(json.message || 'Script error');
     lbAllData = json.data || [];
@@ -9454,8 +9462,11 @@ function lbRender() {
 async function globalSubmitScore({ module, mode, pct, correct, total, time }) {
   const name = localStorage.getItem('sa_name') || 'Anonymous';
   try {
+    // Apps Script doesn't support CORS preflight — use no-cors (fire-and-forget)
+    // The POST still reaches the sheet; we just can't read the response.
     await fetch(LB_SHEET_URL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ name, module, mode, pct, correct, total, time })
     });
